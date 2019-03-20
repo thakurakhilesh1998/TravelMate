@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "15256756336",
+    "firebase_url": "https://travelmateadminapplication.firebaseio.com",
+    "project_id": "travelmateadminapplication",
+    "storage_bucket": "travelmateadminapplication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15256756336:android:3f6625b77cb12b91",
+        "android_client_info": {
+          "package_name": "com.example.travelmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15256756336-32f161lrd44huq7367svuon2csucrnk2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.travelmate",
+            "certificate_hash": "3625921e8934f939655149e2d053a1747e640310"
+          }
+        },
+        {
+          "client_id": "15256756336-al3ol53pi194ui41kbiepo3jsc7vg6jb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBbqVtvP_PdFX6L92Esj2CkW8bben2pgk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15256756336-al3ol53pi194ui41kbiepo3jsc7vg6jb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15256756336:android:311b2b6a358af736",
+        "android_client_info": {
+          "package_name": "com.example.travelmateadminapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15256756336-8ivjd8g39cshecg8hgao7ik5grbk63cc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.travelmateadminapplication",
+            "certificate_hash": "3625921e8934f939655149e2d053a1747e640310"
+          }
+        },
+        {
+          "client_id": "15256756336-al3ol53pi194ui41kbiepo3jsc7vg6jb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBbqVtvP_PdFX6L92Esj2CkW8bben2pgk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15256756336-al3ol53pi194ui41kbiepo3jsc7vg6jb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
