@@ -1,7 +1,7 @@
 package com.example.travelmate;
 
 public class placeData {
-
+    String placename;
 
     public String getPlacename() {
         return placename;
@@ -11,7 +11,7 @@ public class placeData {
         this.placename = placename;
     }
 
-    String placename;
+
 
     public placeData(String placename) {
         this.placename = placename;
