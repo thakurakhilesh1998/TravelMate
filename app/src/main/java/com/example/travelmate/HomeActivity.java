@@ -47,10 +47,8 @@ public class HomeActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference reference;
     ArrayList<String> list, list1;
-    FirebaseFirestore db;
-    placeData data1;
     ArrayList<String> temp, filtered, placename;
-    FusedLocationProviderClient fusedLocationProviderClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,19 +64,16 @@ public class HomeActivity extends AppCompatActivity {
         temp = new ArrayList<>();
         filtered = new ArrayList<>();
         placename = new ArrayList<>();
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchData();
 
         setSupportActionBar(toolbar);
-        Places places = new Places();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame, places);
-        ft.commit();
 
 
     }
 
     private void fetchData() {
+
+
         final String uid = mUser.getUid();
         reference = database.getReference();
         reference.child("User Profile").child(uid).addValueEventListener(new ValueEventListener() {
@@ -87,7 +82,8 @@ public class HomeActivity extends AppCompatActivity {
                 String Email = dataSnapshot.child("Email").getValue().toString();
                 String Name = dataSnapshot.child("Name").getValue().toString();
                 String profile = dataSnapshot.child("Profile").getValue().toString();
-                showData(Email, Name, profile, uid);
+                Log.e("profile",profile);
+                showData(Email, Name, profile);
 
             }
 
@@ -96,268 +92,19 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
-    private void showData(String email, String name, String profile, String uid) {
+    private void showData(String email, String name, String profile) {
         tvName.setText(name);
         tvEmail.setText(email);
         Glide.with(this).load(profile).into(ivprofile);
+        Places places = new Places();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frame, places);
+        ft.commit();
 
-        fetchInterests(uid);
-    }
 
-    private void fetchInterests(String uid) {
 
-
-        reference.child("User Profile").child(uid).child("interests").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-
-                Iterator myVeryOwnIterator = td.keySet().iterator();
-
-                while (myVeryOwnIterator.hasNext()) {
-                    String key = (String) myVeryOwnIterator.next();
-                    list.add((String) td.get(key));
-
-                }
-
-                fetchPlaces(list);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    private void fetchPlaces(final ArrayList<String> interest1) {
-
-
-        call1(interest1.get(0), interest1);
-
-
-    }
-
-    private void call1(String list, final ArrayList<String> interest1) {
-
-
-        reference.child("Places").child(list).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-
-                Iterator myVeryOwnIterator = td.keySet().iterator();
-
-                while (myVeryOwnIterator.hasNext()) {
-                    String key = (String) myVeryOwnIterator.next();
-                    temp.add((String) td.get(key));
-
-                }
-                if (1 <= interest1.size()) {
-                    call2(temp, interest1);
-                } else {
-                    getData(temp);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    private void getData(ArrayList<String> temp) {
-
-
-        findCurrentLocation(temp);
-
-
-    }
-
-    private void findCurrentLocation(final ArrayList<String> temp) {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        }
-        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-
-                    filtered = getDataFirebase.isInside(location.getLatitude(), location.getLongitude(), temp);
-                    getFromFirebase(filtered);
-
-                }
-
-            }
-        });
-
-
-    }
-
-    private void getFromFirebase(final ArrayList<String> filtered) {
-
-
-        for (int i = 0; i < filtered.size(); i++) {
-
-            final int i1 = i;
-            reference.child(filtered.get(i)).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    placename.add(dataSnapshot.child("About").getValue().toString());
-
-                    if (i1==filtered.size()-1) {
-                        getPlaceName(placename);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-        }
-
-
-    }
-
-    private void getPlaceName(ArrayList<String> placename) {
-
-
-        Log.e("size", String.valueOf(this.placename.size()));
-        Log.e("1",placename.get(0));
-        Log.e("1",placename.get(1));
-        Log.e("1",placename.get(2));
-    }
-
-    private void call2(final ArrayList<String> temp, final ArrayList<String> interest1) {
-        reference.child("Places").child(interest1.get(1)).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-
-                Iterator myVeryOwnIterator = td.keySet().iterator();
-
-                while (myVeryOwnIterator.hasNext()) {
-                    String key = (String) myVeryOwnIterator.next();
-                    temp.add((String) td.get(key));
-
-                }
-                if (2 <= interest1.size()) {
-                    call3(temp, interest1);
-                } else {
-                    getData(temp);
-                }
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
-
-    private void call3(final ArrayList<String> temp, final ArrayList<String> interest1) {
-        reference.child("Places").child(interest1.get(2)).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-
-                Iterator myVeryOwnIterator = td.keySet().iterator();
-
-                while (myVeryOwnIterator.hasNext()) {
-                    String key = (String) myVeryOwnIterator.next();
-                    temp.add((String) td.get(key));
-
-                }
-                if (3 < interest1.size()) {
-
-                    call4(temp, interest1);
-                } else {
-                    getData(temp);
-                }
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
-
-    private void call4(final ArrayList<String> temp, final ArrayList<String> interest1) {
-
-        reference.child("Places").child(interest1.get(3)).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-
-                Iterator myVeryOwnIterator = td.keySet().iterator();
-
-                while (myVeryOwnIterator.hasNext()) {
-                    String key = (String) myVeryOwnIterator.next();
-                    temp.add((String) td.get(key));
-
-                }
-                if (4 <= interest1.size()) {
-                    call5(temp, interest1);
-                } else {
-                    getData(temp);
-                }
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
-
-    private void call5(final ArrayList<String> temp, final ArrayList<String> interest1) {
-
-        reference.child("Places").child(interest1.get(4)).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-
-                Iterator myVeryOwnIterator = td.keySet().iterator();
-
-                while (myVeryOwnIterator.hasNext()) {
-                    String key = (String) myVeryOwnIterator.next();
-                    temp.add((String) td.get(key));
-
-                }
-                getData(temp);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
     }
 
@@ -380,6 +127,13 @@ public class HomeActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    private void onLogOut() {
+
+
+        mAuth.signOut();
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -389,10 +143,5 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void onLogOut() {
 
-
-        mAuth.signOut();
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-    }
 }

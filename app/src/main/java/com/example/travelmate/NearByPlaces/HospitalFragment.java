@@ -18,6 +18,7 @@ import com.example.travelmate.NearByAtm.NearByAtm;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.APIS.NearbyApiHitter;
 import com.example.travelmate.R;
+import com.example.travelmate.utility.substringGeolocation;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ import retrofit2.Response;
  */
 public class HospitalFragment extends Fragment {
     public static final String KEY = "AIzaSyDubiCUnOFUDUqIZMGjy8NKav32P6ioDUg";
-    String latlong = "30.7046,76.7179";
+
     public static final String RADIUS = "1000";
     List<Result> hospital;
     RecyclerView rvHospital;
@@ -63,12 +64,19 @@ public class HospitalFragment extends Fragment {
         progressDialog.setMessage("Wait...");
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvHospital.setLayoutManager(manager);
-        getDataFromApi();
+
+        String geolocation = getArguments().getString("geolocation");
+        String lat = substringGeolocation.getLatitude(geolocation);
+        String longitude = substringGeolocation.getLongitude(geolocation);
+
+
+        getDataFromApi(lat, longitude);
 
     }
 
-    private void getDataFromApi() {
+    private void getDataFromApi(String lat,String longitude) {
         progressDialog.show();
+        String latlong = lat+","+longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override

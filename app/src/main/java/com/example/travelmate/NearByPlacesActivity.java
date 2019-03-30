@@ -1,5 +1,6 @@
 package com.example.travelmate;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,15 +15,17 @@ public class NearByPlacesActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     ArrayList<String> name;
-
+    String geolocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_near_by_places);
         findIds();
+        Intent intent=getIntent();
+      geolocation=intent.getStringExtra("geocoordinates");
 
 
-        NearByAdapter myadapter = new NearByAdapter(getSupportFragmentManager(), this, tabLayout.getTabCount(), name);
+        NearByAdapter myadapter = new NearByAdapter(getSupportFragmentManager(), this, tabLayout.getTabCount(), name,geolocation);
         viewPager.setAdapter(myadapter);
         viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         viewPager.setOffscreenPageLimit(10);

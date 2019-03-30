@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +32,9 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     TextView tvTemp, tvHeadline, tvWindspeed;
     LinearLayout weather;
     String locationkey;
+    String geolocation;
+    String KEY = "cqD52k5cnb9H0YdLoKcLLrZ13x9evzhj";
+    String details = "true";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,23 +42,38 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_tourist_place_activity);
         findIds();
         photos = new ArrayList<>();
+        Intent intent = getIntent();
+        geolocation = intent.getStringExtra("geocordinates");
+        geolocation = addChar(geolocation, '.', 2);
+        geolocation = addChar(geolocation, '.', 12);
+        findlatlong(geolocation);
         addPhoto();
         recyclerViewPhotos();
-        // getLocationKey();
-        getWeatherForecast();
+        getWeatherForecast(locationkey);
         tvviewMap.setOnClickListener(this);
         weather.setOnClickListener(this);
         tvNearByPlaces.setOnClickListener(this);
 
     }
 
-    private void getLocationKey() {
+    private void findlatlong(String geolocation) {
 
 
-        Call<LocationKey> locationkey = LocationKeyApi.LocationKeyApi().getLocationKey();
+        Double latitide = Double.valueOf(this.geolocation.substring(0, 9));
+        Double longitude = Double.valueOf(this.geolocation.substring(10, 19));
+
+        String latlong = latitide + "%2C" + longitude;
+        getLocationKey(latlong);
+    }
+
+    private void getLocationKey(String latlong) {
+
+
+        Call<LocationKey> locationkey = LocationKeyApi.LocationKeyApi().getLocationKey(KEY, latlong, details);
         locationkey.enqueue(new Callback<LocationKey>() {
             @Override
             public void onResponse(Call<LocationKey> call, Response<LocationKey> response) {
+
 
                 getKey(response);
             }
@@ -68,18 +87,19 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
     private void getKey(Response<LocationKey> response) {
         locationkey = response.body().getKey();
-//        getWeatherForecast();
+        Log.e("locationkey", locationkey);
+        getWeatherForecast(locationkey);
     }
 
-    private void getWeatherForecast() {
+    private void getWeatherForecast(String locationkey) {
 
-        Call<Weather> weatherCall = WeatherApi.WeatherApi().getWeather();
+        Call<Weather> weatherCall = WeatherApi.WeatherApi().getWeather(locationkey, KEY, details, details);
         weatherCall.enqueue(new Callback<Weather>() {
             @Override
             public void onResponse(Call<Weather> call, Response<Weather> response) {
-                if (response.isSuccessful()) {
-                    putWeatgerData(response);
-                }
+
+                putWeatgerData(response);
+
             }
 
             @Override
@@ -91,6 +111,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void putWeatgerData(Response<Weather> response) {
+
         tvHeadline.setText(response.body().getDailyForecasts().get(0).getDay().getIconPhrase());
         Double temp = response.body().getDailyForecasts().get(0).getRealFeelTemperature().getMaximum().getValue();
         tvTemp.setText(String.valueOf(temp));
@@ -146,18 +167,26 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void onNearByPlacesClicked() {
-startActivity(new Intent(this,NearByPlacesActivity.class));
+
+
+        startActivity(new Intent(this, NearByPlacesActivity.class).putExtra("geocoordinates", geolocation));
 
     }
 
     private void onWeatherClick() {
 
 
-        startActivity(new Intent(getApplicationContext(), weatheractivity.class));
+        startActivity(new Intent(this, weatheractivity.class).putExtra("geocoordinates", geolocation));
     }
 
 
     private void viewOnMap() {
         startActivity(new Intent(this, map_activity.class));
+    }
+
+    public String addChar(String str, char ch, int position) {
+        StringBuilder sb = new StringBuilder(str);
+        sb.insert(position, ch);
+        return sb.toString();
     }
 }

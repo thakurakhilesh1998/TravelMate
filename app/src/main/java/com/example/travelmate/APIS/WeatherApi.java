@@ -7,6 +7,8 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public class WeatherApi {
     public static Retrofit retrofit;
@@ -22,11 +24,11 @@ public class WeatherApi {
 
     }
 
-  public interface ApiInterface {
+    public interface ApiInterface {
 
 
-        @GET("v1/daily/5day/3136635?apikey=YU0QPtFwgBh7jzA4eGELHprxq28AJW5U&details=true&metric=true")
-    public Call<Weather> getWeather();
-
+        @GET("v1/daily/5day/{locationkey}?")
+        Call<Weather> getWeather(@Path("locationkey")String locationkey, @Query(value = "apikey", encoded = true) String key, @Query(value = "details", encoded = true) String details, @Query(value = "metric", encoded = true) String metric);
+//3136635?apikey=YU0QPtFwgBh7jzA4eGELHprxq28AJW5U&details=true&metric=true
     }
 }

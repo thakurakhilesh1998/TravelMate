@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.travelmate.utility.*;
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.travelmate.APIS.DistanceApiHitter;
 import com.example.travelmate.Adapter.NearByAtmAdapter;
@@ -31,7 +32,6 @@ import retrofit2.Response;
 
 public class Atmfragment extends Fragment {
     public static final String KEY = "AIzaSyCOggg7f0D3iWZOQSLOKbo0BWrbQ9Y6ymw";
-    String latlong = "30.7046,76.7179";
     public static final String RADIUS = "1000";
     List<Result> atm1;
     RecyclerView rvAtm;
@@ -63,28 +63,34 @@ public class Atmfragment extends Fragment {
         pullRefreshLayout = view.findViewById(R.id.pullrefresh);
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("wait...");
-        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getDataFromApi();
-            }
-        });
+        String geolocation = getArguments().getString("geolocation");
+        String lat = substringGeolocation.getLatitude(geolocation);
+        String longitude = substringGeolocation.getLongitude(geolocation);
+        Log.e("lat", lat);
+        Log.e("longitude", longitude);
+//        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                getDataFromApi();
+//            }
+//        });
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvAtm.setLayoutManager(manager);
 
-        getDataFromApi();
+        getDataFromApi(lat, longitude);
 
     }
 
-    private void getDataFromApi() {
+    private void getDataFromApi(String lat, String longitude) {
         progressDialog.show();
+        String latlong = lat + "," + longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
             public void onResponse(Call<NearByAtm> call, Response<NearByAtm> response) {
                 if (response.isSuccessful()) {
                     atm1 = response.body().getResults();
-                    NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(),atm1);
+                    NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(), atm1);
                     rvAtm.setAdapter(adapter);
                     progressDialog.dismiss();
 
@@ -97,7 +103,6 @@ public class Atmfragment extends Fragment {
 
             @Override
             public void onFailure(Call<NearByAtm> call, Throwable t) {
-                Log.e("message", t.getMessage());
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
             }
@@ -106,11 +111,10 @@ public class Atmfragment extends Fragment {
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
-        getDataFromApi();
+       // getDataFromApi();
         progressDialog.dismiss();
     }
 }

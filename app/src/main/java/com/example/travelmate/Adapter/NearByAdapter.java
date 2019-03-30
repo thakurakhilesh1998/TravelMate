@@ -1,6 +1,7 @@
 package com.example.travelmate.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,12 +23,16 @@ public class NearByAdapter extends FragmentPagerAdapter {
     Context context;
     int count;
     ArrayList<String> name;
+    String geolocation;
+    Bundle bundle = new Bundle();
 
-    public NearByAdapter(FragmentManager fm, Context context, int count, ArrayList<String> name) {
+
+    public NearByAdapter(FragmentManager fm, Context context, int count, ArrayList<String> name, String geolocation) {
         super(fm);
         this.context = context;
         this.count = count;
         this.name = name;
+        this.geolocation = geolocation;
     }
 
     @Override
@@ -35,15 +40,31 @@ public class NearByAdapter extends FragmentPagerAdapter {
 
         switch (i) {
             case 0:
-                return new Atmfragment();
+
+                bundle.putString("geolocation", geolocation);
+                Atmfragment atmfragment = new Atmfragment();
+                atmfragment.setArguments(bundle);
+                return atmfragment;
             case 1:
-                return new HospitalFragment();
+                bundle.putString("geolocation", geolocation);
+                HospitalFragment hospitalfragment = new HospitalFragment();
+                hospitalfragment.setArguments(bundle);
+                return hospitalfragment;
             case 2:
-                return new FoodFragment();
+                bundle.putString("geolocation", geolocation);
+                FoodFragment foodfragment = new FoodFragment();
+                foodfragment.setArguments(bundle);
+                return foodfragment;
             case 3:
-                return new HotelFragment();
+                bundle.putString("geolocation", geolocation);
+                HotelFragment hotelfragment = new HotelFragment();
+                hotelfragment.setArguments(bundle);
+                return hotelfragment;
             case 4:
-                return new PetrolStationFragment();
+                bundle.putString("geolocation", geolocation);
+                PetrolStationFragment petrolfragment = new PetrolStationFragment();
+                petrolfragment.setArguments(bundle);
+                return petrolfragment;
         }
         return null;
 

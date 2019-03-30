@@ -18,6 +18,7 @@ import com.example.travelmate.Adapter.FoodAdapter;
 import com.example.travelmate.NearByAtm.NearByAtm;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
+import com.example.travelmate.utility.substringGeolocation;
 
 import java.util.List;
 
@@ -59,12 +60,18 @@ public class HotelFragment extends Fragment {
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvHotel.setLayoutManager(manager);
-        getDataFromApi();
+        String geolocation = getArguments().getString("geolocation");
+        String lat = substringGeolocation.getLatitude(geolocation);
+        String longitude = substringGeolocation.getLongitude(geolocation);
+
+
+        getDataFromApi(lat, longitude);
 
     }
 
-    private void getDataFromApi() {
+    private void getDataFromApi(String lat, String longitude) {
         progressDialog.show();
+        String latlong = lat + "," + longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override

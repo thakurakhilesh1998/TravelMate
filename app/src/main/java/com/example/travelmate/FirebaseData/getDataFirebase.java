@@ -7,9 +7,7 @@ import java.util.ArrayList;
 
 public class getDataFirebase {
 
-    static int RADIUS = 50000;
-    // static Double distance;
-    ArrayList<String> latitude;
+    static int RADIUS = 15000;
     static ArrayList<Double> distance1 = new ArrayList<>();
     static ArrayList<String> distance2 = new ArrayList<String>();
     static ArrayList<String> newlist = new ArrayList<>();
@@ -55,7 +53,7 @@ public class getDataFirebase {
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
-        double km = dist / 0.62137;
+        double km = (dist / 0.62137)*1000;
         return (km);
     }
 

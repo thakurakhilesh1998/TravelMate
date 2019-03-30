@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.example.travelmate.NearByAtm.NearByAtm;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.APIS.NearbyApiHitter;
 import com.example.travelmate.R;
+import com.example.travelmate.utility.substringGeolocation;
 
 import java.util.List;
 
@@ -27,11 +29,11 @@ import retrofit2.Response;
 
 public class FoodFragment extends Fragment {
     public static final String KEY = "AIzaSyDubiCUnOFUDUqIZMGjy8NKav32P6ioDUg";
-    String latlong = "30.7046,76.7179";
+
     public static final String RADIUS = "1000";
     List<Result> food;
     RecyclerView rvFood;
-    String types ="resturants";
+    String types = "resturants";
     ProgressDialog progressDialog;
 
     public FoodFragment() {
@@ -55,12 +57,19 @@ public class FoodFragment extends Fragment {
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvFood.setLayoutManager(manager);
-        getDataFromApi();
+
+        String geolocation = getArguments().getString("geolocation");
+        String lat = substringGeolocation.getLatitude(geolocation);
+        String longitude = substringGeolocation.getLongitude(geolocation);
+
+
+        getDataFromApi(lat, longitude);
     }
 
 
-    private void getDataFromApi() {
+    private void getDataFromApi(String lat, String longitude) {
         progressDialog.show();
+        String latlong = lat + "," + longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override

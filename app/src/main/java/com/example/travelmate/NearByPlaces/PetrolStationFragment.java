@@ -22,6 +22,7 @@ import com.example.travelmate.Distance.Distance;
 import com.example.travelmate.NearByAtm.NearByAtm;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
+import com.example.travelmate.utility.substringGeolocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,6 @@ import retrofit2.Response;
 public class PetrolStationFragment extends Fragment {
     ProgressDialog progressDialog;
     String KEY = "AIzaSyCOggg7f0D3iWZOQSLOKbo0BWrbQ9Y6ymw";
-    String latlong = "30.7046,76.7179";
     String RADIUS = "1000";
     List<Result> atm1;
     RecyclerView rvGasStation;
@@ -65,14 +65,20 @@ public class PetrolStationFragment extends Fragment {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvGasStation.setLayoutManager(manager);
 
+        String geolocation = getArguments().getString("geolocation");
+        String lat = substringGeolocation.getLatitude(geolocation);
+        String longitude = substringGeolocation.getLongitude(geolocation);
 
-        getDataFromApi();
+
+        getDataFromApi(lat, longitude);
+
     }
 
-    private void getDataFromApi() {
+    private void getDataFromApi(String lat, String longitude) {
 
 
         progressDialog.show();
+        String latlong = lat + "," + longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
