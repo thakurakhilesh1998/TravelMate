@@ -66,8 +66,6 @@ public class Atmfragment extends Fragment {
         String geolocation = getArguments().getString("geolocation");
         String lat = substringGeolocation.getLatitude(geolocation);
         String longitude = substringGeolocation.getLongitude(geolocation);
-        Log.e("lat", lat);
-        Log.e("longitude", longitude);
 //        pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
 //            @Override
 //            public void onRefresh() {
@@ -83,14 +81,14 @@ public class Atmfragment extends Fragment {
 
     private void getDataFromApi(String lat, String longitude) {
         progressDialog.show();
-        String latlong = lat + "," + longitude;
+        final String latlong = lat + "," + longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
             public void onResponse(Call<NearByAtm> call, Response<NearByAtm> response) {
                 if (response.isSuccessful()) {
                     atm1 = response.body().getResults();
-                    NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(), atm1);
+                    NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(), atm1,latlong);
                     rvAtm.setAdapter(adapter);
                     progressDialog.dismiss();
 

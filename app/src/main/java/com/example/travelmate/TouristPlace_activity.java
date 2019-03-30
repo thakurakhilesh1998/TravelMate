@@ -33,7 +33,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     LinearLayout weather;
     String locationkey;
     String geolocation;
-    String KEY = "cqD52k5cnb9H0YdLoKcLLrZ13x9evzhj";
+    String KEY = "YU0QPtFwgBh7jzA4eGELHprxq28AJW5U";
     String details = "true";
 
     @Override
@@ -44,8 +44,8 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         photos = new ArrayList<>();
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocordinates");
-        geolocation = addChar(geolocation, '.', 2);
-        geolocation = addChar(geolocation, '.', 12);
+//        geolocation = addChar(geolocation, '.', 2);
+//        geolocation = addChar(geolocation, '.', 12);
         findlatlong(geolocation);
         addPhoto();
         recyclerViewPhotos();
@@ -63,7 +63,14 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         Double longitude = Double.valueOf(this.geolocation.substring(10, 19));
 
         String latlong = latitide + "%2C" + longitude;
-        getLocationKey(latlong);
+
+        try {
+            getLocationKey(latlong);
+        }
+        catch (Exception e)
+        {
+            Log.e("exception",e.getMessage());
+        }
     }
 
     private void getLocationKey(String latlong) {
@@ -176,12 +183,12 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     private void onWeatherClick() {
 
 
-        startActivity(new Intent(this, weatheractivity.class).putExtra("geocoordinates", geolocation));
+        startActivity(new Intent(this, weatheractivity.class).putExtra("geocoordinates1", geolocation));
     }
 
 
     private void viewOnMap() {
-        startActivity(new Intent(this, map_activity.class));
+        startActivity(new Intent(this, map_activity.class).putExtra("geocoordinatesmap", geolocation));
     }
 
     public String addChar(String str, char ch, int position) {

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.travelmate.Adapter.HospitalAdapter;
+import com.example.travelmate.Adapter.NearByAtmAdapter;
 import com.example.travelmate.NearByAtm.NearByAtm;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.APIS.NearbyApiHitter;
@@ -76,14 +77,14 @@ public class HospitalFragment extends Fragment {
 
     private void getDataFromApi(String lat,String longitude) {
         progressDialog.show();
-        String latlong = lat+","+longitude;
+        final String latlong = lat+","+longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
             public void onResponse(Call<NearByAtm> call, Response<NearByAtm> response) {
                 if (response.isSuccessful()) {
                     hospital= response.body().getResults();
-                    HospitalAdapter adapter = new HospitalAdapter(getContext(),hospital);
+                    NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(),hospital,latlong);
                     rvHospital.setAdapter(adapter);
 
                 }

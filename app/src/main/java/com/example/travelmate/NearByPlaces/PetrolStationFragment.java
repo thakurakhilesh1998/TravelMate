@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.travelmate.APIS.DistanceApiHitter;
 import com.example.travelmate.APIS.NearbyApiHitter;
+import com.example.travelmate.Adapter.FoodAdapter;
 import com.example.travelmate.Adapter.NearByAtmAdapter;
 import com.example.travelmate.Distance.Distance;
 import com.example.travelmate.NearByAtm.NearByAtm;
@@ -78,14 +79,14 @@ public class PetrolStationFragment extends Fragment {
 
 
         progressDialog.show();
-        String latlong = lat + "," + longitude;
+        final String latlong = lat + "," + longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
             public void onResponse(Call<NearByAtm> call, Response<NearByAtm> response) {
                 if (response.isSuccessful()) {
                     atm1 = response.body().getResults();
-                    NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(), atm1);
+                    NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(), atm1,latlong);
                     rvGasStation.setAdapter(adapter);
                     progressDialog.dismiss();
 

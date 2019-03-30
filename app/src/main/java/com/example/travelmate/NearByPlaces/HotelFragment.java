@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.travelmate.APIS.NearbyApiHitter;
 import com.example.travelmate.Adapter.FoodAdapter;
+import com.example.travelmate.Adapter.NearByAtmAdapter;
 import com.example.travelmate.NearByAtm.NearByAtm;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
@@ -71,14 +72,14 @@ public class HotelFragment extends Fragment {
 
     private void getDataFromApi(String lat, String longitude) {
         progressDialog.show();
-        String latlong = lat + "," + longitude;
+        final String latlong = lat + "," + longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
             public void onResponse(Call<NearByAtm> call, Response<NearByAtm> response) {
                 if (response.isSuccessful()) {
                     hotel = response.body().getResults();
-                    FoodAdapter adapter = new FoodAdapter(getContext(), hotel);
+                    NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(), hotel,latlong);
                     rvHotel.setAdapter(adapter);
                     progressDialog.dismiss();
                 } else {

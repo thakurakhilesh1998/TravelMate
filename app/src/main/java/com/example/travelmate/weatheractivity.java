@@ -36,13 +36,10 @@ public class weatheractivity extends AppCompatActivity {
         setContentView(R.layout.activity_weatheractivity);
         findids();
         Intent intent = getIntent();
-        geolocation = intent.getStringExtra("geocordinates");
-
+        Log.e("geolocation", geolocation);
         String lat = substringGeolocation.getLatitude(geolocation);
         String longitude = substringGeolocation.getLongitude(geolocation);
-
         getLocationKey(lat, longitude);
-
     }
 
     private void forecastWeather(Response<Weather> response) {
