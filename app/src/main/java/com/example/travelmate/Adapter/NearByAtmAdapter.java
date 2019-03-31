@@ -18,19 +18,18 @@ import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
 import com.example.travelmate.map_activity;
 import com.example.travelmate.utility.*;
+
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Holder>  {
+public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Holder> {
 
     Context context;
     List<Result> atm;
     String latlong;
-//    String units="metric";
-//    String key="AIzaSyCOggg7f0D3iWZOQSLOKbo0BWrbQ9Y6ymw";
 
     public NearByAtmAdapter(Context context, List<Result> atm, String latlong) {
         this.context = context;
@@ -55,13 +54,14 @@ public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Hold
         String lat = String.valueOf(atm.get(i).getGeometry().getLocation().getLat());
         String lng = String.valueOf(atm.get(i).getGeometry().getLocation().getLng());
 
-        getDistance(holder,i,lat,lng);
+        getDistance(holder, i, lat, lng);
 
     }
 
-    private void getDistance(final Holder holder, final int i, String lat, String lng) {
+    private void getDistance(final Holder holder, final int i, final String lat, final String lng) {
 
-        Call<Distance> getDistance= DistanceApiHitter.DistanceApiHitter().getDistance(constants.units,latlong,lat+","+lng,constants.KEY);
+
+        Call<Distance> getDistance = DistanceApiHitter.DistanceApiHitter().getDistance(constants.units, latlong, lat + "," + lng, constants.KEY);
         getDistance.enqueue(new Callback<Distance>() {
             @Override
             public void onResponse(Call<Distance> call, Response<Distance> response) {
@@ -75,7 +75,7 @@ public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Hold
                 holder.btnOnMap.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                   context.startActivity(new Intent(context,map_activity.class));
+                        context.startActivity(new Intent(context, map_activity.class).putExtra("lat", lat).putExtra("lang", lng));
                     }
                 });
             }

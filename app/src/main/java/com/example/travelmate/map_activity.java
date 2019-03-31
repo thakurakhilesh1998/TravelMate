@@ -12,9 +12,11 @@ import android.util.Log;
 import com.example.travelmate.utility.*;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,6 +24,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 public class map_activity extends AppCompatActivity {
     String geolocation;
     Double latitude, longitude;
+    String lat, lng;
     GoogleMap mMap;
     FusedLocationProviderClient fusedLocationProviderClient;
 
@@ -67,15 +70,18 @@ public class map_activity extends AppCompatActivity {
     private void getDataFromIntent() {
 
         Intent intent = getIntent();
-        geolocation = intent.getStringExtra("geocoordinatesmap");
-        latitude = Double.valueOf(substringGeolocation.getLatitude(geolocation));
-        longitude = Double.valueOf(substringGeolocation.getLongitude(geolocation));
+
+        lat = intent.getStringExtra("lat");
+        lng = intent.getStringExtra("lang");
+
     }
 
 
     public void addMarker(GoogleMap mMap) {
-        LatLng latLng = new LatLng(latitude, longitude);
+        LatLng latLng = new LatLng(Double.valueOf(lat), Double.valueOf(lng));
         mMap.addMarker(new MarkerOptions().title("Location On Map").position(latLng));
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(20).build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
     }
 }

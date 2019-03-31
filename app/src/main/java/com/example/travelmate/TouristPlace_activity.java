@@ -1,8 +1,9 @@
 package com.example.travelmate;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,11 @@ import com.example.travelmate.APIS.WeatherApi;
 import com.example.travelmate.Adapter.PlacePhotosAdapter;
 import com.example.travelmate.locationkey.LocationKey;
 import com.example.travelmate.weather.Weather;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -26,14 +32,17 @@ import retrofit2.Response;
 
 public class TouristPlace_activity extends AppCompatActivity implements View.OnClickListener {
     RecyclerView rvPhotos;
-    ArrayList<Integer> photos;
+    ArrayList<String> photos;
     TextView tvPlaceName, tvAbout, tvviewMap, tvNearByPlaces;
     ImageView ivWeatherIcon;
     TextView tvTemp, tvHeadline, tvWindspeed;
     LinearLayout weather;
     String locationkey;
     String geolocation;
-    String KEY = "YU0QPtFwgBh7jzA4eGELHprxq28AJW5U";
+    String geolocation1;
+    FirebaseDatabase database;
+    DatabaseReference mRef;
+    String KEY = "cqD52k5cnb9H0YdLoKcLLrZ13x9evzhj";
     String details = "true";
 
     @Override
@@ -44,15 +53,52 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         photos = new ArrayList<>();
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocordinates");
+        Log.e("geo", geolocation);
+        database = FirebaseDatabase.getInstance();
+        mRef = database.getReference();
 //        geolocation = addChar(geolocation, '.', 2);
 //        geolocation = addChar(geolocation, '.', 12);
         findlatlong(geolocation);
-        addPhoto();
-        recyclerViewPhotos();
+
+
+        getDataFromFirebase();
         getWeatherForecast(locationkey);
         tvviewMap.setOnClickListener(this);
         weather.setOnClickListener(this);
         tvNearByPlaces.setOnClickListener(this);
+
+    }
+
+    private void getDataFromFirebase() {
+        geolocation1=geolocation;
+        geolocation1 = geolocation1.substring(0, 2) + geolocation1.substring(3);
+        geolocation1 = geolocation1.substring(0, 11) + geolocation1.substring(12);
+
+
+        mRef.child(geolocation1).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                getFirebaseData(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void getFirebaseData(DataSnapshot dataSnapshot) {
+
+
+        tvPlaceName.setText(dataSnapshot.child("Placename").getValue().toString());
+        tvAbout.setText(dataSnapshot.child("About").getValue().toString());
+        photos.add(dataSnapshot.child("Photos").child("Photo1").getValue().toString());
+        photos.add(dataSnapshot.child("Photos").child("Photo2").getValue().toString());
+        photos.add(dataSnapshot.child("Photos").child("Photo3").getValue().toString());
+        recyclerViewPhotos(photos);
 
     }
 
@@ -66,10 +112,8 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
         try {
             getLocationKey(latlong);
-        }
-        catch (Exception e)
-        {
-            Log.e("exception",e.getMessage());
+        } catch (Exception e) {
+            Log.e("exception", e.getMessage());
         }
     }
 
@@ -93,9 +137,14 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void getKey(Response<LocationKey> response) {
-        locationkey = response.body().getKey();
-        Log.e("locationkey", locationkey);
-        getWeatherForecast(locationkey);
+        if (response != null) {
+            locationkey = response.body().getKey();
+            Log.e("locationkey", locationkey);
+            getWeatherForecast(locationkey);
+        } else {
+            Log.e("error1", "error");
+        }
+
     }
 
     private void getWeatherForecast(String locationkey) {
@@ -142,17 +191,12 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
     }
 
-    private void addPhoto() {
-        photos.add(R.drawable.dharamshala);
 
-        photos.add(R.drawable.bilaspur);
-    }
-
-    private void recyclerViewPhotos() {
+    private void recyclerViewPhotos(ArrayList<String> photos1) {
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvPhotos.setLayoutManager(manager);
-        PlacePhotosAdapter placePhotosAdapter = new PlacePhotosAdapter(this, photos);
+        PlacePhotosAdapter placePhotosAdapter = new PlacePhotosAdapter(this, photos1);
         rvPhotos.setAdapter(placePhotosAdapter);
     }
 
@@ -188,7 +232,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
 
     private void viewOnMap() {
-        startActivity(new Intent(this, map_activity.class).putExtra("geocoordinatesmap", geolocation));
+        startActivity(new Intent(this, map_2_activity.class).putExtra("geocoordinatesmap", geolocation));
     }
 
     public String addChar(String str, char ch, int position) {

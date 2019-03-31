@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mode"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSize"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:paddingVertical="12dp">
+
+        <RadioButton
+            android:id="@+id/cbDriving"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Driving"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/cbWalking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Walking"
+            android:textColor="@color/white" />
+
+
+        <RadioButton
+            android:id="@+id/cbTransit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transit"
+            android:textColor="@color/white" />
+    </RadioGroup>
+</LinearLayout>

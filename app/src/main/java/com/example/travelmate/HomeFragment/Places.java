@@ -1,4 +1,4 @@
-package com.example.travelmate;
+package com.example.travelmate.HomeFragment;
 
 
 import android.Manifest;
@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 
 import com.example.travelmate.Adapter.PlacesAdapter;
 import com.example.travelmate.FirebaseData.getDataFirebase;
+import com.example.travelmate.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;

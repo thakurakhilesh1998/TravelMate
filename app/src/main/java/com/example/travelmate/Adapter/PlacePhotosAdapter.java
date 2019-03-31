@@ -8,15 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.travelmate.R;
 
 import java.util.ArrayList;
 
- public class PlacePhotosAdapter extends RecyclerView.Adapter<PlacePhotosAdapter.Holder> {
+public class PlacePhotosAdapter extends RecyclerView.Adapter<PlacePhotosAdapter.Holder> {
     Context context;
-    ArrayList<Integer> photos;
+    ArrayList<String> photos;
 
-    public PlacePhotosAdapter(Context context, ArrayList<Integer> photos) {
+    public PlacePhotosAdapter(Context context, ArrayList<String> photos) {
         this.context = context;
         this.photos = photos;
     }
@@ -32,7 +33,8 @@ import java.util.ArrayList;
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
-        holder.ivPlacesPhotos.setImageResource(photos.get(i));
+
+        Glide.with(context).load(photos.get(i)).into(holder.ivPlacesPhotos);
     }
 
     @Override

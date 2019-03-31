@@ -14,19 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.baoyz.widget.PullRefreshLayout;
-import com.example.travelmate.APIS.DistanceApiHitter;
 import com.example.travelmate.APIS.NearbyApiHitter;
-import com.example.travelmate.Adapter.FoodAdapter;
 import com.example.travelmate.Adapter.NearByAtmAdapter;
-import com.example.travelmate.Distance.Distance;
 import com.example.travelmate.NearByAtm.NearByAtm;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
 import com.example.travelmate.utility.substringGeolocation;
 
-import java.util.ArrayList;
 import java.util.List;
+import com.example.travelmate.utility.*;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +33,6 @@ import retrofit2.Response;
  */
 public class PetrolStationFragment extends Fragment {
     ProgressDialog progressDialog;
-    String KEY = "AIzaSyCOggg7f0D3iWZOQSLOKbo0BWrbQ9Y6ymw";
     String RADIUS = "1000";
     List<Result> atm1;
     RecyclerView rvGasStation;
@@ -80,7 +75,7 @@ public class PetrolStationFragment extends Fragment {
 
         progressDialog.show();
         final String latlong = lat + "," + longitude;
-        Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(KEY, latlong, RADIUS, types);
+        Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(constants.KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
             public void onResponse(Call<NearByAtm> call, Response<NearByAtm> response) {

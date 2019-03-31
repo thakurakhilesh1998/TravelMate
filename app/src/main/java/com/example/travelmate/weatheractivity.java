@@ -26,7 +26,7 @@ public class weatheractivity extends AppCompatActivity {
     ImageView ivIcon;
     RecyclerView recyclerView;
     String geolocation;
-    String KEY = "cqD52k5cnb9H0YdLoKcLLrZ13x9evzhj";
+    String KEY = "YU0QPtFwgBh7jzA4eGELHprxq28AJW5U";
     String details = "true";
     String locationkey;
 
