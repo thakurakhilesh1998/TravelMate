@@ -1,13 +1,15 @@
 package com.example.travelmate;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.travelmate.HomeFragment.CheckListFragment;
 import com.example.travelmate.HomeFragment.Places;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     NavigationView navigationView;
     Toolbar toolbar;
     ImageView navigationIcon, ivnotification, ivprofile;
@@ -37,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
     DatabaseReference reference;
     ArrayList<String> list, list1;
     ArrayList<String> temp, filtered, placename;
-
+    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +56,17 @@ public class HomeActivity extends AppCompatActivity {
         temp = new ArrayList<>();
         filtered = new ArrayList<>();
         placename = new ArrayList<>();
-        fetchData();
 
+        navigationView.setNavigationItemSelectedListener(this);
+
+        navigationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isDrawerOpened();
+            }
+        });
+
+        fetchData();
         setSupportActionBar(toolbar);
 
 
@@ -71,9 +83,8 @@ public class HomeActivity extends AppCompatActivity {
                 String Email = dataSnapshot.child("Email").getValue().toString();
                 String Name = dataSnapshot.child("Name").getValue().toString();
                 String profile = dataSnapshot.child("Profile").getValue().toString();
-                Log.e("profile",profile);
+                Log.e("profile", profile);
                 showData(Email, Name, profile);
-
             }
 
             @Override
@@ -91,22 +102,18 @@ public class HomeActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frame, places);
         ft.commit();
-
-
-
-
     }
 
     private void findIds() {
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.navigation);
-        navigationIcon = findViewById(R.id.ivnavigationIcon);
-        ivnotification = findViewById(R.id.ivnotification);
         View headerView = navigationView.getHeaderView(0);
+        navigationIcon = findViewById(R.id.ivnavigationIcon);
+
         tvName = headerView.findViewById(R.id.tvName);
         tvEmail = headerView.findViewById(R.id.tvEmail);
         ivprofile = headerView.findViewById(R.id.ivProfile);
-
+        drawerLayout = findViewById(R.id.drawerLayout);
     }
 
     @Override
@@ -133,4 +140,38 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+        switch (menuItem.getItemId()) {
+            case R.id.places:
+                Places places = new Places();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.frame, places);
+                ft.commit();
+                break;
+            case R.id.weather:
+                break;
+            case R.id.checklist:
+                CheckListFragment checkListFragment = new CheckListFragment();
+                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+                ft1.replace(R.id.frame, checkListFragment);
+                ft1.commit();
+                break;
+            case R.id.nearby:
+
+        }
+        return false;
+    }
+
+
+    private void isDrawerOpened() {
+
+        if (drawerLayout.isDrawerOpen(Gravity.START)) {
+            drawerLayout.closeDrawer(Gravity.START);
+        } else {
+            drawerLayout.openDrawer(Gravity.START);
+        }
+
+    }
 }

@@ -40,8 +40,6 @@
                 android:src="@drawable/notification" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
-
-
     <FrameLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"

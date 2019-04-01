@@ -1,25 +1,24 @@
 package com.example.travelmate.FirebaseData;
 
-import android.util.Log;
-
-
 import java.util.ArrayList;
 
 public class getDataFirebase {
 
-    static int RADIUS = 15000;
-    static ArrayList<Double> distance1 = new ArrayList<>();
-    static ArrayList<String> distance2 = new ArrayList<String>();
-    static ArrayList<String> newlist = new ArrayList<>();
-    static ArrayList<String> newlist1 = new ArrayList<>();
+    static int RADIUS = 1000000;
 
     public static ArrayList<String> isInside(double latitude, double longitude, ArrayList<String> temp) {
+
+        ArrayList<Double> distance1 = new ArrayList<>();
+        ArrayList<String> distance2 = new ArrayList<String>();
+        ArrayList<String> newlist = new ArrayList<>();
+        ArrayList<String> newlist1 = new ArrayList<>();
+
         for (int i = 0; i < temp.size(); i++) {
 
             newlist.add(addChar(temp.get(i), '.', 2));
 
-
         }
+
         for (int i = 0; i < temp.size(); i++) {
             newlist1.add(addChar(newlist.get(i), '.', 12));
         }
@@ -53,7 +52,7 @@ public class getDataFirebase {
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
-        double km = (dist / 0.62137)*1000;
+        double km = (dist / 0.62137) * 1000;
         return (km);
     }
 
@@ -71,7 +70,6 @@ public class getDataFirebase {
         sb.insert(position, ch);
         return sb.toString();
     }
-
 
 }
 

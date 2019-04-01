@@ -13,13 +13,17 @@ import com.example.travelmate.R;
 
 import java.util.ArrayList;
 
+import cz.intik.overflowindicator.OverflowPagerIndicator;
+
 public class PlacePhotosAdapter extends RecyclerView.Adapter<PlacePhotosAdapter.Holder> {
     Context context;
     ArrayList<String> photos;
+    OverflowPagerIndicator overflow;
 
-    public PlacePhotosAdapter(Context context, ArrayList<String> photos) {
+    public PlacePhotosAdapter(Context context, ArrayList<String> photos, OverflowPagerIndicator overflow) {
         this.context = context;
         this.photos = photos;
+        this.overflow = overflow;
     }
 
     @NonNull
@@ -35,6 +39,8 @@ public class PlacePhotosAdapter extends RecyclerView.Adapter<PlacePhotosAdapter.
     public void onBindViewHolder(@NonNull Holder holder, int i) {
 
         Glide.with(context).load(photos.get(i)).into(holder.ivPlacesPhotos);
+        overflow.onPageSelected(i);
+
     }
 
     @Override

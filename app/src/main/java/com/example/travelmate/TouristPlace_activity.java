@@ -1,5 +1,6 @@
 package com.example.travelmate;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,8 @@ import com.example.travelmate.APIS.LocationKeyApi;
 import com.example.travelmate.APIS.WeatherApi;
 import com.example.travelmate.Adapter.PlacePhotosAdapter;
 import com.example.travelmate.locationkey.LocationKey;
+import com.example.travelmate.utility.constants;
+import com.example.travelmate.utility.weathericon;
 import com.example.travelmate.weather.Weather;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,15 +28,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import cz.intik.overflowindicator.OverflowPagerIndicator;
+import cz.intik.overflowindicator.SimpleSnapHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class TouristPlace_activity extends AppCompatActivity implements View.OnClickListener {
     RecyclerView rvPhotos;
     ArrayList<String> photos;
-    TextView tvPlaceName, tvAbout, tvviewMap, tvNearByPlaces;
+    TextView tvPlaceName, tvAbout, tvviewMap, tvNearByPlaces, tvRainProbablity;
     ImageView ivWeatherIcon;
     TextView tvTemp, tvHeadline, tvWindspeed;
     LinearLayout weather;
@@ -42,7 +46,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     String geolocation1;
     FirebaseDatabase database;
     DatabaseReference mRef;
-    String KEY = "cqD52k5cnb9H0YdLoKcLLrZ13x9evzhj";
+    OverflowPagerIndicator overflow;
     String details = "true";
 
     @Override
@@ -56,8 +60,6 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         Log.e("geo", geolocation);
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
-//        geolocation = addChar(geolocation, '.', 2);
-//        geolocation = addChar(geolocation, '.', 12);
         findlatlong(geolocation);
 
 
@@ -70,7 +72,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void getDataFromFirebase() {
-        geolocation1=geolocation;
+        geolocation1 = geolocation;
         geolocation1 = geolocation1.substring(0, 2) + geolocation1.substring(3);
         geolocation1 = geolocation1.substring(0, 11) + geolocation1.substring(12);
 
@@ -120,7 +122,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     private void getLocationKey(String latlong) {
 
 
-        Call<LocationKey> locationkey = LocationKeyApi.LocationKeyApi().getLocationKey(KEY, latlong, details);
+        Call<LocationKey> locationkey = LocationKeyApi.LocationKeyApi().getLocationKey(constants.WeatherKEY, latlong, details);
         locationkey.enqueue(new Callback<LocationKey>() {
             @Override
             public void onResponse(Call<LocationKey> call, Response<LocationKey> response) {
@@ -149,7 +151,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
     private void getWeatherForecast(String locationkey) {
 
-        Call<Weather> weatherCall = WeatherApi.WeatherApi().getWeather(locationkey, KEY, details, details);
+        Call<Weather> weatherCall = WeatherApi.WeatherApi().getWeather(locationkey, constants.WeatherKEY, details, details);
         weatherCall.enqueue(new Callback<Weather>() {
             @Override
             public void onResponse(Call<Weather> call, Response<Weather> response) {
@@ -168,11 +170,13 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
     private void putWeatgerData(Response<Weather> response) {
 
-        tvHeadline.setText(response.body().getDailyForecasts().get(0).getDay().getIconPhrase());
+        tvHeadline.setText(String.valueOf(response.body().getDailyForecasts().get(0).getRealFeelTemperature().getMinimum().getValue()) + "°C");
         Double temp = response.body().getDailyForecasts().get(0).getRealFeelTemperature().getMaximum().getValue();
-        tvTemp.setText(String.valueOf(temp));
-        tvWindspeed.setText(response.body().getDailyForecasts().get(0).getAirAndPollen().get(0).getType());
-
+        tvTemp.setText(String.valueOf(temp) + "°C");
+        tvWindspeed.setText(response.body().getDailyForecasts().get(0).getDay().getIconPhrase());
+        tvRainProbablity.setText(String.valueOf("Rain Probablity:" + response.body().getDailyForecasts().get(0).getDay().getRainProbability()) + "%");
+        int icon = response.body().getDailyForecasts().get(0).getDay().getIcon();
+        ivWeatherIcon.setImageResource(weathericon.WeatherIcon(icon));
     }
 
 
@@ -188,6 +192,8 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         tvWindspeed = findViewById(R.id.tvwinspeed);
         tvHeadline = findViewById(R.id.tvHeadline);
         weather = findViewById(R.id.weatherlayout);
+        overflow = findViewById(R.id.view_pager_indicator);
+        tvRainProbablity = findViewById(R.id.tvRainProbablity);
 
     }
 
@@ -196,8 +202,13 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvPhotos.setLayoutManager(manager);
-        PlacePhotosAdapter placePhotosAdapter = new PlacePhotosAdapter(this, photos1);
+        PlacePhotosAdapter placePhotosAdapter = new PlacePhotosAdapter(this, photos1, overflow);
         rvPhotos.setAdapter(placePhotosAdapter);
+        overflow.attachToRecyclerView(rvPhotos);
+        SimpleSnapHelper pagerSnapHelper = new SimpleSnapHelper(overflow);
+        pagerSnapHelper.attachToRecyclerView(rvPhotos);
+
+
     }
 
     @Override

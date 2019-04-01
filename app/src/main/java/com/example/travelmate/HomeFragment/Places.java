@@ -2,21 +2,17 @@ package com.example.travelmate.HomeFragment;
 
 
 import android.Manifest;
-
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
-
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -33,7 +29,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +47,7 @@ public class Places extends Fragment {
     ArrayList<String> list, list1;
     ArrayList<String> temp, filtered, placename, name, geolocation;
     FusedLocationProviderClient fusedLocationProviderClient;
-
+    ProgressDialog mprogressDialog;
 
     public Places() {
     }
@@ -74,7 +69,7 @@ public class Places extends Fragment {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvPlaces.setLayoutManager(manager);
 
-
+        mprogressDialog = new ProgressDialog(getContext());
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
@@ -89,7 +84,8 @@ public class Places extends Fragment {
         geolocation = new ArrayList<>();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
-
+        mprogressDialog.setMessage("Wait...Fetching...Your Places");
+        mprogressDialog.setCanceledOnTouchOutside(false);
         fetchInterests(mUser.getUid());
 
 
@@ -148,7 +144,7 @@ public class Places extends Fragment {
                     temp.add((String) td.get(key));
 
                 }
-                if (1 <interest1.size()) {
+                if (1 < interest1.size()) {
                     call2(temp, interest1);
                 } else {
                     getData(temp);
@@ -165,8 +161,6 @@ public class Places extends Fragment {
     }
 
     private void getData(ArrayList<String> temp) {
-
-
         findCurrentLocation(temp);
 
 
@@ -180,10 +174,8 @@ public class Places extends Fragment {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
-
                     filtered = getDataFirebase.isInside(location.getLatitude(), location.getLongitude(), temp);
                     getFromFirebase(filtered);
-
                 }
 
             }
@@ -203,7 +195,6 @@ public class Places extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     geolocation.add(dataSnapshot.getKey());
                     placename.add(dataSnapshot.child("Imageaddress").getValue().toString());
-
                     name.add(dataSnapshot.child("Placename").getValue().toString());
 
                     if (i1 == filtered.size() - 1) {
@@ -229,6 +220,7 @@ public class Places extends Fragment {
 
         PlacesAdapter placesAdapter = new PlacesAdapter(getContext(), placename1, name, geolocation1);
         rvPlaces.setAdapter(placesAdapter);
+        mprogressDialog.dismiss();
 
 
     }
@@ -246,7 +238,7 @@ public class Places extends Fragment {
                     temp.add((String) td.get(key));
 
                 }
-                if (2 <interest1.size()) {
+                if (2 < interest1.size()) {
                     call3(temp, interest1);
                 } else {
                     getData(temp);
@@ -354,5 +346,9 @@ public class Places extends Fragment {
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
+    }
 }

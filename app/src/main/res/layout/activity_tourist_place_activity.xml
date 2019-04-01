@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".TouristPlace_activity">
 
-        <android.support.v7.widget.CardView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -19,16 +19,24 @@
                 android:id="@+id/rvPhotos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-        </android.support.v7.widget.CardView>
+
+            <cz.intik.overflowindicator.OverflowPagerIndicator
+                android:id="@+id/view_pager_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/background"
+                android:gravity="center" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tvPlaceName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="32dp"
             android:text="Bilaspur"
             android:textColor="@color/black"
-            android:textSize="@dimen/textSize"
+            android:textSize="30dp"
             android:textStyle="bold" />
 
         <TextView
@@ -38,6 +46,66 @@
             android:layout_marginTop="12dp"
             android:text="hgdfg bdhcjdsghsb cnbhdsbc sdhgdhsfbsdhs chdbcdsn cshdfsnfbdnfghsdj dfbhsdbfsjdbfhjsd sdhfbsdnf"
             android:textColor="#0f0f0f" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:id="@+id/weatherlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <ImageView
+                    android:id="@+id/ivWeatherIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/cloud" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp">
+
+                    <TextView
+                        android:id="@+id/tvTemp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:drawableLeft="@drawable/up"
+                        android:text="24.5" />
+
+                    <TextView
+                        android:id="@+id/tvHeadline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvTemp"
+                        android:drawableLeft="@drawable/down"
+                        android:text="lowtemp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvwinspeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:text="headline"
+                    android:textSize="12dp" />
+                <TextView
+                    android:id="@+id/tvRainProbablity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:text="Rain Probablity"
+                    android:textSize="12dp" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
         <TextView
             android:id="@+id/tvviewOnMap"
@@ -49,51 +117,6 @@
             android:text="View On Map"
             android:textSize="30dp"
             android:textStyle="bold" />
-
-        <LinearLayout
-            android:id="@+id/weatherlayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="12dp">
-
-            <ImageView
-                android:id="@+id/ivWeatherIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/cloud" />
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingHorizontal="20dp">
-
-                <TextView
-                    android:id="@+id/tvTemp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="24.5" />
-
-                <TextView
-                    android:id="@+id/tvHeadline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvTemp"
-                    android:text="Icon Phrase" />
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/tvwinspeed"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:text="2.4m/s"
-                android:textSize="12dp" />
-        </LinearLayout>
 
         <TextView
             android:id="@+id/tvNearByPlaces"

@@ -1,6 +1,7 @@
 package com.example.travelmate.Adapter;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,7 +9,6 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.travelmate.APIS.DistanceApiHitter;
 import com.example.travelmate.Distance.Distance;
-import com.example.travelmate.Distance.Distance_;
 import com.example.travelmate.R;
-import com.example.travelmate.utility.*;
 import com.example.travelmate.TouristPlace_activity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -38,7 +36,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
 
     Context context;
     ArrayList<String> placesimages, name, geolocation;
-
+    ProgressDialog mmprogressDialog;
 
     static String KEY = "AIzaSyCOggg7f0D3iWZOQSLOKbo0BWrbQ9Y6ymw";
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -67,6 +65,9 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
 
     @Override
     public void onBindViewHolder(@NonNull final Holder holder, final int i) {
+        mmprogressDialog = new ProgressDialog(context);
+        mmprogressDialog.setMessage("Wait...Fetching...Your Places");
+        mmprogressDialog.setCanceledOnTouchOutside(false);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -85,7 +86,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
     private void getDistanceTime(String currentLatlong, final int i, final Holder holder) {
         geolocation.set(i, addChar(geolocation.get(i), '.', 2));
         geolocation.set(i, addChar(geolocation.get(i), '.', 12));
-        Log.e("d1", geolocation.get(i));
 
         Call<Distance> getDistance = DistanceApiHitter.DistanceApiHitter().getDistance(units, currentLatlong, geolocation.get(i), KEY);
         getDistance.enqueue(new Callback<Distance>() {
@@ -98,8 +98,8 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
 
                 holder.tvName.setText(name.get(i));
                 Glide.with(context).load(placesimages.get(i)).into(holder.ivImage);
-                holder.tvDistance.setText(response.body().getRows().get(0).getElements().get(0).getDistance().getText());
-                holder.tvTime.setText(response.body().getRows().get(0).getElements().get(0).getDuration().getText());
+                holder.tvDistance.setText("Around "+response.body().getRows().get(0).getElements().get(0).getDistance().getText()+" Away");
+                holder.tvTime.setText(" "+response.body().getRows().get(0).getElements().get(0).getDuration().getText());
                 holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
