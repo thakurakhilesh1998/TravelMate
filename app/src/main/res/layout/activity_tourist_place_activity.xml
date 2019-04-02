@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+
         tools:context=".TouristPlace_activity">
 
         <RelativeLayout
@@ -29,102 +30,77 @@
                 android:gravity="center" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tvPlaceName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Bilaspur"
-            android:textColor="@color/black"
-            android:textSize="30dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvAbout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="hgdfg bdhcjdsghsb cnbhdsbc sdhgdhsfbsdhs chdbcdsn cshdfsnfbdnfghsdj dfbhsdbfsjdbfhjsd sdhfbsdnf"
-            android:textColor="#0f0f0f" />
+            android:orientation="vertical"
+            android:padding="8dp">
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="2dp">
 
-            <LinearLayout
-                android:id="@+id/weatherlayout"
+            <TextView
+                android:id="@+id/tvPlaceName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Bilaspur"
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvAbout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
+                android:layout_marginTop="12dp"
+                android:text="hgdfg bdhcjdsghsb cnbhdsbc sdhgdhsfbsdhs chdbcdsn cshdfsnfbdnfghsdj dfbhsdbfsjdbfhjsd sdhfbsdnf"
+                android:textColor="#0f0f0f" />
 
-                <ImageView
-                    android:id="@+id/ivWeatherIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/cloud" />
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="#87cefa"
+                app:cardElevation="4dp">
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="20dp">
+                <include
+                    layout="@layout/weatherlayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.v7.widget.CardView>
 
-                    <TextView
-                        android:id="@+id/tvTemp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:drawableLeft="@drawable/up"
-                        android:text="24.5" />
+            <TextView
+                android:id="@+id/tvviewOnMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:elevation="12dp"
+                android:text="View On Map"
+                android:textSize="30dp"
+                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/tvHeadline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tvTemp"
-                        android:drawableLeft="@drawable/down"
-                        android:text="lowtemp" />
-                </RelativeLayout>
+            <TextView
+                android:id="@+id/tvNearByPlaces"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="nearbyPlaces"
+                android:textSize="20dp" />
 
-                <TextView
-                    android:id="@+id/tvwinspeed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:text="headline"
-                    android:textSize="12dp" />
-                <TextView
-                    android:id="@+id/tvRainProbablity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:text="Rain Probablity"
-                    android:textSize="12dp" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
 
-        <TextView
-            android:id="@+id/tvviewOnMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="12dp"
-            android:elevation="12dp"
-            android:text="View On Map"
-            android:textSize="30dp"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Explore"
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+            <include
+                layout="@layout/nearbylayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/tvNearByPlaces"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:text="nearbyPlaces"
-            android:textSize="20dp" />
+        </LinearLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

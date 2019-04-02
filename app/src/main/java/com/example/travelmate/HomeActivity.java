@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     NavigationView navigationView;
     Toolbar toolbar;
     ImageView navigationIcon, ivnotification, ivprofile;
@@ -67,6 +67,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
 
         fetchData();
+        ivprofile.setOnClickListener(this);
         setSupportActionBar(toolbar);
 
 
@@ -173,5 +174,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout.openDrawer(Gravity.START);
         }
 
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.ivProfile:
+                onClickOnProfile();
+        }
+
+    }
+
+    private void onClickOnProfile() {
+
+        startActivity(new Intent(this, userprofile_activity.class));
     }
 }
