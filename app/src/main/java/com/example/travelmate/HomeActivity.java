@@ -15,9 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.example.travelmate.HomeFragment.*;
 import com.bumptech.glide.Glide;
-import com.example.travelmate.HomeFragment.CheckListFragment;
 import com.example.travelmate.HomeFragment.Places;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -154,12 +153,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.weather:
                 break;
             case R.id.checklist:
-                CheckListFragment checkListFragment = new CheckListFragment();
-                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-                ft1.replace(R.id.frame, checkListFragment);
-                ft1.commit();
+
                 break;
             case R.id.nearby:
+                mytripFragment mytripFragment=new mytripFragment();
+                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+                ft1.replace(R.id.frame,mytripFragment);
+                ft1.commit();
 
         }
         return false;

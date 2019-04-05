@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.travelmate.APIS.DistanceApiHitter;
@@ -92,21 +93,21 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
             @Override
             public void onResponse(Call<Distance> call, Response<Distance> response) {
 
-                response.body().getRows().get(0).getElements().get(0).getDistance().getText();
-                response.body().getRows().get(0).getElements().get(0).getDuration().getText();
+                if (true) {
+                    holder.tvName.setText(name.get(i));
+                    Glide.with(context).load(placesimages.get(i)).into(holder.ivImage);
+//                    holder.tvDistance.setText("Around " + response.body().getRows().get(0).getElements().get(0).getDistance().getText() + " Away");
+//                    holder.tvTime.setText(" " + response.body().getRows().get(0).getElements().get(0).getDuration().getText());
+                    holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            click(i);
+                        }
 
-
-                holder.tvName.setText(name.get(i));
-                Glide.with(context).load(placesimages.get(i)).into(holder.ivImage);
-                holder.tvDistance.setText("Around "+response.body().getRows().get(0).getElements().get(0).getDistance().getText()+" Away");
-                holder.tvTime.setText(" "+response.body().getRows().get(0).getElements().get(0).getDuration().getText());
-                holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        click(i);
-                    }
-                });
-
+                    });
+                } else {
+                    Toast.makeText(context, "error", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

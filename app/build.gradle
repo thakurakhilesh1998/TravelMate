@@ -64,4 +64,10 @@ dependencies {
     implementation "cz.intik:overflow-pager-indicator:1.2.1"
 
 
+    implementation 'com.github.jakebonk:NotifyMe:1.0.0'
+
+    //DATETIMEPICKER
+    implementation 'com.wdullaer:materialdatetimepicker:3.6.0'
+
+
 }
