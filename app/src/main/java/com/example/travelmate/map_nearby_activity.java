@@ -3,6 +3,7 @@ package com.example.travelmate;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.travelmate.APIS.NearbyApiHitter;
@@ -38,6 +39,7 @@ public class map_nearby_activity extends AppCompatActivity {
         setContentView(R.layout.activity_map_nearby_activity);
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geo");
+        Log.e("geo",geolocation);
         lat1 = new ArrayList<>();
         lang = new ArrayList<>();
         lat = substringGeolocation.getLatitude(geolocation);
@@ -72,7 +74,7 @@ public class map_nearby_activity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     atm1 = response.body().getResults();
                     for (int i = 0; i < atm1.size(); i++) {
-                        lat1.add(atm1.get(i).getGeometry().getLocation().getLng());
+                        lat1.add(atm1.get(i).getGeometry().getLocation().getLat());
                         lang.add(atm1.get(i).getGeometry().getLocation().getLng());
                     }
                     addMarkerOnMap(lat1, lang);
@@ -93,6 +95,9 @@ public class map_nearby_activity extends AppCompatActivity {
     }
 
     private void addMarkerOnMap(List<Double> lat1, List<Double> lang) {
+
+
+        Log.e("size",lat1.size()+","+lang.size());
         for (int i = 0; i < lat1.size(); i++) {
 
             mMap.addMarker(new MarkerOptions().position(new LatLng(lat1.get(i), lang.get(i))).title("atm"));
