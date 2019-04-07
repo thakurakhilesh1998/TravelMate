@@ -11,10 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.travelmate.Adapter.TripAdapter;
 import com.example.travelmate.R;
-import com.example.travelmate.utility.savetripdata;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +24,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,6 +39,10 @@ public class mytripFragment extends Fragment {
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     ArrayList<String> list;
+    ArrayList<String> listfinal;
+    TextView tvnotrip;
+    LinearLayout linearLayout;
+
     public mytripFragment() {
     }
 
@@ -49,11 +56,14 @@ public class mytripFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rvMyTrips = view.findViewById(R.id.rvMytrips);
-        mAuth=FirebaseAuth.getInstance();
+        //  rvMyTrips = view.findViewById(R.id.rvMytrips);
+        mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
-        list=new ArrayList<>();
+        list = new ArrayList<>();
+        listfinal = new ArrayList<>();
+        linearLayout = view.findViewById(R.id.linearLayout);
+        //tvnotrip = view.findViewById(R.id.tvnotrip);
         getDataFromFirebase();
 
 
@@ -65,23 +75,48 @@ public class mytripFragment extends Fragment {
         databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
 
-                LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                rvMyTrips.setLayoutManager(manager);
-                Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-                Iterator myVeryOwnIterator = td.keySet().iterator();
+                    Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
+                    Iterator myVeryOwnIterator = td.keySet().iterator();
+                    while (myVeryOwnIterator.hasNext()) {
+                        String key = (String) myVeryOwnIterator.next();
+                        list.add(key);
+                    }
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String formattedDate = df.format(c.getTime());
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).compareTo(formattedDate) > 0) {
+                            listfinal.add(list.get(i));
+                        }
 
-                while (myVeryOwnIterator.hasNext()) {
-                    String key = (String) myVeryOwnIterator.next();
-                    list.add(key);
+                    }
+                            Log.e("listsize", String.valueOf(listfinal.size()));
+                            if (listfinal.size() != 0) {
+                                rvMyTrips = new RecyclerView(getContext());
+                                linearLayout.addView(rvMyTrips);
+                                rvMyTrips.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                                rvMyTrips.setLayoutManager(manager);
+                                TripAdapter tripAdapter = new TripAdapter(getContext(), listfinal);
+                                rvMyTrips.setAdapter(tripAdapter);
+                                rvMyTrips.setVisibility(View.VISIBLE);
+                            } else {
 
+                                tvnotrip = new TextView(getContext());
+                                tvnotrip.setText("no tripfound");
+                                tvnotrip.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                linearLayout.addView(tvnotrip);
+                                Log.e("dfsdgd", "textview");
+
+                            }
+
+
+
+                } else {
+                    Log.e("datasnapshot", "error");
                 }
-                Log.e("size", String.valueOf(list.size()));
-                Log.e("first",list.get(0));
-
-                TripAdapter tripAdapter = new TripAdapter(getContext(),list);
-                rvMyTrips.setAdapter(tripAdapter);
-
             }
 
             @Override
@@ -89,5 +124,7 @@ public class mytripFragment extends Fragment {
 
             }
         });
+
+
     }
 }

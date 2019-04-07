@@ -2,7 +2,6 @@ package com.example.travelmate.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,22 +18,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     Context context;
-    String name;
+    String list;
     FirebaseDatabase database;
     DatabaseReference databaseReference;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
+    ArrayList<String> list1=new ArrayList<>();
 
-    public ExpandableListViewAdapter(Context context, String name) {
+
+    public ExpandableListViewAdapter(Context context, String list) {
         this.context = context;
-        this.name = name;
+        this.list = list;
     }
 
 
@@ -45,7 +43,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return 6;
+        return list1.size();
     }
 
     @Override
@@ -98,15 +96,16 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         databaseReference = database.getReference();
         final TextView listTitleTextView = (TextView) convertView
                 .findViewById(R.id.tvListView);
-
-        databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(name).child("list").addValueEventListener(new ValueEventListener() {
+        database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference();
+        mAuth=FirebaseAuth.getInstance();
+        mUser=mAuth.getCurrentUser();
+        databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list).child("list").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                  ArrayList<String> list = (ArrayList<String>) dataSnapshot.getValue();
-                 Log.e("size", String.valueOf(list.size()));
-                }
+
+                list1 = (ArrayList<String>) dataSnapshot.getValue();
 
             }
 
@@ -115,6 +114,9 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
             }
         });
+
+
+        listTitleTextView.setText(list1.get(childPosition));
 
         return convertView;
     }

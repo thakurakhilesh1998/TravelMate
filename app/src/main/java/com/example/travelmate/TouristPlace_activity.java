@@ -48,6 +48,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     DatabaseReference mRef;
     OverflowPagerIndicator overflow;
     String details = "true";
+    ImageView ivFirst, ivSecond, ivThird, ivFourth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,10 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         tvviewMap.setOnClickListener(this);
         weather.setOnClickListener(this);
         tvNearByPlaces.setOnClickListener(this);
+        ivFirst.setOnClickListener(this);
+        ivSecond.setOnClickListener(this);
+        ivThird.setOnClickListener(this);
+        ivFourth.setOnClickListener(this);
 
     }
 
@@ -194,6 +199,10 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         weather = findViewById(R.id.weatherlayout);
         overflow = findViewById(R.id.view_pager_indicator);
         tvRainProbablity = findViewById(R.id.tvRainProbablity);
+        ivFirst = findViewById(R.id.tvFirst);
+        ivSecond = findViewById(R.id.tvsecond);
+        ivThird = findViewById(R.id.tvThird);
+        ivFourth = findViewById(R.id.tvFourth);
 
     }
 
@@ -223,9 +232,26 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
             case R.id.tvNearByPlaces:
                 onNearByPlacesClicked();
                 break;
+            case R.id.tvFirst:
+                onAtmClick();
+                break;
+            case R.id.tvsecond:
+                break;
+            case R.id.tvThird:
+                break;
+            case R.id.tvFourth:
+                break;
 
 
         }
+    }
+
+    private void onAtmClick() {
+
+        startActivity(new Intent(getApplicationContext(),atm_activity.class).putExtra("geocoordinates2", geolocation));
+
+
+
     }
 
     private void onNearByPlacesClicked() {

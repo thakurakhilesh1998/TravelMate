@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -48,7 +49,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         list = new ArrayList<>();
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        mUser=mAuth.getCurrentUser();
+        mUser = mAuth.getCurrentUser();
         tvPickDate.setOnClickListener(this);
         btnCreate.setOnClickListener(this);
         btnadditem.setOnClickListener(this);
@@ -122,7 +123,6 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
             case R.id.btnaddItem:
                 addItem();
         }
-
     }
 
     private void addItem() {
@@ -130,24 +130,21 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         textView = new TextView(this);
         list.add(textItem);
         addItemToTextView(textItem);
-
-
     }
 
     private void addItemToTextView(String textItem) {
-
         textView.setText(textItem);
         textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         linearLayout.addView(textView);
     }
 
     private void notification() {
-
         String tripname = etTripname.getText().toString().trim();
-        String date = String.valueOf(y + "/" + m + "/" + d + "::" + h + ":" + mi);
-        savetripdata data = new savetripdata(tripname, date, list);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = df.format(now.getTime());
+        savetripdata data = new savetripdata(tripname, formattedDate, list);
         reference = database.getReference();
-        reference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(tripname).setValue(data);
+        reference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(formattedDate).setValue(data);
         NotifyMe notifyMe = new NotifyMe.Builder(getApplicationContext())
                 .title("hello")
                 .content("hi")
@@ -157,12 +154,12 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
                 .key("test")
                 .large_icon(R.mipmap.ic_launcher_round)
                 .build();
-
     }
-
 
     private void pickDate() {
         dpd.show(getFragmentManager(), "Datepickerdialog");
-        tvPickDate.setText(String.valueOf(y + "/" + m + "/" + d + "::" + h + ":" + mi));
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = df.format(now.getTime());
+        tvPickDate.setText(formattedDate);
     }
 }

@@ -1,9 +1,13 @@
 package com.example.travelmate;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -15,9 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.example.travelmate.HomeFragment.*;
+
 import com.bumptech.glide.Glide;
 import com.example.travelmate.HomeFragment.Places;
+import com.example.travelmate.HomeFragment.mytripFragment;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,13 +48,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ArrayList<String> list, list1;
     ArrayList<String> temp, filtered, placename;
     DrawerLayout drawerLayout;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    String geolocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         findIds();
-
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
@@ -55,6 +64,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         temp = new ArrayList<>();
         filtered = new ArrayList<>();
         placename = new ArrayList<>();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        }
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                geolocation = location.getLatitude() + "," + location.getLongitude();
+
+            }
+        });
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -101,7 +121,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Places places = new Places();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frame, places);
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 
     private void findIds() {
@@ -148,18 +168,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 Places places = new Places();
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.frame, places);
-                ft.commit();
+                ft.commitAllowingStateLoss();
                 break;
             case R.id.weather:
+
+                startActivity(new Intent(getApplicationContext(), weatheractivity.class).putExtra("geocoordinates1", geolocation));
                 break;
             case R.id.checklist:
-
+                startActivity(new Intent(this, mytrip_activity.class));
                 break;
             case R.id.nearby:
-                mytripFragment mytripFragment=new mytripFragment();
+                mytripFragment mytripFragment = new mytripFragment();
                 FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-                ft1.replace(R.id.frame,mytripFragment);
-                ft1.commit();
+                ft1.replace(R.id.frame, mytripFragment);
+                ft1.commitAllowingStateLoss();
 
         }
         return false;

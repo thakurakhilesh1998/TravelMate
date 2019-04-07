@@ -3,10 +3,12 @@ package com.example.travelmate.Adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.travelmate.R;
@@ -18,7 +20,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
 
@@ -29,11 +33,13 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     ArrayList<String> list1 = new ArrayList<>();
+    String name;
 
 
     public TripAdapter(Context context, ArrayList<String> list) {
         this.context = context;
         this.list = list;
+
     }
 
     @NonNull
@@ -45,31 +51,63 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final Holder holder, int i) {
+    public void onBindViewHolder(@NonNull final Holder holder, final int i) {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference();
-        databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).addValueEventListener(new ValueEventListener() {
+        holder.ivDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDelClick(name, i);
+            }
+        });
+        if (list.get(i) != null) {
+            databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    getDataSetData(dataSnapshot, holder, i);
+                    Log.e("dbfhjg", "error");
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
+    }
+
+    private void onDelClick(String name, int i) {
+        notifyItemRemoved(i);
+        list.remove(i);
+    }
+
+    private void getDataSetData(DataSnapshot dataSnapshot, final Holder holder, int i) {
+        name = dataSnapshot.child("tripname").getValue().toString();
+        String date = dataSnapshot.child("date").getValue().toString();
+
+
+        //Boolean id = comapreDate(date, formattedDate);
+
+        //  Log.e("id", String.valueOf(id));
+        holder.tvTripName.setText(name);
+        holder.tvDate.setText(date);
+
+        databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).child("list").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                String name = dataSnapshot.child("tripname").getValue().toString();
-                String date = dataSnapshot.child("date").getValue().toString();
-                holder.tvTripName.setText(name);
-                holder.tvDate.setText(date);
-                ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(context,name);
+                ArrayList<String> list = (ArrayList<String>) dataSnapshot.getValue();
+                ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(context, name);
                 holder.expandableListView.setAdapter(adapter);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
-
     }
+
 
     @Override
     public int getItemCount() {
@@ -79,12 +117,15 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
     public class Holder extends RecyclerView.ViewHolder {
         ExpandableListView expandableListView;
         TextView tvTripName, tvDate;
+        ImageView ivDel;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
             tvTripName = itemView.findViewById(R.id.tvTripName);
             tvDate = itemView.findViewById(R.id.tvDate);
             expandableListView = itemView.findViewById(R.id.expandableListView);
+            ivDel = itemView.findViewById(R.id.ivDel);
         }
     }
+
 }

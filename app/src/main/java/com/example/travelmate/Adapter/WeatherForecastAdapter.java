@@ -1,9 +1,9 @@
 package com.example.travelmate.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,10 @@ import android.widget.TextView;
 
 import com.example.travelmate.R;
 import com.example.travelmate.weather.Weather;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import retrofit2.Response;
 
@@ -35,34 +39,50 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
 
-        String minTemp = String.valueOf(response.body().getDailyForecasts().get(i).getRealFeelTemperature().getMinimum().getValue());
-        Log.e("minTemp", minTemp);
-        String maxTemp = String.valueOf(response.body().getDailyForecasts().get(i).getRealFeelTemperature().getMaximum().getValue());
-        holder.minTemp.setText(minTemp);
-        holder.maxTemp.setText(maxTemp);
-        holder.date.setText(response.body().getDailyForecasts().get(i).getDate().substring(0, 10));
 
+        if (i % 2 == 1) {
+            holder.itemView.setBackgroundColor(Color.parseColor("#EA5A42"));
+        } else {
+            holder.itemView.setBackgroundColor(Color.parseColor("#3A5276"));
 
+        }
 
+        String minTemp = String.valueOf(response.body().getDailyForecasts().get(i + 1).getRealFeelTemperature().getMinimum().getValue());
+        String maxTemp = String.valueOf(response.body().getDailyForecasts().get(i + 1).getRealFeelTemperature().getMaximum().getValue());
+        holder.tvTemp.setText(minTemp.substring(0, 2) + "°-" + maxTemp.substring(0, 2) + "°");
+        String status = response.body().getDailyForecasts().get(i).getDay().getIconPhrase();
+        holder.tvStatus.setText(status);
 
+        SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = inFormat.parse(response.body().getDailyForecasts().get(i).getDate().substring(0, 10));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat outFormat = new SimpleDateFormat("EEEE");
+        String goal = outFormat.format(date);
+        holder.tvDayName.setText(goal);
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return 4;
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-        TextView date, day, maxTemp, minTemp;
-        ImageView ivIcon;
+        ImageView ivWeatherIcon;
+        TextView tvDayName, tvStatus, tvTemp;
 
 
         public Holder(@NonNull View itemView) {
             super(itemView);
-            date = itemView.findViewById(R.id.date);
-            day = itemView.findViewById(R.id.day);
-            maxTemp = itemView.findViewById(R.id.maxTemp);
-            minTemp = itemView.findViewById(R.id.minTemp);
+            ivWeatherIcon = itemView.findViewById(R.id.ivWeatherIcon);
+            tvDayName = itemView.findViewById(R.id.tvDayName);
+            tvStatus = itemView.findViewById(R.id.tvStatus);
+            tvTemp = itemView.findViewById(R.id.tvTemp);
+
+
         }
     }
 }
