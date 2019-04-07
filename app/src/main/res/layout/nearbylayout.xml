@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/tvFirst"
-        android:src="@drawable/viewonmap"
+        android:src="@drawable/distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

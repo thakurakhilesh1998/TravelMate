@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".atm_activity"></activity>
+        <activity android:name=".map_nearby_activity"></activity>
+        <activity android:name=".atm_activity" />
 
         <receiver android:name="com.allyants.notifyme.NotificationPublisher" />
         <receiver android:name="com.allyants.notifyme.BootNotifyMe">
@@ -24,7 +25,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".mytrip_activity"></activity>
+        <activity android:name=".mytrip_activity" />
         <activity android:name=".userprofile_activity" />
         <activity android:name=".map_2_activity" />
         <activity android:name=".NearByPlacesActivity" />

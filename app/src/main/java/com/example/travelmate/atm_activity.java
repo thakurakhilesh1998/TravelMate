@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.travelmate.APIS.NearbyApiHitter;
@@ -22,21 +25,27 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class atm_activity extends AppCompatActivity {
+public class atm_activity extends AppCompatActivity implements View.OnClickListener {
     public static final String RADIUS = "1000";
     List<Result> atm1;
     RecyclerView rvAtm;
     String types = "atm";
     ProgressDialog progressDialog;
-
+    Toolbar toolbar;
+    TextView tvMapView;
+    String geolocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atm_activity);
+        toolbar=findViewById(R.id.toolbar);
+        tvMapView=findViewById(R.id.tvMapView);
+        setSupportActionBar(toolbar);
         rvAtm = findViewById(R.id.rvAtm);
         Intent intent = getIntent();
         progressDialog = new ProgressDialog(getApplicationContext());
-        String geolocation = intent.getStringExtra("geocoordinates2");
+        tvMapView.setOnClickListener(this);
+        geolocation = intent.getStringExtra("geocoordinates2");
         Log.e("geolocation", geolocation);
         String lat = substringGeolocation.getLatitude(geolocation);
         String longitude = substringGeolocation.getLongitude(geolocation);
@@ -74,5 +83,20 @@ public class atm_activity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onClick(View v) {
+switch (v.getId())
+{
+    case R.id.tvMapView:
+        onClickMap();
+
+}
+    }
+
+    private void onClickMap() {
+
+        startActivity(new Intent(getApplicationContext(),map_nearby_activity.class).putExtra("geo",geolocation));
     }
 }

@@ -3,17 +3,16 @@ package com.example.travelmate.Adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.travelmate.APIS.DistanceApiHitter;
-import com.example.travelmate.APIS.PlacePhoto;
-import com.example.travelmate.APIS.PlacePhotosClass;
 import com.example.travelmate.Distance.Distance;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
@@ -63,32 +62,24 @@ public class NearBy extends RecyclerView.Adapter<NearBy.Holder> {
             @Override
             public void onResponse(Call<Distance> call, Response<Distance> response) {
                 holder.tvPlaceName.setText(atm1.get(i).getName());
-                holder.tvRatings.setText(String.valueOf(atm1.get(i).getRating()));
+                try {
+                    holder.tvRatings.setText(String.valueOf(atm1.get(i).getRating()));
+                } catch (Exception e) {
+                    holder.tvRatings.setText("");
+                }
                 holder.tvPlaceAddress.setText(atm1.get(i).getVicinity());
                 holder.tvDistance.setText(response.body().getRows().get(0).getElements().get(0).getDistance().getText());
-
-                    String photoref = atm1.get(0).getPhotos().get(0).getPhotoReference();
-                    Log.e("exception",photoref);
-                    Call<PlacePhotosClass> getPhoto = PlacePhoto.PlacePhoto().getPhoto("100", "100", photoref, constants.KEY);
-                    getPhoto.enqueue(new Callback<PlacePhotosClass>() {
-                        @Override
-                        public void onResponse(Call<PlacePhotosClass> call, Response<PlacePhotosClass> response) {
-                            Log.e("url", response.body().getPhotourl());
-                        }
-
-                        @Override
-                        public void onFailure(Call<PlacePhotosClass> call, Throwable t) {
-                            Log.e("bfdgfs", t.getMessage());
-                        }
-                    });
+                Glide.with(context).load(atm1.get(0).getIcon()).into(holder.ivImage);
+                holder.tvTotal.setText(String.valueOf("(" + atm1.get(i).getUserRatingsTotal() + ")"));
+                try {
+                    Float a = (float) atm1.get(i).getRating();
+                    holder.rbRating.setRating(a);
+                } catch (Exception e) {
+                    holder.rbRating.setRating((float) 0.0);
                 }
+                //   holder.rbRating.setRating();
 
-//                holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        context.startActivity(new Intent(context, map_activity.class).putExtra("lat", lat).putExtra("lang", lng));
-//                    }
-//                });
+            }
 
 
             @Override
@@ -108,6 +99,8 @@ public class NearBy extends RecyclerView.Adapter<NearBy.Holder> {
         ImageView ivImage;
         TextView tvPlaceName, tvPlaceAddress, tvRatings, tvDistance;
         LinearLayout linearLayout;
+        RatingBar rbRating;
+        TextView tvTotal;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -117,6 +110,8 @@ public class NearBy extends RecyclerView.Adapter<NearBy.Holder> {
             tvRatings = itemView.findViewById(R.id.tvratings);
             tvDistance = itemView.findViewById(R.id.tvDistance);
             //   linearLayout = itemView.findViewById(R.id.linearLayout);
+            rbRating = itemView.findViewById(R.id.rbRating);
+            tvTotal = itemView.findViewById(R.id.tvTotal);
         }
     }
 }

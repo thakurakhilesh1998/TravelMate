@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -45,6 +46,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     String geolocation;
     String geolocation1;
     FirebaseDatabase database;
+
     DatabaseReference mRef;
     OverflowPagerIndicator overflow;
     String details = "true";
@@ -55,17 +57,18 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tourist_place_activity);
         findIds();
+
         photos = new ArrayList<>();
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocordinates");
         Log.e("geo", geolocation);
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
-        findlatlong(geolocation);
+      //  findlatlong(geolocation);
 
 
         getDataFromFirebase();
-        getWeatherForecast(locationkey);
+       // getWeatherForecast(locationkey);
         tvviewMap.setOnClickListener(this);
         weather.setOnClickListener(this);
         tvNearByPlaces.setOnClickListener(this);
