@@ -2,7 +2,9 @@ package com.example.travelmate;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -10,13 +12,18 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.travelmate.APIS.DirectionApiHitter;
+import com.example.travelmate.Adapter.NavAdapter;
 import com.example.travelmate.Direction.Direction;
 import com.example.travelmate.Direction.Leg;
 import com.example.travelmate.Direction.Route;
@@ -43,15 +50,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class map_2_activity extends AppCompatActivity implements View.OnClickListener {
-    TextView tvDistance, tvTime;
+    TextView tvDistance, tvTime, tvDestination;
+    Toolbar toolbar;
     GoogleMap mMap;
     FusedLocationProviderClient mClient;
     Double latitude, langitude;
-
+    ImageView ivcurrent, ivdirection;
     List<com.example.travelmate.Direction.Route> Route;
     ArrayList<LatLng> list;
     String destLatlang;
     Dialog dialog;
+    RecyclerView rvDirection;
+    ArrayList<String> direction, time, distance, manuer;
+    int backpresscount = 0;
+    RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +71,34 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
         String mode = "driving";
         setContentView(R.layout.activity_map_2_activity);
         mClient = LocationServices.getFusedLocationProviderClient(this);
-        Route = new ArrayList<>();
-        list = new ArrayList<>();
-        tvDistance = findViewById(R.id.tvDistance);
-        tvTime = findViewById(R.id.tvTime);
 
+        findIds();
+        setSupportActionBar(toolbar);
         Intent intent = getIntent();
         destLatlang = intent.getStringExtra("geocoordinatesmap");
-        Log.e("destLatlang", destLatlang);
+        ivdirection.setOnClickListener(this);
+        ivcurrent.setOnClickListener(this);
+        relativeLayout.setVisibility(View.VISIBLE);
+        onChangeMode();
 
-       onChangeMode();
+
+    }
+
+    private void findIds() {
+        toolbar = findViewById(R.id.toolbar);
+        tvDistance = findViewById(R.id.tvDistance);
+        tvTime = findViewById(R.id.tvTime);
+        Route = new ArrayList<>();
+        list = new ArrayList<>();
+        ivcurrent = findViewById(R.id.ivcurrent);
+        ivdirection = findViewById(R.id.ivDirection);
+        rvDirection = findViewById(R.id.rvDirection);
+        tvDestination = findViewById(R.id.tvDest);
+        direction = new ArrayList<>();
+        time = new ArrayList<>();
+        distance = new ArrayList<>();
+        manuer = new ArrayList<>();
+        relativeLayout = findViewById(R.id.realativelayout);
 
 
     }
@@ -93,7 +123,6 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
 
         String originlatlang = latitude + "," + langitude;
         final LatLng latLng1 = new LatLng(latitude, langitude);
-        Log.e("mode12", mode);
         final LatLng destLatlang1 = new LatLng(Double.valueOf(destLatlang.substring(0, 9)), Double.valueOf(destLatlang.substring(10, 19)));
         Call<Direction> getDirection = DirectionApiHitter.DirectionApiHitter().getDirection(originlatlang, destLatlang, mode, constants.KEY);
         getDirection.enqueue(new Callback<Direction>() {
@@ -102,8 +131,6 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
 
                 Route = response.body().getRoutes();
                 initMap(Route, latLng1, destLatlang1, mode);
-
-
             }
 
             @Override
@@ -121,15 +148,28 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     mMap = googleMap;
-
                     mMap.addMarker(new MarkerOptions().position(latLng1).title("Current"));
                     mMap.addMarker(new MarkerOptions().position(destLatlang1).title("destination"));
                     tvDistance.setText(route.get(0).getLegs().get(0).getDistance().getText());
-                    tvTime.setText(route.get(0).getLegs().get(0).getDuration().getText());
-                    Log.e("travelmode", route.get(0).getLegs().get(0).getSteps().get(0).getTravelMode());
+                    tvDestination.setText(route.get(0).getLegs().get(0).getEndAddress());
+                    tvTime.setText("(" + route.get(0).getLegs().get(0).getDuration().getText() + ")");
                     list = getDirectionPolylines(route);
                     drawRouteOnMap(mMap, list);
 
+
+                    for (Route rout : route) {
+                        List<Leg> legs = rout.getLegs();
+                        for (Leg leg1 : legs) {
+                            List<Step> steps = leg1.getSteps();
+                            for (Step step : steps) {
+                                String list = step.getHtmlInstructions();
+                                distance.add(step.getDistance().getText());
+                                time.add(step.getDuration().getText());
+                                direction.add(android.text.Html.fromHtml(list).toString());
+                                manuer.add(step.getManeuver());
+                            }
+                        }
+                    }
                 }
 
 
@@ -149,7 +189,6 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
                 .zoom(17)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
 
 
     }
@@ -211,7 +250,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-String mode;
+        String mode;
         switch (v.getId()) {
             case R.id.cbDriving:
                 mode = "driving";
@@ -228,8 +267,54 @@ String mode;
                 getCurrentLocation(mode);
                 dialog.dismiss();
                 break;
+            case R.id.ivcurrent:
+                onClickOnCurrent();
+                break;
+            case R.id.ivDirection:
+                onClickOnNav();
+                break;
         }
 
+    }
+
+    private void onClickOnNav() {
+        relativeLayout.setVisibility(View.GONE);
+        rvDirection.setVisibility(View.VISIBLE);
+        LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        rvDirection.setLayoutManager(manager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvDirection.getContext(),
+                manager.getOrientation());
+        rvDirection.addItemDecoration(dividerItemDecoration);
+        NavAdapter adapter = new NavAdapter(this, distance, time, direction, manuer);
+        rvDirection.setAdapter(adapter);
+
+
+    }
+
+    private void onClickOnCurrent() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        }
+        mClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                latitude = location.getLatitude();
+                langitude = location.getLongitude();
+                addMarker(latitude, langitude);
+            }
+        });
+
+
+    }
+
+    private void addMarker(Double latitude, Double langitude) {
+        LatLng latLng = new LatLng(latitude, langitude);
+        mMap.addMarker(new MarkerOptions().title("Current Location").position(latLng));
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(15)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
 
@@ -249,4 +334,41 @@ String mode;
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+        backpresscount++;
+        rvDirection.setVisibility(View.GONE);
+        relativeLayout.setVisibility(View.VISIBLE);
+        if (backpresscount == 2) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("Do You Want To esit this activity?");
+            alertDialogBuilder.setTitle("Exit Screen");
+            alertDialogBuilder.setCancelable(false);
+
+            alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+
+                }
+            });
+            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    backpresscount = 0;
+                }
+            });
+            AlertDialog alert = alertDialogBuilder.create();
+
+            alert.setTitle("AlertDialogExample");
+            alert.show();
+        }
+        if (backpresscount == 3) {
+            super.onBackPressed();
+            return;
+        }
+
+
+    }
 }

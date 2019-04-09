@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -64,11 +63,11 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         Log.e("geo", geolocation);
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
-      //  findlatlong(geolocation);
+        //  findlatlong(geolocation);
 
 
         getDataFromFirebase();
-       // getWeatherForecast(locationkey);
+        // getWeatherForecast(locationkey);
         tvviewMap.setOnClickListener(this);
         weather.setOnClickListener(this);
         tvNearByPlaces.setOnClickListener(this);
@@ -239,8 +238,10 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
                 onAtmClick();
                 break;
             case R.id.tvsecond:
+                onHospitalClick();
                 break;
             case R.id.tvThird:
+                onPetrolPumpClick();
                 break;
             case R.id.tvFourth:
                 break;
@@ -249,10 +250,18 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         }
     }
 
+    private void onPetrolPumpClick() {
+
+        startActivity(new Intent(getApplicationContext(), atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "petrol-pump"));
+    }
+
+    private void onHospitalClick() {
+        startActivity(new Intent(getApplicationContext(), atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "hospital"));
+    }
+
     private void onAtmClick() {
 
-        startActivity(new Intent(getApplicationContext(),atm_activity.class).putExtra("geocoordinates2", geolocation));
-
+        startActivity(new Intent(getApplicationContext(), atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "atm"));
 
 
     }

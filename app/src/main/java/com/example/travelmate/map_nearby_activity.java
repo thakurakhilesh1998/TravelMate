@@ -1,6 +1,7 @@
 package com.example.travelmate;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,9 +12,12 @@ import com.example.travelmate.NearByAtm.NearByAtm;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.utility.constants;
 import com.example.travelmate.utility.substringGeolocation;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -94,15 +98,16 @@ public class map_nearby_activity extends AppCompatActivity {
         });
     }
 
-    private void addMarkerOnMap(List<Double> lat1, List<Double> lang) {
-
+    private void addMarkerOnMap(List<Double> lat1, List<Double> lang){
 
         Log.e("size",lat1.size()+","+lang.size());
         for (int i = 0; i < lat1.size(); i++) {
-
+            LatLng latLng=new LatLng(lat1.get(i),lang.get(i));
             mMap.addMarker(new MarkerOptions().position(new LatLng(lat1.get(i), lang.get(i))).title("atm"));
-        }
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(20).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+        }
 
     }
 }

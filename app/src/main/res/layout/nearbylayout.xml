@@ -8,26 +8,30 @@
     <ImageView
         android:id="@+id/tvFirst"
         android:src="@drawable/distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 
     <ImageView
         android:id="@+id/tvsecond"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/restaurant" />
 
     <ImageView
         android:id="@+id/tvThird"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/gasstation" />
 
     <ImageView
         android:id="@+id/tvFourth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/hospital" />
 
     <ImageView
         android:id="@+id/tvFifth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/hospital" />
 </LinearLayout>

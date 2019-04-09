@@ -3,6 +3,7 @@ package com.example.travelmate.HomeFragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -12,9 +13,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.travelmate.Adapter.PlacesAdapter;
 import com.example.travelmate.FirebaseData.getDataFirebase;
@@ -38,6 +41,7 @@ import java.util.Map;
 
 public class Places extends Fragment {
 
+    private static final int REQUEST_CODE = 12;
     RecyclerView rvPlaces;
     ArrayList<Integer> placesimages;
     FirebaseUser mUser;
@@ -86,7 +90,11 @@ public class Places extends Fragment {
 
         mprogressDialog.setMessage("Wait...Fetching...Your Places");
         mprogressDialog.setCanceledOnTouchOutside(false);
-        fetchInterests(mUser.getUid());
+        try {
+            fetchInterests(mUser.getUid());
+        } catch (Exception e) {
+            Log.e("msg", e.getMessage());
+        }
 
 
     }
@@ -123,9 +131,11 @@ public class Places extends Fragment {
 
     private void fetchPlaces(final ArrayList<String> interest1) {
 
-
-        call1(interest1.get(0), interest1);
-
+        try {
+            call1(interest1.get(0), interest1);
+        } catch (Exception e) {
+            Log.e("msg",e.getMessage());
+        }
 
     }
 
@@ -138,18 +148,15 @@ public class Places extends Fragment {
                 Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
 
                 Iterator myVeryOwnIterator = td.keySet().iterator();
-
                 while (myVeryOwnIterator.hasNext()) {
                     String key = (String) myVeryOwnIterator.next();
                     temp.add((String) td.get(key));
-
                 }
                 if (1 < interest1.size()) {
                     call2(temp, interest1);
                 } else {
                     getData(temp);
                 }
-
             }
 
             @Override
@@ -161,14 +168,22 @@ public class Places extends Fragment {
     }
 
     private void getData(ArrayList<String> temp) {
-        findCurrentLocation(temp);
-
+        try {
+            findCurrentLocation(temp);
+        } catch (Exception e) {
+            Log.e("msg", e.getMessage());
+        }
 
     }
 
     private void findCurrentLocation(final ArrayList<String> temp) {
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_CODE);
+
         }
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -230,9 +245,7 @@ public class Places extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-
                 Iterator myVeryOwnIterator = td.keySet().iterator();
-
                 while (myVeryOwnIterator.hasNext()) {
                     String key = (String) myVeryOwnIterator.next();
                     temp.add((String) td.get(key));
@@ -350,5 +363,43 @@ public class Places extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.e("request", String.valueOf(requestCode));
+        switch (requestCode) {
+            case REQUEST_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    }
+                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                filtered = getDataFirebase.isInside(location.getLatitude(), location.getLongitude(), temp);
+                                Log.e("size", String.valueOf(temp.size()));
+                                getFromFirebase(filtered);
+                            }
+                        }
+                    });
+
+                } else {
+                    Toast.makeText(getContext(), "permission denied", Toast.LENGTH_SHORT);
+                }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_CODE);
+        }
     }
 }

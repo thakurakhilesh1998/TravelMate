@@ -39,7 +39,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
     RadioButton rbMale, rbFemale;
     CheckBox cb1, cb2, cb3, cb4, cb5, cb6;
     String Name, Phone, Age, Gender;
-    String interest1, interest2, interes3, interest4, interest5, interest6;
+    String interest1, interest2, interest3, interest4, interest5, interest6;
     FirebaseUser mUser;
     FirebaseAuth mAuth;
     FirebaseDatabase database;
@@ -142,7 +142,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
     private void saveDataInFirebase(String email, String uid, String imageurl) {
 
         saveData = new SaveData(Name, Phone, email, Gender, imageurl);
-        saveData1 = new SaveData(interest1, interest2, interes3, interest4, interest5, interest6);
+        saveData1 = new SaveData(interest1, interest2, interest3, interest4, interest5, interest6);
 
 
         myRef = database.getReference("User Profile");
@@ -155,25 +155,29 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
     private void findInterests() {
 
         if (cb1.isChecked()) {
-            interest1 = "Mountains";
+            interest1=cb1.getText().toString();
+
         }
         if (cb2.isChecked()) {
-            interest2 = "Ocean";
+            interest2=cb2.getText().toString();
+
         }
         if (cb3.isChecked()) {
 
 
-            interes3 = "Deserts";
+            interest3=cb3.getText().toString();
         }
         if (cb4.isChecked()) {
 
-            interest4 = "Religous";
+            interest4=cb4.getText().toString();
+
         }
         if (cb5.isChecked()) {
-            interest5 = "Historical";
-        }
+            interest5=cb5.getText().toString();
+       }
         if (cb6.isChecked()) {
-            interest6 = "Forest";
+            interest6=cb6.getText().toString();
+
         }
 
 

@@ -29,21 +29,24 @@ public class atm_activity extends AppCompatActivity implements View.OnClickListe
     public static final String RADIUS = "1000";
     List<Result> atm1;
     RecyclerView rvAtm;
-    String types = "atm";
+    String types;
     ProgressDialog progressDialog;
     Toolbar toolbar;
     TextView tvMapView;
     String geolocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atm_activity);
-        toolbar=findViewById(R.id.toolbar);
-        tvMapView=findViewById(R.id.tvMapView);
+        toolbar = findViewById(R.id.toolbar);
+        tvMapView = findViewById(R.id.tvMapView);
         setSupportActionBar(toolbar);
         rvAtm = findViewById(R.id.rvAtm);
         Intent intent = getIntent();
+        types = intent.getStringExtra("type");
         progressDialog = new ProgressDialog(getApplicationContext());
+        getSupportActionBar().setTitle(types);
         tvMapView.setOnClickListener(this);
         geolocation = intent.getStringExtra("geocoordinates2");
         Log.e("geolocation", geolocation);
@@ -51,7 +54,6 @@ public class atm_activity extends AppCompatActivity implements View.OnClickListe
         String longitude = substringGeolocation.getLongitude(geolocation);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         rvAtm.setLayoutManager(manager);
-
         getDataFromApi(lat, longitude);
 
     }
@@ -87,16 +89,15 @@ public class atm_activity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-switch (v.getId())
-{
-    case R.id.tvMapView:
-        onClickMap();
+        switch (v.getId()) {
+            case R.id.tvMapView:
+                onClickMap();
 
-}
+        }
     }
 
     private void onClickMap() {
 
-        startActivity(new Intent(getApplicationContext(),map_nearby_activity.class).putExtra("geo",geolocation));
+        startActivity(new Intent(getApplicationContext(), map_nearby_activity.class).putExtra("geo", geolocation));
     }
 }
