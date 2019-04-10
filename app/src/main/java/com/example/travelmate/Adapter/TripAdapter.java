@@ -2,6 +2,7 @@ package com.example.travelmate.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,9 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
 
@@ -39,7 +38,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
     public TripAdapter(Context context, ArrayList<String> list) {
         this.context = context;
         this.list = list;
-
     }
 
     @NonNull
@@ -66,7 +64,12 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
             databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    getDataSetData(dataSnapshot, holder, i);
+
+                    try {
+                        getDataSetData(dataSnapshot, holder, i);
+                    } catch (Exception e) {
+                        Log.e("msg", e.getMessage());
+                    }
                     Log.e("dbfhjg", "error");
                 }
 
@@ -77,19 +80,21 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
         }
     }
 
-    private void onDelClick(String name, int i) {
-        notifyItemRemoved(i);
-        list.remove(i);
+    private void onDelClick(String name, final int i) {
+        databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                notifyItemRemoved(i);
+                list.remove(i);
+            }
+        });
+
     }
 
     private void getDataSetData(DataSnapshot dataSnapshot, final Holder holder, int i) {
         name = dataSnapshot.child("tripname").getValue().toString();
         String date = dataSnapshot.child("date").getValue().toString();
 
-
-        //Boolean id = comapreDate(date, formattedDate);
-
-        //  Log.e("id", String.valueOf(id));
         holder.tvTripName.setText(name);
         holder.tvDate.setText(date);
 

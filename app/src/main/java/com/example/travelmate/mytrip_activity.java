@@ -1,6 +1,8 @@
 package com.example.travelmate;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +42,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
     DatabaseReference reference;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         findIds();
         findDateTime();
         list = new ArrayList<>();
+        dialog = new ProgressDialog(this);
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -120,7 +124,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
                 break;
             case R.id.btnCreate:
                 try {
-                    notification();
+                    notification(v);
                 } catch (Exception e) {
                     Log.e("exception", e.getMessage());
                 }
@@ -143,8 +147,10 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         linearLayout.addView(textView);
     }
 
-    private void notification() {
-
+    private void notification(View v) {
+        dialog.setMessage("Creating Trip");
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
         String tripname = etTripname.getText().toString().trim();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(now.getTime());
@@ -160,6 +166,8 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
                 .key("test")
                 .large_icon(R.mipmap.ic_launcher_round)
                 .build();
+        Snackbar.make(v, "Trip Created,And Remainder Set", Snackbar.LENGTH_SHORT).show();
+        dialog.dismiss();
     }
 
     private void pickDate() {

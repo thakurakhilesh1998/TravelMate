@@ -27,7 +27,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     DatabaseReference databaseReference;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
-    ArrayList<String> list1=new ArrayList<>();
+    ArrayList<String> list1 = new ArrayList<>();
 
 
     public ExpandableListViewAdapter(Context context, String list) {
@@ -98,8 +98,8 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.tvListView);
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference();
-        mAuth=FirebaseAuth.getInstance();
-        mUser=mAuth.getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list).child("list").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

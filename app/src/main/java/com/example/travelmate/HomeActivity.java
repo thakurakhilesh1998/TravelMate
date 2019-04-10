@@ -72,11 +72,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-//                    REQUEST_CODE);
-
-
         }
 
 
@@ -90,6 +85,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
 
         fetchData();
+
         ivprofile.setOnClickListener(this);
         setSupportActionBar(toolbar);
 
@@ -187,6 +183,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 Places places = new Places();
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.frame, places);
+                ft.addToBackStack("fm1");
+                drawerLayout.closeDrawer(Gravity.START);
                 ft.commitAllowingStateLoss();
                 break;
             case R.id.weather:
@@ -199,7 +197,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nearby:
                 mytripFragment mytripFragment = new mytripFragment();
                 FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+                ft1.addToBackStack("fm2");
                 ft1.replace(R.id.frame, mytripFragment);
+                drawerLayout.closeDrawer(Gravity.START);
                 ft1.commitAllowingStateLoss();
 
         }
@@ -230,6 +230,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void onClickOnProfile() {
 
         startActivity(new Intent(this, userprofile_activity.class));
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(Gravity.START)) {
+            drawerLayout.closeDrawer(Gravity.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }

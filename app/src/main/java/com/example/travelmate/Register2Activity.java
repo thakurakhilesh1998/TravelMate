@@ -4,11 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Register2Activity extends AppCompatActivity implements View.OnClickListener {
 
@@ -90,7 +95,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
 
         switch (v.getId()) {
             case R.id.btnRegister:
-                onRegister();
+                onRegister(v);
                 break;
             case R.id.ivProfile:
                 chooseImage();
@@ -107,8 +112,15 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE);
     }
 
-    private void onRegister() {
+    private void onRegister(View v) {
         progressDialog1.show();
+
+        if (emptycheck(v)) ;
+        {
+
+        }
+
+
         Name = etName.getText().toString().trim();
         Phone = etPhone.getText().toString().trim();
         Age = etAge.getText().toString().trim();
@@ -119,6 +131,30 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
 
     }
 
+    private boolean emptycheck(View v) {
+
+        if (etName.getText().toString().isEmpty()) {
+            etName.setError("Name field can not empty");
+            etName.setFocusable(true);
+
+        } else if (etAge.getText().toString().isEmpty()) {
+            etAge.setError("Name field can not empty");
+            etAge.setFocusable(true);
+
+
+        } else if (etPhone.getText().toString().isEmpty()) {
+            etPhone.setError("Phone can not be empty");
+            etPhone.setFocusable(true);
+        } else if (!cb1.isChecked() || !cb2.isChecked() || !cb3.isChecked() || !cb4.isChecked() || !cb5.isChecked()) {
+            Snackbar.make(v, "Check At Least One interest", BaseTransientBottomBar.LENGTH_LONG).show();
+        } else if (findGender() == null) {
+            Snackbar.make(v, "Select your gender", BaseTransientBottomBar.LENGTH_LONG).show();
+        } else {
+            return true;
+        }
+        return false;
+    }
+
     private void saveDataOnFirebase() {
         final String Email = mUser.getEmail();
         final String uid = mUser.getUid();
@@ -126,16 +162,13 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
             @Override
             public void onSuccess(Uri uri) {
                 String imageurl = String.valueOf(uri);
-        saveDataInFirebase(Email,uid,imageurl);
+              saveDataInFirebase(Email, uid, imageurl);
             }
         });
 
 
-
-
-
         progressDialog1.dismiss();
-     //   startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+        //   startActivity(new Intent(getApplicationContext(), HomeActivity.class));
 
     }
 
@@ -149,34 +182,34 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         myRef.child(uid).setValue(saveData);
         myRef.child(uid).child("interests").setValue(saveData1);
 
-        startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }
 
     private void findInterests() {
 
         if (cb1.isChecked()) {
-            interest1=cb1.getText().toString();
+            interest1 = cb1.getText().toString();
 
         }
         if (cb2.isChecked()) {
-            interest2=cb2.getText().toString();
+            interest2 = cb2.getText().toString();
 
         }
         if (cb3.isChecked()) {
 
 
-            interest3=cb3.getText().toString();
+            interest3 = cb3.getText().toString();
         }
         if (cb4.isChecked()) {
 
-            interest4=cb4.getText().toString();
+            interest4 = cb4.getText().toString();
 
         }
         if (cb5.isChecked()) {
-            interest5=cb5.getText().toString();
-       }
+            interest5 = cb5.getText().toString();
+        }
         if (cb6.isChecked()) {
-            interest6=cb6.getText().toString();
+            interest6 = cb6.getText().toString();
 
         }
 
@@ -231,6 +264,14 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                 util.toast(getApplicationContext(), e.getMessage());
             }
         });
+
+
+    }
+
+    public boolean isNameCorrect() {
+        Pattern pattern = Pattern.compile(new String("^[a-zA-Z\\s]*$"));
+        Matcher matcher = pattern.matcher(etName.getText().toString());
+        return matcher.matches();
 
 
     }
