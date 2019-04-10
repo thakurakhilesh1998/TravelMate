@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.travelmate.utility.TripNumber;
 import com.example.travelmate.utility.UserProfileData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,8 +39,6 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
     ArrayList<String> list;
     LinearLayout linearLayout;
     String interest1, interest2, interest3, interest4, interest5, interest6;
-    int flag = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +59,17 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
 
     private void getTripNumber() {
 
-   reference.child("User Profile").child(mUser.getUid()).child("My Trip").addValueEventListener(new ValueEventListener() {
-       @Override
-       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-           TripNumber number=dataSnapshot.getValue(TripNumber.class);
-         Log.e("size", String.valueOf(number.getList().size()));
-       }
+        reference.child("User Profile").child(mUser.getUid()).child("MyTrip").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                tvMyTrips.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+            }
 
-       @Override
-       public void onCancelled(@NonNull DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-       }
-   });
+            }
+        });
 
     }
 

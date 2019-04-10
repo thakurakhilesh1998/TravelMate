@@ -92,30 +92,36 @@ public class mytripFragment extends Fragment {
                         }
 
                     }
-                            Log.e("listsize", String.valueOf(listfinal.size()));
-                            if (listfinal.size() != 0) {
-                                rvMyTrips = new RecyclerView(getContext());
-                                linearLayout.addView(rvMyTrips);
-                                rvMyTrips.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                                rvMyTrips.setLayoutManager(manager);
-                                TripAdapter tripAdapter = new TripAdapter(getContext(), listfinal);
-                                rvMyTrips.setAdapter(tripAdapter);
-                                rvMyTrips.setVisibility(View.VISIBLE);
-                            } else {
+                    Log.e("listsize", String.valueOf(listfinal.size()));
+                    if (listfinal.size() != 0) {
+                        try {
+                            rvMyTrips = new RecyclerView(getContext());
+                        } catch (Exception e) {
+                            Log.e("exception", e.getMessage());
+                        }
+                        linearLayout.addView(rvMyTrips);
+                        rvMyTrips.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                        rvMyTrips.setLayoutManager(manager);
+                        TripAdapter tripAdapter = new TripAdapter(getContext(), listfinal);
+                        rvMyTrips.setAdapter(tripAdapter);
+                        rvMyTrips.setVisibility(View.VISIBLE);
+                    } else {
+                        tvnotrip = new TextView(getContext());
+                        tvnotrip.setText("no tripfound");
+                        tvnotrip.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        linearLayout.addView(tvnotrip);
+                        Log.e("dfsdgd", "textview");
 
-                                tvnotrip = new TextView(getContext());
-                                tvnotrip.setText("no tripfound");
-                                tvnotrip.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                linearLayout.addView(tvnotrip);
-                                Log.e("dfsdgd", "textview");
-
-                            }
-
+                    }
 
 
                 } else {
-                    Log.e("datasnapshot", "error");
+                    tvnotrip = new TextView(getContext());
+                    tvnotrip.setText("no tripfound");
+                    tvnotrip.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    linearLayout.addView(tvnotrip);
+                    Log.e("dfsdgd", "textview");
                 }
             }
 

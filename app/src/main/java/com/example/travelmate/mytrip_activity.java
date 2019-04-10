@@ -2,6 +2,7 @@ package com.example.travelmate;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -118,7 +119,11 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
 
                 break;
             case R.id.btnCreate:
-                notification();
+                try {
+                    notification();
+                } catch (Exception e) {
+                    Log.e("exception", e.getMessage());
+                }
                 break;
             case R.id.btnaddItem:
                 addItem();
@@ -139,6 +144,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
     }
 
     private void notification() {
+
         String tripname = etTripname.getText().toString().trim();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(now.getTime());
@@ -146,7 +152,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         reference = database.getReference();
         reference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(formattedDate).setValue(data);
         NotifyMe notifyMe = new NotifyMe.Builder(getApplicationContext())
-                .title("hello")
+                .title("Trip remainder")
                 .content("hi")
                 .color(255, 0, 0, 255)
                 .led_color(255, 255, 255, 255)
