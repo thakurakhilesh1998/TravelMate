@@ -114,19 +114,16 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
 
     private void onRegister(View v) {
         progressDialog1.show();
-
+        findInterests();
         if (emptycheck(v)) ;
         {
+            Name = etName.getText().toString().trim();
+            Phone = etPhone.getText().toString().trim();
+            Age = etAge.getText().toString().trim();
+            Gender = findGender();
 
+            saveDataOnFirebase();
         }
-
-
-        Name = etName.getText().toString().trim();
-        Phone = etPhone.getText().toString().trim();
-        Age = etAge.getText().toString().trim();
-        Gender = findGender();
-        findInterests();
-        saveDataOnFirebase();
 
 
     }
@@ -162,7 +159,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
             @Override
             public void onSuccess(Uri uri) {
                 String imageurl = String.valueOf(uri);
-              saveDataInFirebase(Email, uid, imageurl);
+                saveDataInFirebase(Email, uid, imageurl);
             }
         });
 

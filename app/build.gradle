@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.travelmate"
-        minSdkVersion 19
+        minSdkVersion 17
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -71,6 +71,9 @@ dependencies {
 
     //DATETIMEPICKER
     implementation 'com.wdullaer:materialdatetimepicker:3.6.0'
+
+
+    implementation 'com.firebaseui:firebase-ui:0.6.0'
 
 
 }

@@ -16,19 +16,14 @@ public class WeatherApi {
     static String URL = "http://dataservice.accuweather.com/forecasts/";
 
     public static ApiInterface WeatherApi() {
-
         retrofit = new Retrofit.Builder().baseUrl(URL).addConverterFactory(GsonConverterFactory.create()).build();
-
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
         return apiInterface;
 
     }
 
     public interface ApiInterface {
-
-
         @GET("v1/daily/5day/{locationkey}?")
-        Call<Weather> getWeather(@Path("locationkey")String locationkey, @Query(value = "apikey", encoded = true) String key, @Query(value = "details", encoded = true) String details, @Query(value = "metric", encoded = true) String metric);
-//3136635?apikey=YU0QPtFwgBh7jzA4eGELHprxq28AJW5U&details=true&metric=true
+        Call<Weather> getWeather(@Path("locationkey") String locationkey, @Query(value = "apikey", encoded = true) String key, @Query(value = "details", encoded = true) String details, @Query(value = "metric", encoded = true) String metric);
     }
 }
