@@ -3,6 +3,7 @@ package com.example.travelmate.Adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.travelmate.APIS.DistanceApiHitter;
+import com.example.travelmate.APIS.PlacePhoto;
 import com.example.travelmate.Distance.Distance;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
@@ -20,6 +22,7 @@ import com.example.travelmate.utility.constants;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +32,7 @@ public class NearBy extends RecyclerView.Adapter<NearBy.Holder> {
     String photoref;
     List<Result> atm1;
     String latlong;
+
 
     public NearBy(Context context, List<Result> atm1, String latlong) {
 
@@ -69,6 +73,25 @@ public class NearBy extends RecyclerView.Adapter<NearBy.Holder> {
                 }
                 holder.tvPlaceAddress.setText(atm1.get(i).getVicinity());
                 holder.tvDistance.setText(response.body().getRows().get(0).getElements().get(0).getDistance().getText());
+                try {
+                    photoref = atm1.get(i).getPhotos().get(i).getPhotoReference();
+                } catch (Exception e) {
+                    photoref = "";
+                    Log.e("msg", e.getMessage());
+                }
+                Call<ResponseBody> getphoto = PlacePhoto.PlacePhoto().getPhoto("200dp", "200dp", photoref, constants.KEY);
+                getphoto.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Log.e("url", String.valueOf(response.body()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+
                 Glide.with(context).load(atm1.get(0).getIcon()).into(holder.ivImage);
                 holder.tvTotal.setText(String.valueOf("(" + atm1.get(i).getUserRatingsTotal() + ")"));
                 try {

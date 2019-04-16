@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.travelmate.HomeFragment.HomePageFragment;
 import com.example.travelmate.HomeFragment.Places;
 import com.example.travelmate.HomeFragment.mytripFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,6 +39,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+    private static final int REQUEST_CODE = 12;
     NavigationView navigationView;
     Toolbar toolbar;
     ImageView navigationIcon, ivnotification, ivprofile;
@@ -51,14 +53,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     FusedLocationProviderClient fusedLocationProviderClient;
     String geolocation;
-    private static final int REQUEST_CODE = 12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         findIds();
-
         subscribetocloudmessaging();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -118,7 +118,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 String Email = dataSnapshot.child("Email").getValue().toString();
                 String Name = dataSnapshot.child("Name").getValue().toString();
                 String profile = dataSnapshot.child("Profile").getValue().toString();
-                Log.e("profile", profile);
+                Log.e("akhilesh", "akhilesh thakur");
                 showData(Email, Name, profile);
             }
 
@@ -133,10 +133,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         tvName.setText(name);
         tvEmail.setText(email);
         Glide.with(this).load(profile).into(ivprofile);
-        Places places = new Places();
+
+        HomePageFragment homePageFragment = new HomePageFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame, places);
+        ft.replace(R.id.frame, homePageFragment);
         ft.commitAllowingStateLoss();
+
+//
+//        Places places = new Places();
+//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//        ft.replace(R.id.frame, places);
+//        ft.commitAllowingStateLoss();
     }
 
     private void findIds() {
@@ -144,7 +151,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.navigation);
         View headerView = navigationView.getHeaderView(0);
         navigationIcon = findViewById(R.id.ivnavigationIcon);
-
         tvName = headerView.findViewById(R.id.tvName);
         tvEmail = headerView.findViewById(R.id.tvEmail);
         ivprofile = headerView.findViewById(R.id.ivProfile);

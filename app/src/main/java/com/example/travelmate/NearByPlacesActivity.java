@@ -1,11 +1,10 @@
 package com.example.travelmate;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 
 import com.example.travelmate.Adapter.NearByAdapter;
 
@@ -16,16 +15,17 @@ public class NearByPlacesActivity extends AppCompatActivity {
     ViewPager viewPager;
     ArrayList<String> name;
     String geolocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_near_by_places);
         findIds();
-        Intent intent=getIntent();
-      geolocation=intent.getStringExtra("geocoordinates");
+        Intent intent = getIntent();
+        geolocation = intent.getStringExtra("geocoordinates");
 
 
-        NearByAdapter myadapter = new NearByAdapter(getSupportFragmentManager(), this, tabLayout.getTabCount(), name,geolocation);
+        NearByAdapter myadapter = new NearByAdapter(getSupportFragmentManager(), this, tabLayout.getTabCount(), name, geolocation);
         viewPager.setAdapter(myadapter);
         viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         viewPager.setOffscreenPageLimit(10);
@@ -42,7 +42,7 @@ public class NearByPlacesActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-            viewPager.setCurrentItem(tab.getPosition());
+                viewPager.setCurrentItem(tab.getPosition());
             }
         });
 

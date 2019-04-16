@@ -13,18 +13,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChatWithUsActivity">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/userprofilegrad" />
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
+        <activity android:name=".BookCab"></activity>
+        <activity android:name=".ChatWithUsActivity" />
 
         <service
-            android:name=".FirebaseMessagingService"
+            android:name=".FirebaseMessaging"
             android:enabled="true"
             android:exported="true" />
 
@@ -48,15 +45,19 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCOggg7f0D3iWZOQSLOKbo0BWrbQ9Y6ymw" />
+            android:value="AIzaSyCWTWqdL9-aiocQ7dE3Fh6P5oJfnvn2Ty4" />
 
         <activity android:name=".map_activity" />
         <activity android:name=".TouristPlace_activity" />
-        <activity android:name=".HomeActivity" />
+        <activity android:name=".HomeActivity"></activity>
         <activity android:name=".Register2Activity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service android:name=".PushNotification">

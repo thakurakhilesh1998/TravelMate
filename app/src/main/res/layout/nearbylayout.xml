@@ -7,9 +7,9 @@
 
     <ImageView
         android:id="@+id/tvFirst"
-        android:src="@drawable/distance"
         android:layout_width="50dp"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:src="@drawable/distance" />
 
     <ImageView
         android:id="@+id/tvsecond"

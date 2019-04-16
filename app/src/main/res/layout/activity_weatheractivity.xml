@@ -66,6 +66,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingVertical="12dp">
+
             <TextView
                 android:id="@+id/tvRain"
                 android:layout_width="match_parent"

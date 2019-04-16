@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:orientation="vertical">
-<de.hdodenhof.circleimageview.CircleImageView
-    android:id="@+id/ivProfile"
-    android:layout_width="150dp"
-    android:layout_height="120dp"
-    android:src="@drawable/profile"
-    android:layout_gravity="start"
-    app:civ_border_color="@color/white"
-    app:civ_border_width="3dp"/>
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivProfile"
+        android:layout_width="150dp"
+        android:layout_height="120dp"
+        android:layout_gravity="start"
+        android:src="@drawable/profile"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="3dp" />
+
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Akhilesh Thakur"
-        android:textSize="20dp"
         android:textColor="@color/white"
-        android:textStyle="bold"/>
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textSize="16dp"
         android:text="thakurakhilesh20@gmail.com"
         android:textColor="@color/white"
-        android:textStyle="bold"/>
+        android:textSize="16dp"
+        android:textStyle="bold" />
 </LinearLayout>

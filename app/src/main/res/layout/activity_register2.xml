@@ -1,186 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.NestedScrollView android:layout_height="match_parent"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".Register2Activity">
+    android:layout_height="match_parent">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ivProfile"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/profile"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp" />
-
-    <com.github.florent37.materialtextfield.MaterialTextField
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:mtf_backgroundColor="@color/background"
-        app:mtf_image="@drawable/name"
-        app:mtf_labelColor="@color/black">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".Register2Activity">
 
-        <EditText
-            android:id="@+id/etName"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/profile" />
+
+        <com.github.florent37.materialtextfield.MaterialTextField
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
-            android:textColor="@color/white"
-            android:textColorHint="@color/black"
-            android:textSize="15sp" />
-    </com.github.florent37.materialtextfield.MaterialTextField>
+            app:mtf_backgroundColor="@color/background"
+            app:mtf_image="@drawable/name"
+            app:mtf_labelColor="@color/black">
 
-    <com.github.florent37.materialtextfield.MaterialTextField
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:mtf_backgroundColor="@color/background"
-        app:mtf_image="@drawable/phone"
-        app:mtf_labelColor="@color/black">
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:textColor="@color/white"
+                android:textColorHint="@color/black"
+                android:textSize="15sp" />
+        </com.github.florent37.materialtextfield.MaterialTextField>
 
-        <EditText
-            android:id="@+id/etPhone"
+        <com.github.florent37.materialtextfield.MaterialTextField
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Phone Number"
-            android:textColor="@color/white"
-            android:textColorHint="@color/black"
-            android:textSize="15sp" />
-    </com.github.florent37.materialtextfield.MaterialTextField>
-    <com.github.florent37.materialtextfield.MaterialTextField
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:mtf_backgroundColor="@color/background"
-        app:mtf_image="@drawable/age"
-        app:mtf_labelColor="@color/black">
+            app:mtf_backgroundColor="@color/background"
+            app:mtf_image="@drawable/phone"
+            app:mtf_labelColor="@color/black">
 
-        <EditText
-            android:id="@+id/etAge"
+            <EditText
+                android:id="@+id/etPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone Number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/black"
+                android:textSize="15sp" />
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+        <com.github.florent37.materialtextfield.MaterialTextField
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Age"
+            app:mtf_backgroundColor="@color/background"
+            app:mtf_image="@drawable/age"
+            app:mtf_labelColor="@color/black">
+
+            <EditText
+                android:id="@+id/etAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Age"
+                android:textColor="@color/white"
+                android:textColorHint="@color/black"
+                android:textSize="15sp" />
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gender:"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/rbMale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Male"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/rbFemale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Female"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Interests:"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <CheckBox
+                android:id="@+id/cb1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:text="Mountains"
+                android:textColor="@color/background"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/cb2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:text="Ocean"
+                android:textColor="@color/background"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/cb3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center"
+                android:text="Deserts"
+                android:textColor="@color/background"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <CheckBox
+                android:id="@+id/cb4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:text="Religous"
+                android:textColor="@color/background"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/cb5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:text="Historical"
+                android:textColor="@color/background"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/cb6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center"
+                android:text="Forest"
+                android:textColor="@color/background"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/background"
+            android:text="Register"
             android:textColor="@color/white"
-            android:textColorHint="@color/black"
-            android:textSize="15sp" />
-    </com.github.florent37.materialtextfield.MaterialTextField>
-
- <RadioGroup
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:orientation="horizontal"
-     android:layout_marginTop="16dp"
-     android:layout_gravity="center"
-     android:id="@+id/radioGroup">
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:text="Gender:"
-         android:textSize="15sp"
-         android:textColor="@color/black"/>
-     <RadioButton
-         android:id="@+id/rbMale"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:text="Male"
-         android:textColor="@color/black"
-         android:textSize="15sp"/>
-     <RadioButton
-         android:id="@+id/rbFemale"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:text="Female"
-         android:textColor="@color/black"
-         android:textSize="15sp"/>
- </RadioGroup>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Interests:"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:layout_marginTop="16dp"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-       >
-    <CheckBox
-        android:id="@+id/cb1"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:textSize="16sp"
-        android:layout_alignParentLeft="true"
-        android:textColor="@color/background"
-        android:layout_height="wrap_content"
-        android:text="Mountains"/>
-    <CheckBox
-        android:id="@+id/cb2"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/background"
-        android:text="Ocean"/>
-    <CheckBox
-        android:id="@+id/cb3"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:textSize="16sp"
-        android:textColor="@color/background"
-        android:text="Deserts"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        >
-        <CheckBox
-            android:id="@+id/cb4"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:textSize="16sp"
-            android:layout_alignParentLeft="true"
-            android:textColor="@color/background"
-            android:layout_height="wrap_content"
-            android:text="Religous"/>
-        <CheckBox
-            android:id="@+id/cb5"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/background"
-            android:text="Historical"/>
-        <CheckBox
-            android:id="@+id/cb6"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:textSize="16sp"
-            android:textColor="@color/background"
-            android:text="Forest"/>
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_marginTop="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="Register"
-        android:textColor="@color/white"
-        android:background="@color/background"/>
-</LinearLayout>
+            android:textSize="20sp" />
+    </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

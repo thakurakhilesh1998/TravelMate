@@ -1,16 +1,30 @@
 package com.example.travelmate;
 
-import android.net.Uri;
-
 class SaveData {
 
 
-    String Name,Phone,Email,Gender;
+    String Name, Phone, Email, Gender;
     String Profile;
 
 
+    String interest1, interest6, interest2, interest3, interest4, interest5;
 
-    String interest1,interest6,interest2,interest3,interest4,interest5;
+    SaveData(String Interest1, String Interest2, String Interest3, String Interest4, String Interest5, String Interest6) {
+        this.interest1 = Interest1;
+        this.interest2 = Interest2;
+        this.interest3 = Interest3;
+        this.interest4 = Interest4;
+        this.interest5 = Interest5;
+        this.interest6 = Interest6;
+    }
+
+    SaveData(String name, String phone, String email, String gender, String profile) {
+        Name = name;
+        Phone = phone;
+        Email = email;
+        Gender = gender;
+        Profile = profile;
+    }
 
     public String getInterest1() {
         return interest1;
@@ -58,23 +72,6 @@ class SaveData {
 
     public void setInterest5(String interest5) {
         this.interest5 = interest5;
-    }
-
-    SaveData(String Interest1, String Interest2, String Interest3, String Interest4, String Interest5, String Interest6) {
-        this.interest1 = Interest1;
-        this.interest2 = Interest2;
-        this.interest3 = Interest3;
-        this.interest4 = Interest4;
-        this.interest5 = Interest5;
-        this.interest6=Interest6;
-    }
-
-     SaveData(String name, String phone, String email, String gender, String profile) {
-        Name = name;
-        Phone = phone;
-        Email = email;
-        Gender = gender;
-        Profile = profile;
     }
 
 

@@ -7,7 +7,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
 
-public class SendDataService extends Service {  private final LocalBinder mBinder = new LocalBinder();
+public class SendDataService extends Service {
+    private final LocalBinder mBinder = new LocalBinder();
     protected Handler handler;
     protected Toast mToast;
 
@@ -42,7 +43,7 @@ public class SendDataService extends Service {  private final LocalBinder mBinde
 
     public class LocalBinder extends Binder {
         public SendDataService getService() {
-            return SendDataService .this;
+            return SendDataService.this;
         }
     }
 }

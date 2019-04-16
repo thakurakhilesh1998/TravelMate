@@ -96,6 +96,7 @@
                 android:textColor="@color/black"
                 android:textSize="30dp"
                 android:textStyle="bold" />
+
             <include
                 layout="@layout/nearbylayout"
                 android:layout_width="fill_parent"

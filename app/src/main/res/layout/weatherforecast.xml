@@ -46,6 +46,7 @@
             android:textColor="@color/white"
             android:textSize="16dp" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/tvTemp"
         android:layout_width="match_parent"
@@ -54,6 +55,6 @@
         android:layout_weight="1"
         android:text="14u-1u8"
         android:textColor="@color/white"
-        android:textSize="36dp"/>
+        android:textSize="36dp" />
 
 </LinearLayout>

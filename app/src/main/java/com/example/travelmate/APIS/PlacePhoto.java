@@ -1,8 +1,8 @@
 package com.example.travelmate.APIS;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -23,6 +23,6 @@ public class PlacePhoto {
 
 
         @GET("photo?")
-        Call<PlacePhotosClass> getPhoto(@Query(value = "maxwidth", encoded = true) String maxwidth, @Query(value = "maxheight", encoded = true) String maxheight, @Query(value = "photoreference", encoded = true) String photorefrence, @Query(value = "key", encoded = true) String key);
+        Call<ResponseBody> getPhoto(@Query(value = "maxwidth", encoded = true) String maxwidth, @Query(value = "maxheight", encoded = true) String maxheight, @Query(value = "photoreference", encoded = true) String photorefrence, @Query(value = "key", encoded = true) String key);
     }
 }
