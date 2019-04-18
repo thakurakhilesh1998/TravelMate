@@ -6,19 +6,33 @@ import java.util.HashMap;
 public class UserProfileData {
 
     HashMap<String, String> interests;
-    private String Email, Gender, Name, Phone, Profile;
+    private String Email;
+    private String Gender;
+    private String Name;
+    private String Phone;
+    private String Profile;
+    private String Age;
 
-    public UserProfileData() {
-
-    }
-
-    public UserProfileData(String email, String gender, String name, String phone, String profile, HashMap<String, String> interests) {
+    public UserProfileData(String email, String gender, String name, String phone, String profile, HashMap<String, String> interests,String Age) {
         Email = email;
         Gender = gender;
         Name = name;
         Phone = phone;
         Profile = profile;
         this.interests = interests;
+        this.Age=Age;
+    }
+
+    public String getAge() {
+        return Age;
+    }
+
+    public UserProfileData() {
+
+    }
+
+    public void setAge(String age) {
+        Age = age;
     }
 
 

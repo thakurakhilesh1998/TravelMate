@@ -4,4 +4,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="imgwidth">80dp</dimen>
     <dimen name="imgheight">100dp</dimen>
+    <dimen name="intwidth">80dp</dimen>
 </resources>

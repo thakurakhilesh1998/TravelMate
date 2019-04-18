@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -28,8 +28,9 @@ import java.util.Iterator;
 
 public class userprofile_activity extends AppCompatActivity implements View.OnClickListener {
     ImageView ivProfile;
-    TextView tvEmail, tvMyTrips, tvTotalTrips;
-    EditText etName;
+    EditText tvEmail;
+    EditText etPhone, etAge;
+    TextView etName;
     CheckBox cb1, cb2, cb3, cb4, cb5, cb6;
     Button btnEditDetails, btnsaveDetails;
     FirebaseDatabase database;
@@ -38,6 +39,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
     FirebaseUser mUser;
     ArrayList<String> list;
     LinearLayout linearLayout;
+    Toolbar toolbar;
     String interest1, interest2, interest3, interest4, interest5, interest6;
 
     @Override
@@ -49,6 +51,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         reference = database.getReference();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+        setSupportActionBar(toolbar);
         getTripNumber();
         list = new ArrayList<>();
         btnEditDetails.setVisibility(View.VISIBLE);
@@ -62,7 +65,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         reference.child("User Profile").child(mUser.getUid()).child("MyTrip").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                tvMyTrips.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                //  tvMyTrips.setText(String.valueOf(dataSnapshot.getChildrenCount()));
             }
 
             @Override
@@ -81,9 +84,8 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
                 UserProfileData data = dataSnapshot.getValue(UserProfileData.class);
                 etName.setText(data.getName());
                 tvEmail.setText(data.getEmail());
-
-                Log.e("profile1", data.getProfile());
-
+                etPhone.setText(data.getPhone());
+                etAge.setText(data.getAge());
                 Glide.with(getApplicationContext()).load(data.getProfile()).into(ivProfile);
                 Iterator myVeryOwnIterator = data.getInterests().values().iterator();
                 while (myVeryOwnIterator.hasNext()) {
@@ -128,9 +130,12 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
     }
 
     private void findIds() {
+        toolbar = findViewById(R.id.toolbar);
         ivProfile = findViewById(R.id.ivProfile);
         etName = findViewById(R.id.etName);
         tvEmail = findViewById(R.id.tvEmail);
+        etPhone = findViewById(R.id.etPhone);
+        etAge = findViewById(R.id.etAge);
         cb1 = findViewById(R.id.cb1);
         cb2 = findViewById(R.id.cb2);
         cb3 = findViewById(R.id.cb3);
