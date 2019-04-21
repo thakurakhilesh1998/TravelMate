@@ -5,20 +5,25 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@color/background">
+        android:background="@color/background"
+        app:logo="@drawable/backicon"
+        app:title="My Profile"
+        app:titleMarginStart="100dp"
+        app:titleTextColor="@color/white">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My Profile"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="28dp"
-            android:textStyle="bold" />
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="My Profile"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="28dp"-->
+        <!--android:textStyle="bold" />-->
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.NestedScrollView
@@ -43,20 +48,23 @@
                 <LinearLayout
 
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="120dp"
                     android:background="@drawable/userhomegrad"
                     android:orientation="horizontal"
                     android:paddingHorizontal="28dp"></LinearLayout>
 
-                <android.support.v7.widget.CardView
+
+                <LinearLayout
                     android:id="@+id/cardview"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="200dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="70dp"
+                    android:layout_marginTop="40dp"
                     android:layout_marginRight="20dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp">
+                    android:background="@drawable/navhomegradient"
+
+                    android:orientation="vertical"
+                    android:paddingBottom="12dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -66,10 +74,12 @@
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/ivProfile"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/profile">
+                            android:layout_margin="12dp"
+                            android:src="@drawable/profile"
+                           >
 
                         </de.hdodenhof.circleimageview.CircleImageView>
 
@@ -78,13 +88,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="12dp"
                             android:text="Akhilesh Thakur"
-                            android:textColor="@color/background"
-                            android:textSize="24dp"
-                            android:textStyle="bold" />
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/llemail"
@@ -94,25 +103,20 @@
                     android:layout_marginTop="16dp"
                     android:paddingHorizontal="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Email"
-                        android:textColor="@color/black"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/tvEmail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/email1"
+                        android:drawablePadding="12dp"
                         android:enabled="false"
+                        android:maxLength="40"
+                        android:maxLines="1"
                         android:text="thakurakhilesh20@gmail.com"
-                        android:textColor="@color/background"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sizetext" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -120,30 +124,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/llemail"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/margintop1"
                     android:paddingHorizontal="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:text="Phone"
-                        android:textColor="@color/black"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/etPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="8"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/phone1"
+                        android:drawablePadding="12dp"
                         android:enabled="false"
                         android:text="708516983"
-                        android:textColor="@color/background"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sizetext" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -151,28 +147,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/llphone"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/margintop1"
                     android:paddingHorizontal="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:text="Age"
-                        android:textColor="@color/black"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/etAge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="6"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/age"
+                        android:drawablePadding="12dp"
                         android:text="21"
-                        android:textColor="@color/background"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sizetext" />
                 </LinearLayout>
 
                 <TextView
@@ -181,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/llage"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/margintop1"
                     android:text="Interests"
                     android:textColor="@color/black"
                     android:textSize="20dp"
@@ -192,7 +181,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/int1"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/margintop1"
                     android:paddingHorizontal="16dp">
 
                     <CheckBox
@@ -200,6 +189,7 @@
                         android:layout_width="@dimen/intwidth"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/background"
                         android:enabled="false"
                         android:text="Mountains"
                         android:textColor="@color/black" />
@@ -209,6 +199,7 @@
                         android:layout_width="@dimen/intwidth"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/background"
                         android:enabled="false"
                         android:text="Deserts"
                         android:textColor="@color/black" />
@@ -218,6 +209,7 @@
                         android:layout_width="@dimen/intwidth"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/background"
                         android:enabled="false"
                         android:text="Ocean"
                         android:textColor="@color/black" />
@@ -236,6 +228,7 @@
                         android:layout_width="@dimen/intwidth"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/background"
                         android:enabled="false"
                         android:text="Religious"
                         android:textColor="@color/black" />
@@ -245,6 +238,7 @@
                         android:layout_width="@dimen/intwidth"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/background"
                         android:enabled="false"
                         android:text="Forest"
                         android:textColor="@color/black" />
@@ -254,6 +248,7 @@
                         android:layout_width="@dimen/intwidth"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/background"
                         android:enabled="false"
                         android:text="Forest"
                         android:textColor="@color/black" />
@@ -266,11 +261,13 @@
                     android:layout_below="@+id/interests"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="12dp"
-                    android:background="@color/background"
+                    android:layout_marginEnd="48dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/button"
                     android:padding="12dp"
                     android:text="Edit Details"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/btntextsize"
                     android:textStyle="bold"
                     android:visibility="visible" />
 
@@ -280,11 +277,14 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/interests"
                     android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="48dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/button"
                     android:padding="12dp"
                     android:text="Save Details"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/btntextsize"
                     android:textStyle="bold"
                     android:visibility="gone" />
 

@@ -10,6 +10,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.travelmate.utility.util;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,7 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     EditText etEmail, etPass;
-    Button btnLogin, btnRegister;
+    Button btnLogin;
+    TextView btnRegister;
     String Email, Password;
     FirebaseAuth mAuth;
     FirebaseUser mUser;

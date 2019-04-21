@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -30,9 +31,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.jgabrielfreitas.core.BlurImageView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 public class Register2Activity extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,7 +54,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
     DatabaseReference myRef;
     StorageReference mStorageRef;
     Uri Filepath;
-
+    LinearLayout linearLayout;
     SaveData saveData, saveData1;
     ProgressDialog progressDialog, progressDialog1;
 
@@ -66,6 +69,9 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         mStorageRef = FirebaseStorage.getInstance().getReference();
         btnRegister.setOnClickListener(this);
         ivProfile.setOnClickListener(this);
+
+
+
     }
 
     private void findIds() {
@@ -84,10 +90,12 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         cb4 = findViewById(R.id.cb4);
         cb5 = findViewById(R.id.cb5);
         cb6 = findViewById(R.id.cb6);
+        linearLayout = findViewById(R.id.linearparent);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Uploading Image...");
         progressDialog1 = new ProgressDialog(this);
         progressDialog1.setMessage("Registering");
+
     }
 
     @Override

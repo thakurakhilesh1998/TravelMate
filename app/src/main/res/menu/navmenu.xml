@@ -1,17 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-
-    <item
-        android:id="@+id/places"
-        android:title="Places" />
-    <item
-        android:id="@+id/weather"
-        android:title="Weather" />
-    <item
-        android:id="@+id/nearby"
-        android:title="NearBy" />
-    <item
-        android:id="@+id/checklist"
-        android:title="Checklist" />
+    <group android:id="@+id/group1">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/homw"
+            android:iconTint="@color/background"
+            android:title="Home" />
+        <item
+            android:id="@+id/mytrip"
+            android:icon="@drawable/mytrip"
+            android:iconTint="@color/background"
+            android:title="My Trip" />
+    </group>
+    <group android:id="@+id/group2">
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/settingn"
+            android:iconTint="@color/background"
+            android:title="Setting" />
+        <item
+            android:id="@+id/share"
+            android:icon="@drawable/share"
+            android:iconTint="@color/background"
+            android:title="Share" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/logout"
+            android:iconTint="@color/background"
+            android:title="LogOut" />
+    </group>
+    <group android:id="@+id/group3">
+        <item
+            android:id="@+id/places"
+            android:title="Places" />
+        <item
+            android:id="@+id/weather"
+            android:title="Weather" />
+        <item
+            android:id="@+id/nearby"
+            android:title="NearBy" />
+        <item
+            android:id="@+id/checklist"
+            android:title="Checklist" />
+    </group>
 </menu>

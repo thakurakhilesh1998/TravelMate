@@ -14,8 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <!--<meta-data-->
-            <!--android:name="com.google.android.actions"-->
-            <!--android:resource="@xml/userprofilegrad" />-->
+        <!--android:name="com.google.android.actions"-->
+        <!--android:resource="@xml/userprofilegrad" />-->
 
         <activity android:name=".BookCab"></activity>
         <activity android:name=".ChatWithUsActivity" />
@@ -50,7 +50,12 @@
         <activity android:name=".map_activity" />
         <activity android:name=".TouristPlace_activity" />
         <activity android:name=".HomeActivity"></activity>
-        <activity android:name=".Register2Activity" />
+        <activity android:name=".Register2Activity" >
+
+
+
+
+        </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -58,6 +63,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
 
         <service android:name=".PushNotification">

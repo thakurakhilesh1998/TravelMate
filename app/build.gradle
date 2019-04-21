@@ -78,5 +78,12 @@ dependencies {
 
     implementation 'com.google.android.libraries.places:places:1.0.0'
 
+    //google sign in button
+
+    implementation 'com.shobhitpuri.custombuttons:google-signin:1.0.0'
+
+    //blurry image
+
+    implementation 'com.github.jgabrielfreitas:BlurImageView:1.0.1'
 
 }

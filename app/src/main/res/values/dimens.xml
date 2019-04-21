@@ -5,4 +5,8 @@
     <dimen name="imgwidth">80dp</dimen>
     <dimen name="imgheight">100dp</dimen>
     <dimen name="intwidth">80dp</dimen>
+    <dimen name="btntextsize">20dp</dimen>
+    <dimen name="sizetext">16dp</dimen>
+    <dimen name="margintop1">6dp</dimen>
+    <dimen name="checkboxsize">16dp</dimen>
 </resources>
