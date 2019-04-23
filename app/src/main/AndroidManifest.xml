@@ -8,16 +8,16 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--<meta-data-->
-        <!--android:name="com.google.android.actions"-->
-        <!--android:resource="@xml/userprofilegrad" />-->
-
-        <activity android:name=".BookCab"></activity>
+        <activity android:name=".activity_weather1"></activity>
+        <activity android:name=".nearbyplaces_activity" /> <!-- <meta-data -->
+        <!-- android:name="com.google.android.actions" -->
+        <!-- android:resource="@xml/userprofilegrad" /> -->
+        <activity android:name=".BookCab" />
         <activity android:name=".ChatWithUsActivity" />
 
         <service
@@ -46,16 +46,14 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCWTWqdL9-aiocQ7dE3Fh6P5oJfnvn2Ty4" />
-
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+        <activity android:name=".NearByPlaces1" />
         <activity android:name=".map_activity" />
         <activity android:name=".TouristPlace_activity" />
-        <activity android:name=".HomeActivity"></activity>
-        <activity android:name=".Register2Activity" >
-
-
-
-
-        </activity>
+        <activity android:name=".HomeActivity" />
+        <activity android:name=".Register2Activity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -63,8 +61,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
 
         <service android:name=".PushNotification">

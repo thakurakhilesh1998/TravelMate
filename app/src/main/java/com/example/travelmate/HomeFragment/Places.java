@@ -22,8 +22,11 @@ import android.widget.Toast;
 import com.example.travelmate.Adapter.PlacesAdapter;
 import com.example.travelmate.FirebaseData.getDataFirebase;
 import com.example.travelmate.R;
+import com.example.travelmate.utility.GpsEnabled;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,7 +41,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-
 public class Places extends Fragment {
 
     private static final int REQUEST_CODE = 12;
@@ -52,6 +54,7 @@ public class Places extends Fragment {
     ArrayList<String> temp, filtered, placename, name, geolocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     ProgressDialog mprogressDialog;
+    View v;
 
     public Places() {
     }
@@ -91,7 +94,13 @@ public class Places extends Fragment {
         mprogressDialog.setMessage("Wait...Fetching...Your Places");
         mprogressDialog.setCanceledOnTouchOutside(false);
         try {
-            fetchInterests(mUser.getUid());
+
+            if (GpsEnabled.isEnabled(getContext())) {
+                fetchInterests(mUser.getUid());
+            } else {
+                Toast.makeText(getContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
+//                Snackbar.make(v, "Please enable the GPS of device", Snackbar.LENGTH_LONG).show();
+            }
         } catch (Exception e) {
             Log.e("msg", e.getMessage());
         }
@@ -134,7 +143,7 @@ public class Places extends Fragment {
         try {
             call1(interest1.get(0), interest1);
         } catch (Exception e) {
-            Log.e("msg",e.getMessage());
+            Log.e("msg", e.getMessage());
         }
 
     }
@@ -183,16 +192,26 @@ public class Places extends Fragment {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION},
                     REQUEST_CODE);
-
+            return;
         }
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
+
                 if (location != null) {
                     filtered = getDataFirebase.isInside(location.getLatitude(), location.getLongitude(), temp);
+                    Log.e("filtered", String.valueOf(filtered.size()));
                     getFromFirebase(filtered);
+                } else {
+                    Toast.makeText(getContext(), "Your location not accessible", Toast.LENGTH_LONG).show();
+                    getFromFirebase(temp);
                 }
 
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("msg e", e.getMessage());
             }
         });
 
@@ -213,6 +232,7 @@ public class Places extends Fragment {
                     name.add(dataSnapshot.child("Placename").getValue().toString());
 
                     if (i1 == filtered.size() - 1) {
+                        Log.e("firebase", "firebase");
                         getPlaceName(placename, name, geolocation);
                     }
 
@@ -231,7 +251,6 @@ public class Places extends Fragment {
     }
 
     private void getPlaceName(ArrayList<String> placename1, ArrayList<String> name, ArrayList<String> geolocation1) {
-
 
         PlacesAdapter placesAdapter = new PlacesAdapter(getContext(), placename1, name, geolocation1);
         rvPlaces.setAdapter(placesAdapter);
@@ -367,7 +386,6 @@ public class Places extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.e("request", String.valueOf(requestCode));
         switch (requestCode) {
             case REQUEST_CODE:
                 if (grantResults.length > 0

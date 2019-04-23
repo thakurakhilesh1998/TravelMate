@@ -63,7 +63,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         Log.e("geo", geolocation);
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
-        //  findlatlong(geolocation);
+         findlatlong(geolocation);
 
 
         getDataFromFirebase();

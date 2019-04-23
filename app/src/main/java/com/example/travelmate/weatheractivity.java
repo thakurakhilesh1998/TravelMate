@@ -37,7 +37,6 @@ public class weatheractivity extends AppCompatActivity {
         findids();
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocoordinates1");
-//        Log.e("geolocation", geolocation);
         String lat = substringGeolocation.getLatitude(geolocation);
         String longitude = substringGeolocation.getLongitude(geolocation);
         getLocationKey(lat, longitude);

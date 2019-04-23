@@ -3,6 +3,7 @@ package com.example.travelmate;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -18,14 +19,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.travelmate.HomeFragment.HomePageFragment;
 import com.example.travelmate.HomeFragment.Places;
 import com.example.travelmate.HomeFragment.mytripFragment;
+import com.example.travelmate.utility.GpsEnabled;
+import com.example.travelmate.utility.PrefLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,6 +59,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     FusedLocationProviderClient fusedLocationProviderClient;
     String geolocation;
+    PrefLocation prefLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +75,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         temp = new ArrayList<>();
         filtered = new ArrayList<>();
         placename = new ArrayList<>();
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
 
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
+        try {
+
+            if (GpsEnabled.isEnabled(getApplicationContext())) {
+
+                fetchCurrentLocation();
+            } else {
+                Toast.makeText(getApplicationContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e("msg", e.getMessage());
         }
 
 
@@ -88,6 +103,42 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         ivprofile.setOnClickListener(this);
         setSupportActionBar(toolbar);
+
+
+    }
+
+    private void fetchCurrentLocation() {
+
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_CODE);
+
+        } else {
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    if (location != null) {
+                        Log.e("location", String.valueOf(location.getLatitude()));
+                        prefLocation = new PrefLocation(getApplicationContext());
+                        prefLocation.setLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your location not accessible", Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("msg e", e.getMessage());
+                }
+            });
+        }
 
 
     }
@@ -139,11 +190,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ft.replace(R.id.frame, homePageFragment);
         ft.commitAllowingStateLoss();
 
-//
-//        Places places = new Places();
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.replace(R.id.frame, places);
-//        ft.commitAllowingStateLoss();
     }
 
     private void findIds() {
@@ -246,5 +292,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
 
 }
