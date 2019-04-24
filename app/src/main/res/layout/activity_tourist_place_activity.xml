@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingVertical="4dp">
+           >
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -42,7 +42,8 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rvPhotos"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                        android:layout_height="300dp">
+                    </android.support.v7.widget.RecyclerView>
 
                     <cz.intik.overflowindicator.OverflowPagerIndicator
                         android:id="@+id/view_pager_indicator"
@@ -75,20 +76,21 @@
                         android:layout_weight="1"
                         android:text="Bilaspur"
                         android:textColor="@color/black"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textSize="30dp"
+                        android:textStyle="italic" />
 
                     <TextView
                         android:id="@+id/tvviewOnMap"
-                        android:layout_width="60dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="0.6"
                         android:background="@drawable/button"
                         android:drawableLeft="@drawable/navigate"
                         android:text="Navigation"
+                        android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="24dp" />
                 </LinearLayout>
 
 
@@ -109,6 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     app:cardBackgroundColor="@color/background"
+                    app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
 
                     <include
@@ -117,30 +120,20 @@
                         android:layout_height="wrap_content" />
                 </android.support.v7.widget.CardView>
 
-
-                <TextView
-                    android:id="@+id/tvNearByPlaces"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="16dp"
-                    android:text="nearbyPlaces"
-                    android:textSize="20dp" />
-
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Explore"
+                    android:paddingVertical="12dp"
+                    android:text="Explore Nearby"
                     android:textColor="@color/black"
-                    android:textSize="30dp"
-                    android:textStyle="bold"/>
+                    android:textSize="20dp"
+                    android:textStyle="italic" />
 
-                <include
-                    layout="@layout/nearbylayout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
-
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvnearby"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

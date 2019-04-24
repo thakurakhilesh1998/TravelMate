@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.travelmate.APIS.LocationKeyApi;
 import com.example.travelmate.APIS.WeatherApi;
+import com.example.travelmate.Adapter.NearByImageAdapter;
 import com.example.travelmate.Adapter.PlacePhotosAdapter;
 import com.example.travelmate.locationkey.LocationKey;
 import com.example.travelmate.utility.constants;
@@ -38,7 +39,7 @@ import retrofit2.Response;
 public class TouristPlace_activity extends AppCompatActivity implements View.OnClickListener {
     RecyclerView rvPhotos;
     ArrayList<String> photos;
-    TextView tvPlaceName, tvAbout, tvviewMap, tvNearByPlaces, tvRainProbablity;
+    TextView tvPlaceName, tvAbout, tvviewMap, tvRainProbablity;
     ImageView ivWeatherIcon;
     TextView tvTemp, tvHeadline, tvWindspeed;
     LinearLayout weather;
@@ -47,19 +48,23 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     String geolocation1;
     FirebaseDatabase database;
     Toolbar toolbar;
-
+    RecyclerView rvnearby;
     DatabaseReference mRef;
     OverflowPagerIndicator overflow;
     String details = "true";
-    ImageView ivFirst, ivSecond, ivThird, ivFourth;
+    ArrayList<Integer> images;
+    ArrayList<String> name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tourist_place_activity);
         setSupportActionBar(toolbar);
+        images = new ArrayList<>();
+        name = new ArrayList<>();
+        setName();
+        setImageList();
         findIds();
-
         photos = new ArrayList<>();
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocordinates");
@@ -67,26 +72,40 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
         //  findlatlong(geolocation);
-
-
         getDataFromFirebase();
         // getWeatherForecast(locationkey);
         tvviewMap.setOnClickListener(this);
         weather.setOnClickListener(this);
-        tvNearByPlaces.setOnClickListener(this);
-        ivFirst.setOnClickListener(this);
-        ivSecond.setOnClickListener(this);
-        ivThird.setOnClickListener(this);
-        ivFourth.setOnClickListener(this);
+        setNearByrecyclerView();
+    }
 
+    private void setName() {
+        name.add("Food");
+        name.add("Atm");
+        name.add("Hotels");
+        name.add("Petrol Station");
+        name.add("Hospital");
+    }
+
+    private void setImageList() {
+        images.add(R.drawable.food);
+        images.add(R.drawable.atm);
+        images.add(R.drawable.hotel);
+        images.add(R.drawable.petrol);
+        images.add(R.drawable.hospital);
+    }
+
+    private void setNearByrecyclerView() {
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        rvnearby.setLayoutManager(manager);
+        NearByImageAdapter nearByImageAdapter = new NearByImageAdapter(getApplicationContext(), images, name, geolocation);
+        rvnearby.setAdapter(nearByImageAdapter);
     }
 
     private void getDataFromFirebase() {
         geolocation1 = geolocation;
         geolocation1 = geolocation1.substring(0, 2) + geolocation1.substring(3);
         geolocation1 = geolocation1.substring(0, 11) + geolocation1.substring(12);
-
-
         mRef.child(geolocation1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -196,7 +215,6 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         tvPlaceName = findViewById(R.id.tvPlaceName);
         tvAbout = findViewById(R.id.tvAbout);
         tvviewMap = findViewById(R.id.tvviewOnMap);
-        tvNearByPlaces = findViewById(R.id.tvNearByPlaces);
         ivWeatherIcon = findViewById(R.id.ivWeatherIcon);
         tvTemp = findViewById(R.id.tvTemp);
         tvWindspeed = findViewById(R.id.tvwinspeed);
@@ -204,10 +222,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         weather = findViewById(R.id.weatherlayout);
         overflow = findViewById(R.id.view_pager_indicator);
         tvRainProbablity = findViewById(R.id.tvRainProbablity);
-        ivFirst = findViewById(R.id.tvFirst);
-        ivSecond = findViewById(R.id.tvsecond);
-        ivThird = findViewById(R.id.tvThird);
-        ivFourth = findViewById(R.id.tvFourth);
+        rvnearby = findViewById(R.id.rvnearby);
 
     }
 
@@ -233,48 +248,9 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.weatherlayout:
                 onWeatherClick();
-                break;
-            case R.id.tvNearByPlaces:
-                onNearByPlacesClicked();
-                break;
-            case R.id.tvFirst:
-                onAtmClick();
-                break;
-            case R.id.tvsecond:
-                onHospitalClick();
-                break;
-            case R.id.tvThird:
-                onPetrolPumpClick();
-                break;
-            case R.id.tvFourth:
-                break;
-
-
         }
     }
 
-    private void onPetrolPumpClick() {
-
-        startActivity(new Intent(getApplicationContext(), atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "petrol-pump"));
-    }
-
-    private void onHospitalClick() {
-        startActivity(new Intent(getApplicationContext(), atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "hospital"));
-    }
-
-    private void onAtmClick() {
-
-        startActivity(new Intent(getApplicationContext(), atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "atm"));
-
-
-    }
-
-    private void onNearByPlacesClicked() {
-
-
-        startActivity(new Intent(this, NearByPlacesActivity.class).putExtra("geocoordinates", geolocation));
-
-    }
 
     private void onWeatherClick() {
 
