@@ -7,15 +7,18 @@
 
     <ImageView
         android:id="@+id/tvFirst"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/distance" />
-
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:fitsSystemWindows="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/nearbyatm" />
     <ImageView
         android:id="@+id/tvsecond"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/restaurant" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:fitsSystemWindows="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/nearbyresturents" />
 
     <ImageView
         android:id="@+id/tvThird"

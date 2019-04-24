@@ -3,6 +3,7 @@
     android:id="@+id/weatherlayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+
     android:orientation="horizontal"
     android:padding="12dp">
 
@@ -30,6 +31,8 @@
             android:drawableLeft="@drawable/up"
             android:gravity="center"
             android:text="24.5"
+            android:textColor="@color/white"
+            android:textSize="16dp"
             android:textStyle="bold" />
 
         <TextView
@@ -39,7 +42,9 @@
             android:layout_weight="1"
             android:drawableLeft="@drawable/down"
             android:gravity="center"
-            android:text="lowtemp"
+            android:text="24.5"
+            android:textColor="@color/white"
+            android:textSize="16dp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -55,7 +60,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="headline"
-            android:textSize="12dp"
+            android:textColor="@color/white"
+            android:textSize="16dp"
             android:textStyle="bold" />
 
         <TextView
@@ -65,7 +71,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Rain Probablity"
-            android:textSize="12dp"
+            android:textColor="@color/white"
+            android:textSize="16dp"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

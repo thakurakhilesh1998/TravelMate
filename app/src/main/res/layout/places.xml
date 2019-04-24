@@ -1,42 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearLayout"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_margin="4dp"
+    app:cardElevation="16dp">
 
-
-    <ImageView
-        android:id="@+id/ivImage"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="fitXY" />
-
-
-    <TextView
-        android:id="@+id/tvName"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name"
-        android:textColor="@color/background"
-        android:textSize="@dimen/textSize"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/back2" />
 
 
-    <TextView
-        android:id="@+id/tvDistance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Distance"
-        android:textColor="@color/background"
-        android:textSize="@dimen/textSize" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                android:padding="12dp">
 
-    <TextView
-        android:id="@+id/tvTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/car"
-        android:text="Time"
-        android:textColor="@color/background"
-        android:textSize="@dimen/textSize" />
-</LinearLayout>
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Name"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"
+                    android:textStyle="bold" />
+
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="Click Here"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="24dp"-->
+                <!--android:textStyle="bold" />-->
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:paddingLeft="8dp">
+
+            <TextView
+                android:id="@+id/tvDistance"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/distanceicon"
+                android:drawablePadding="4dp"
+                android:text="Distance"
+                android:textColor="@color/background"
+                android:textSize="@dimen/textSize" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/time"
+                android:drawablePadding="4dp"
+                android:text="Time"
+                android:textColor="@color/background"
+                android:textSize="@dimen/textSize" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

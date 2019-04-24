@@ -1,114 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".TouristPlace_activity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingVertical="12dp"
-        tools:context=".TouristPlace_activity">
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        app:logo="@drawable/backicon"
+        app:title="My Place"
+        app:titleMarginStart="120dp"
+        app:titleTextColor="@color/white"></android.support.v7.widget.Toolbar>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvPhotos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-
-            <cz.intik.overflowindicator.OverflowPagerIndicator
-                android:id="@+id/view_pager_indicator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/background"
-                android:gravity="center" />
-        </RelativeLayout>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp">
-
-                <TextView
-                    android:id="@+id/tvPlaceName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:layout_weight="1"
-                    android:text="Bilaspur"
-                    android:textColor="@color/black"
-                    android:textSize="30dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvviewOnMap"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="View On Map"
-                    android:textColor="@color/black"
-                    android:textSize="30dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvAbout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="hgdfg bdhcjdsghsb cnbhdsbc sdhgdhsfbsdhs chdbcdsn cshdfsnfbdnfghsdj dfbhsdbfsjdbfhjsd sdhfbsdnf"
-                android:textColor="#0f0f0f" />
+            android:paddingVertical="4dp">
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:cardBackgroundColor="#87cefa"
-                app:cardElevation="4dp">
+                app:cardElevation="8dp">
 
-                <include
-                    layout="@layout/weatherlayout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rvPhotos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+                    <cz.intik.overflowindicator.OverflowPagerIndicator
+                        android:id="@+id/view_pager_indicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/background"
+                        android:gravity="center" />
+                </RelativeLayout>
             </android.support.v7.widget.CardView>
 
-
-            <TextView
-                android:id="@+id/tvNearByPlaces"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:text="nearbyPlaces"
-                android:textSize="20dp" />
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:orientation="horizontal"
+                    android:paddingRight="12dp">
+
+                    <TextView
+                        android:id="@+id/tvPlaceName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="Bilaspur"
+                        android:textColor="@color/black"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvviewOnMap"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.6"
+                        android:background="@drawable/button"
+                        android:drawableLeft="@drawable/navigate"
+                        android:text="Navigation"
+                        android:textColor="@color/white"
+                        android:textSize="20dp" />
+                </LinearLayout>
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Explore"
-                android:textColor="@color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvAbout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="left"
+                    android:lineHeight="20dp"
+                    android:paddingVertical="8dp"
+                    android:text="hgdfg bdhcjdsghsb cnbhdsbc sdhgdhsfbsdhs chdbcdsn cshdfsnfbdnfghsdj dfbhsdbfsjdbfhjsd sdhfbsdnf"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
 
-            <include
-                layout="@layout/nearbylayout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:cardBackgroundColor="@color/background"
+                    app:cardElevation="8dp">
 
+                    <include
+                        layout="@layout/weatherlayout"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.v7.widget.CardView>
+
+
+                <TextView
+                    android:id="@+id/tvNearByPlaces"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:text="nearbyPlaces"
+                    android:textSize="20dp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Explore"
+                    android:textColor="@color/black"
+                    android:textSize="30dp"
+                    android:textStyle="bold"/>
+
+                <include
+                    layout="@layout/nearbylayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+    </ScrollView>
+</LinearLayout>
+
+

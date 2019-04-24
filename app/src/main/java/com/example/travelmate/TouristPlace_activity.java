@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -45,6 +46,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     String geolocation;
     String geolocation1;
     FirebaseDatabase database;
+    Toolbar toolbar;
 
     DatabaseReference mRef;
     OverflowPagerIndicator overflow;
@@ -55,6 +57,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tourist_place_activity);
+        setSupportActionBar(toolbar);
         findIds();
 
         photos = new ArrayList<>();
@@ -63,7 +66,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         Log.e("geo", geolocation);
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
-         findlatlong(geolocation);
+        //  findlatlong(geolocation);
 
 
         getDataFromFirebase();
@@ -188,7 +191,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
 
     private void findIds() {
-
+        toolbar = findViewById(R.id.toolbar);
         rvPhotos = findViewById(R.id.rvPhotos);
         tvPlaceName = findViewById(R.id.tvPlaceName);
         tvAbout = findViewById(R.id.tvAbout);
