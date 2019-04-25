@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class nearbyplaces_activity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference reference;
+    Toolbar toolbar;
     ArrayList<String> list, list1;
     ArrayList<String> temp, filtered, placename, name, geolocation;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -54,7 +56,8 @@ public class nearbyplaces_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearbyplaces_activity);
-
+        toolbar = findViewById(R.id.toolbar1);
+        setSupportActionBar(toolbar);
         prefLocation = new PrefLocation(this);
         Log.e("location", prefLocation.getLangitude());
         rvPlaces = findViewById(R.id.rvPlaces);

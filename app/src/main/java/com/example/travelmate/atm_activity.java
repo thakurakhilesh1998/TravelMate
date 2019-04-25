@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,14 +27,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class atm_activity extends AppCompatActivity implements View.OnClickListener {
+public class atm_activity extends AppCompatActivity
+{
     public static final String RADIUS = "1000";
     List<Result> atm1;
     RecyclerView rvAtm;
     String types;
     ProgressDialog progressDialog;
     Toolbar toolbar;
-    TextView tvMapView;
     String geolocation;
 
     @Override
@@ -40,14 +42,12 @@ public class atm_activity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atm_activity);
         toolbar = findViewById(R.id.toolbar);
-        tvMapView = findViewById(R.id.tvMapView);
         setSupportActionBar(toolbar);
         rvAtm = findViewById(R.id.rvAtm);
         Intent intent = getIntent();
         types = intent.getStringExtra("type");
         progressDialog = new ProgressDialog(getApplicationContext());
         getSupportActionBar().setTitle(types);
-        tvMapView.setOnClickListener(this);
         geolocation = intent.getStringExtra("geocoordinates2");
         Log.e("geolocation", geolocation);
         String lat = substringGeolocation.getLatitude(geolocation);
@@ -87,17 +87,29 @@ public class atm_activity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tvMapView:
-                onClickMap();
-
-        }
-    }
 
     private void onClickMap() {
 
-        startActivity(new Intent(getApplicationContext(), map_nearby_activity.class).putExtra("geo", geolocation));
+        startActivity(new Intent(getApplicationContext(), map_nearby_activity.class).putExtra("geo", geolocation).putExtra("type",types));
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.mapview, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+    switch (item.getItemId())
+    {
+        case R.id.viewonMap:
+            onClickMap();
+    }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

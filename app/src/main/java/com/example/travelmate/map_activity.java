@@ -33,7 +33,8 @@ public class map_activity extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getDataFromIntent();
 
-        getCurrentLocation();
+      //  getCurrentLocation();
+        showOnMap();
     }
 
     private void getCurrentLocation() {
@@ -45,12 +46,12 @@ public class map_activity extends AppCompatActivity {
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                showOnMap(location.getLatitude(), location.getLongitude());
+                showOnMap();
             }
         });
     }
 
-    private void showOnMap(double latitude, double longitude) {
+    private void showOnMap() {
 
 
         if (mMap == null) {
@@ -78,7 +79,7 @@ public class map_activity extends AppCompatActivity {
     public void addMarker(GoogleMap mMap) {
         LatLng latLng = new LatLng(Double.valueOf(lat), Double.valueOf(lng));
         mMap.addMarker(new MarkerOptions().title("Location On Map").position(latLng));
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(20).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
     }

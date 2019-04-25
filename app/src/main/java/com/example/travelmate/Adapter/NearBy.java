@@ -1,6 +1,7 @@
 package com.example.travelmate.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.example.travelmate.APIS.PlacePhoto;
 import com.example.travelmate.Distance.Distance;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
+import com.example.travelmate.map_activity;
 import com.example.travelmate.utility.constants;
 
 import java.util.List;
@@ -52,8 +54,8 @@ public class NearBy extends RecyclerView.Adapter<NearBy.Holder> {
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
 
-        String lat = String.valueOf(atm1.get(i).getGeometry().getLocation().getLat());
-        String lng = String.valueOf(atm1.get(i).getGeometry().getLocation().getLng());
+        final String lat = String.valueOf(atm1.get(i).getGeometry().getLocation().getLat());
+        final String lng = String.valueOf(atm1.get(i).getGeometry().getLocation().getLng());
 
         getDistance(holder, i, lat, lng);
     }
@@ -92,6 +94,14 @@ public class NearBy extends RecyclerView.Adapter<NearBy.Holder> {
                     }
                 });
 
+
+                holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        context.startActivity(new Intent(context, map_activity.class).putExtra("lat", lat).putExtra("lang", lng));
+                    }
+                });
+
                 Glide.with(context).load(atm1.get(0).getIcon()).into(holder.ivImage);
                 holder.tvTotal.setText(String.valueOf("(" + atm1.get(i).getUserRatingsTotal() + ")"));
                 try {
@@ -117,6 +127,7 @@ public class NearBy extends RecyclerView.Adapter<NearBy.Holder> {
         return atm1.size();
     }
 
+
     public class Holder extends RecyclerView.ViewHolder {
 
         ImageView ivImage;
@@ -135,6 +146,7 @@ public class NearBy extends RecyclerView.Adapter<NearBy.Holder> {
             //   linearLayout = itemView.findViewById(R.id.linearLayout);
             rbRating = itemView.findViewById(R.id.rbRating);
             tvTotal = itemView.findViewById(R.id.tvTotal);
+            linearLayout = itemView.findViewById(R.id.linearlayout2);
         }
     }
 }

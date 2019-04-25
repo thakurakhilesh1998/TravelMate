@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,8 +35,8 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
     TimePickerDialog tpd;
     DatePickerDialog dpd;
     int y, m, d, h, mi;
-    EditText etTripname, etItemname;
-    Button btnadditem;
+    EditText etTripname, etItemname, etDestination;
+    ImageView btnadditem;
     TextView textView;
     LinearLayout linearLayout;
     ArrayList<String> list;
@@ -42,6 +44,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
     DatabaseReference reference;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
+    int i = 1;
     ProgressDialog dialog;
 
     @Override
@@ -88,6 +91,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         etTripname = findViewById(R.id.etTripName);
         btnadditem = findViewById(R.id.btnaddItem);
         linearLayout = findViewById(R.id.linearLayout);
+        etDestination = findViewById(R.id.etDestination);
 
     }
 
@@ -135,39 +139,77 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
     }
 
     private void addItem() {
+
         String textItem = etItemname.getText().toString();
-        textView = new TextView(this);
-        list.add(textItem);
-        addItemToTextView(textItem);
+        if (textItem.isEmpty()) {
+            etItemname.setFocusable(true);
+            etItemname.setError("Enter a item name");
+        } else {
+            textView = new TextView(this);
+            list.add(textItem);
+            addItemToTextView(textItem);
+        }
+
     }
 
     private void addItemToTextView(String textItem) {
-        textView.setText(textItem);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        textView.setText(i + ". " + textItem);
+        i++;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(20, 6, 0, 0);
+        textView.setLayoutParams(params);
+        textView.setTextColor(getResources().getColor(R.color.background));
+        textView.setTextSize(24);
+        linearLayout.setVisibility(View.VISIBLE);
         linearLayout.addView(textView);
     }
 
-    private void notification(View v) {
+    private void notification(View v) throws ParseException {
         dialog.setMessage("Creating Trip");
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);
-        String tripname = etTripname.getText().toString().trim();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(now.getTime());
-        savetripdata data = new savetripdata(tripname, formattedDate, list);
-        reference = database.getReference();
-        reference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(formattedDate).setValue(data);
-        NotifyMe notifyMe = new NotifyMe.Builder(getApplicationContext())
-                .title("Trip remainder")
-                .content("hi")
-                .color(255, 0, 0, 255)
-                .led_color(255, 255, 255, 255)
-                .time(now)
-                .key("test")
-                .large_icon(R.mipmap.ic_launcher_round)
-                .build();
-        Snackbar.make(v, "Trip Created,And Remainder Set", Snackbar.LENGTH_SHORT).show();
-        dialog.dismiss();
+
+
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate1 = df1.format(c.getTime());
+
+
+        if (etTripname.getText().toString().trim().isEmpty()) {
+            etTripname.setError("Enter Trip Name");
+            etTripname.setFocusable(true);
+        } else if (etDestination.getText().toString().trim().isEmpty()) {
+            etDestination.setError("Enter Destination Name");
+            etDestination.setFocusable(true);
+        } else if (tvPickDate.getText().toString().trim().isEmpty()) {
+            tvPickDate.setError("Pick a date");
+            tvPickDate.setFocusable(true);
+        } else if (formattedDate.compareTo(formattedDate1) < 0) {
+            tvPickDate.setError("pick right date");
+            tvPickDate.setFocusable(true);
+            Snackbar.make(v, "Please Pick Right Date", Snackbar.LENGTH_SHORT).show();
+            dialog.dismiss();
+        } else {
+            String tripname = etTripname.getText().toString().trim();
+            String destination = etDestination.getText().toString().trim();
+            savetripdata data = new savetripdata(tripname, formattedDate, list, destination);
+            reference = database.getReference();
+            reference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(formattedDate).setValue(data);
+            NotifyMe notifyMe = new NotifyMe.Builder(getApplicationContext())
+                    .title("Trip remainder")
+                    .content("Hi,Your Trip is started.Look at your item list so you can not miss items during your trip")
+                    .color(255, 0, 0, 255)
+                    .led_color(255, 255, 255, 255)
+                    .small_icon(R.drawable.tripicon)
+                    .large_icon(R.drawable.tripicon)
+                    .time(now)
+                    .key("test")
+                    .build();
+            Snackbar.make(v, "Trip Created,And Remainder Set", Snackbar.LENGTH_SHORT).show();
+            dialog.dismiss();
+        }
     }
 
     private void pickDate() {
@@ -176,4 +218,6 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         String formattedDate = df.format(now.getTime());
         tvPickDate.setText(formattedDate);
     }
+
+
 }

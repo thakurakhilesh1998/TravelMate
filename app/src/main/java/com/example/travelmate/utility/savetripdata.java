@@ -6,13 +6,24 @@ public class savetripdata {
 
 
     String tripname, date;
-    ArrayList<String> list;
-    ArrayList<String> list1;
+    String destination;
 
-    public savetripdata(String tripname, String date, ArrayList<String> list) {
+    public savetripdata(String tripname, String date, ArrayList<String> list, String destination) {
         this.tripname = tripname;
         this.list = list;
         this.date = date;
+        this.destination = destination;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    ArrayList<String> list;
+    ArrayList<String> list1;
+
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
     public savetripdata(ArrayList<String> list1) {

@@ -50,7 +50,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class map_2_activity extends AppCompatActivity implements View.OnClickListener {
-    TextView tvDistance, tvTime, tvDestination;
+    TextView tvDistance, tvTime, tvDestination, tvCurrent;
     Toolbar toolbar;
     GoogleMap mMap;
     FusedLocationProviderClient mClient;
@@ -71,7 +71,6 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
         String mode = "driving";
         setContentView(R.layout.activity_map_2_activity);
         mClient = LocationServices.getFusedLocationProviderClient(this);
-
         findIds();
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
@@ -85,6 +84,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void findIds() {
+        tvCurrent = findViewById(R.id.tvCurrent);
         toolbar = findViewById(R.id.toolbar);
         tvDistance = findViewById(R.id.tvDistance);
         tvTime = findViewById(R.id.tvTime);
@@ -131,11 +131,11 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
 
                 Route = response.body().getRoutes();
                 initMap(Route, latLng1, destLatlang1, mode);
+                tvCurrent.setText(response.body().getRoutes().get(0).getLegs().get(0).getStartAddress());
             }
 
             @Override
             public void onFailure(Call<Direction> call, Throwable t) {
-
             }
         });
 
@@ -181,16 +181,15 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
 
     private void drawRouteOnMap(GoogleMap mMap, ArrayList<LatLng> list) {
 
-        PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
+        PolylineOptions options = new PolylineOptions().width(8).color(Color.BLUE).geodesic(true);
         options.addAll(list);
         Polyline polyline = mMap.addPolyline(options);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(list.get(1).latitude, list.get(1).longitude))
                 .zoom(17)
                 .build();
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-
     }
 
     private ArrayList<LatLng> getDirectionPolylines(List<Route> route) {
@@ -262,11 +261,6 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
                 getCurrentLocation(mode);
                 dialog.dismiss();
                 break;
-            case R.id.cbTransit:
-                mode = "transit";
-                getCurrentLocation(mode);
-                dialog.dismiss();
-                break;
             case R.id.ivcurrent:
                 onClickOnCurrent();
                 break;
@@ -323,10 +317,8 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
         dialog.setContentView(R.layout.mode);
         RadioButton cbDriving = dialog.findViewById(R.id.cbDriving);
         RadioButton cbWalking = dialog.findViewById(R.id.cbWalking);
-        RadioButton cbTransit = dialog.findViewById(R.id.cbTransit);
         cbDriving.setOnClickListener(this);
         cbWalking.setOnClickListener(this);
-        cbTransit.setOnClickListener(this);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
@@ -342,7 +334,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
         relativeLayout.setVisibility(View.VISIBLE);
         if (backpresscount == 2) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("Do You Want To esit this activity?");
+            alertDialogBuilder.setMessage("Do You Want To enter Home Page?");
             alertDialogBuilder.setTitle("Exit Screen");
             alertDialogBuilder.setCancelable(false);
 

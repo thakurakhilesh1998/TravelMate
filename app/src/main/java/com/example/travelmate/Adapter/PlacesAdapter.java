@@ -66,7 +66,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
         mmprogressDialog.setMessage("Wait...Fetching...Your Places");
         mmprogressDialog.setCanceledOnTouchOutside(false);
         prefLocation = new PrefLocation(context);
-
         currentLatlong = prefLocation.getLatitude() + "," + prefLocation.getLangitude();
         getDistanceTime(currentLatlong, i, holder);
     }

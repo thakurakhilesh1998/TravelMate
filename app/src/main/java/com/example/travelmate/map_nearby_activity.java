@@ -1,9 +1,10 @@
 package com.example.travelmate;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.travelmate.APIS.NearbyApiHitter;
@@ -15,6 +16,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -34,14 +36,17 @@ public class map_nearby_activity extends AppCompatActivity {
     String lat, longitude;
     List<Result> atm1;
     List<Double> lat1, lang;
+    String type;
+    BitmapDrawable bitmapdraw;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_nearby_activity);
-        Intent intent = getIntent();
+        intent = getIntent();
         geolocation = intent.getStringExtra("geo");
-        Log.e("geo", geolocation);
+
         lat1 = new ArrayList<>();
         lang = new ArrayList<>();
         lat = substringGeolocation.getLatitude(geolocation);
@@ -97,15 +102,41 @@ public class map_nearby_activity extends AppCompatActivity {
     }
 
     private void addMarkerOnMap(List<Double> lat1, List<Double> lang) {
-
-        Log.e("size", lat1.size() + "," + lang.size());
+        int height = 100;
+        int width = 50;
+        BitmapDrawable bitmapDrawable1 = getBitMapIcon();
+        Bitmap b = bitmapDrawable1.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
         for (int i = 0; i < lat1.size(); i++) {
             LatLng latLng = new LatLng(lat1.get(i), lang.get(i));
-            mMap.addMarker(new MarkerOptions().position(new LatLng(lat1.get(i), lang.get(i))).title("atm"));
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(20).build();
+            mMap.addMarker(new MarkerOptions().position(new LatLng(lat1.get(i), lang.get(i))).title("atm").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         }
+
+    }
+
+    public BitmapDrawable getBitMapIcon() {
+        type = intent.getStringExtra("type");
+        switch (type) {
+            case "food":
+                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.locateresturants);
+                return bitmapdraw;
+            case "atm":
+                bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.viewonatm);
+                return bitmapdraw;
+            case "hotels":
+                bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.locatehotel);
+                return bitmapdraw;
+            case "petrol-pump":
+                bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.locateatm);
+                return bitmapdraw;
+            case "hospital":
+                bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.locatehospital);
+                return bitmapdraw;
+        }
+        return bitmapdraw;
 
     }
 }

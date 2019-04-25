@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,14 +55,14 @@ public class mytripFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //  rvMyTrips = view.findViewById(R.id.rvMytrips);
+        rvMyTrips = view.findViewById(R.id.rvMytrips);
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
         list = new ArrayList<>();
         listfinal = new ArrayList<>();
         linearLayout = view.findViewById(R.id.linearLayout);
-        //tvnotrip = view.findViewById(R.id.tvnotrip);
+        tvnotrip = view.findViewById(R.id.tvnotrip);
         getDataFromFirebase();
 
 
@@ -90,14 +89,11 @@ public class mytripFragment extends Fragment {
                         if (list.get(i).compareTo(formattedDate) > 0) {
                             listfinal.add(list.get(i));
                         }
-
                     }
-                    Log.e("listsize", String.valueOf(listfinal.size()));
                     if (listfinal.size() != 0) {
                         try {
                             rvMyTrips = new RecyclerView(getContext());
                         } catch (Exception e) {
-                            Log.e("exception", e.getMessage());
                         }
                         linearLayout.addView(rvMyTrips);
                         rvMyTrips.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -111,17 +107,13 @@ public class mytripFragment extends Fragment {
                         tvnotrip.setText("no tripfound");
                         tvnotrip.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         linearLayout.addView(tvnotrip);
-                        Log.e("dfsdgd", "textview");
-
                     }
-
 
                 } else {
                     tvnotrip = new TextView(getContext());
                     tvnotrip.setText("no tripfound");
                     tvnotrip.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     linearLayout.addView(tvnotrip);
-                    Log.e("dfsdgd", "textview");
                 }
             }
 
