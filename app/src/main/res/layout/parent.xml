@@ -8,5 +8,8 @@
         android:id="@+id/tvList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Check List" />
+        android:text="My Items For Trip"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:textStyle="bold" />
 </LinearLayout>

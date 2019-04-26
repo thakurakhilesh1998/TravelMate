@@ -240,8 +240,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 ft.commitAllowingStateLoss();
                 break;
             case R.id.weather:
-
-                startActivity(new Intent(getApplicationContext(), weatheractivity.class).putExtra("geocoordinates1", geolocation));
+                startActivity(new Intent(getApplicationContext(), viewmytripactivity.class));
+                //   startActivity(new Intent(getApplicationContext(), weatheractivity.class).putExtra("geocoordinates1", geolocation));
                 break;
             case R.id.checklist:
                 startActivity(new Intent(this, mytrip_activity.class));

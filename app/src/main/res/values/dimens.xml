@@ -9,4 +9,5 @@
     <dimen name="sizetext">16dp</dimen>
     <dimen name="margintop1">6dp</dimen>
     <dimen name="checkboxsize">16dp</dimen>
+    <dimen name="viewtriptext">22dp</dimen>
 </resources>

@@ -1,22 +1,18 @@
-package com.example.travelmate.HomeFragment;
+package com.example.travelmate;
 
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.travelmate.Adapter.TripAdapter;
-import com.example.travelmate.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +28,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class mytripFragment extends Fragment {
+public class viewmytripactivity extends AppCompatActivity implements View.OnClickListener {
+
 
     RecyclerView rvMyTrips;
     FirebaseDatabase database;
@@ -41,37 +38,32 @@ public class mytripFragment extends Fragment {
     FirebaseUser mUser;
     ArrayList<String> list;
     ArrayList<String> listfinal;
-    TextView tvnotrip;
-    LinearLayout linearLayout;
-
-    public mytripFragment() {
-    }
+    LinearLayout linearLayout, notriplayout;
+    Button btncreatetrip;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_mytrip, container, false);
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_viewmytripactivity);
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        tvnotrip = view.findViewById(R.id.tvnotrip);
-        rvMyTrips = view.findViewById(R.id.rvMytrips);
+        btncreatetrip = findViewById(R.id.btncreatetrip);
+        rvMyTrips = findViewById(R.id.rvMytrips);
+        notriplayout = findViewById(R.id.notriplayout);
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
         list = new ArrayList<>();
         listfinal = new ArrayList<>();
-        linearLayout = view.findViewById(R.id.linearLayout);
-        tvnotrip = view.findViewById(R.id.tvnotrip);
+        btncreatetrip.setOnClickListener(this);
+        linearLayout = findViewById(R.id.linearLayout);
         try {
             getDataFromFirebase();
         } catch (Exception e) {
             Log.e("msg", e.getMessage());
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+
 
     }
 
@@ -99,7 +91,7 @@ public class mytripFragment extends Fragment {
             getData2(dataSnapshot);
         } else {
 
-            tvnotrip.setVisibility(View.VISIBLE);
+            notriplayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -113,19 +105,20 @@ public class mytripFragment extends Fragment {
         }
         comapreDate();
         if (listfinal.size() != 0) {
-            LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
             rvMyTrips.setLayoutManager(manager);
-            TripAdapter tripAdapter = new TripAdapter(getContext(), listfinal);
+            TripAdapter tripAdapter = new TripAdapter(getApplicationContext(), listfinal);
             rvMyTrips.setAdapter(tripAdapter);
             rvMyTrips.setVisibility(View.VISIBLE);
         } else if (list.size() == 0) {
 
-            tvnotrip.setVisibility(View.VISIBLE);
+            notriplayout.setVisibility(View.VISIBLE);
         } else {
-            tvnotrip.setVisibility(View.VISIBLE);
+            notriplayout.setVisibility(View.VISIBLE);
         }
 
     }
+
     private ArrayList<String> comapreDate() {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).compareTo(getCurrentDate()) > 0) {
@@ -142,5 +135,14 @@ public class mytripFragment extends Fragment {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(c.getTime());
         return formattedDate;
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btncreatetrip:
+                startActivity(new Intent(getApplicationContext(), mytrip_activity.class));
+        }
     }
 }

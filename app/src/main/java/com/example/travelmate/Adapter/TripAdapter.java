@@ -2,14 +2,14 @@ package com.example.travelmate.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.travelmate.R;
@@ -31,8 +31,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
     DatabaseReference databaseReference;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
-    ArrayList<String> list1 = new ArrayList<>();
-    String name;
+    String name, date, destination;
 
 
     public TripAdapter(Context context, ArrayList<String> list) {
@@ -43,7 +42,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
         View view = LayoutInflater.from(context).inflate(R.layout.mytrip, viewGroup, false);
         return new Holder(view);
     }
@@ -54,65 +52,77 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
         mUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference();
-        holder.ivDel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onDelClick(name, i);
-            }
-        });
-        if (list.get(i) != null) {
-            databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    try {
-                        getDataSetData(dataSnapshot, holder, i);
-                    } catch (Exception e) {
-                        Log.e("msg", e.getMessage());
-                    }
-                    Log.e("dbfhjg", "error");
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                }
-            });
-        }
-    }
-
-    private void onDelClick(String name, final int i) {
-        databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).removeValue(new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                notifyItemRemoved(i);
-                list.remove(i);
-            }
-        });
-
-    }
-
-    private void getDataSetData(DataSnapshot dataSnapshot, final Holder holder, int i) {
-        name = dataSnapshot.child("tripname").getValue().toString();
-        String date = dataSnapshot.child("date").getValue().toString();
-
-        holder.tvTripName.setText(name);
-        holder.tvDate.setText(date);
-
-        databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).child("list").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String> list = (ArrayList<String>) dataSnapshot.getValue();
-                ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(context, name);
-                holder.expandableListView.setAdapter(adapter);
+                if (dataSnapshot.hasChildren()) {
+                    getDataSetData(dataSnapshot, holder, i);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+    }
+
+    private void getDataSetData(DataSnapshot dataSnapshot, final Holder holder, int i) {
+        if (dataSnapshot.hasChildren()) {
+            name = dataSnapshot.child("tripname").getValue().toString();
+            date = dataSnapshot.child("date").getValue().toString().substring(0, 11);
+            destination = dataSnapshot.child("destination").getValue().toString();
+            holder.tvTripName.setText(name);
+            holder.tvDate.setText(date);
+            holder.tvDestination.setText(destination);
+            databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).child("list").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChildren()) {
+                        ArrayList<String> list = (ArrayList<String>) dataSnapshot.getValue();
+                        ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(context, list);
+                        holder.expandableListView.setAdapter(adapter);
+                        onExpandViewExapned(holder, list);
+                        onExpandViewCollapsed(holder, list);
+                    } else {
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        } else {
+
+        }
+    }
+
+    private void onExpandViewCollapsed(final Holder holder, final ArrayList<String> list1) {
+        holder.expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+
+                holder.expandableListView.getLayoutParams().height =70;
+            }
+        });
+
 
     }
 
+    private void onExpandViewExapned(final Holder holder, final ArrayList<String> list1) {
+        holder.expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                int height = 0;
+                for (int i = 0; i < list1.size(); i++) {
+                    height += 70;
+                }
+                holder.expandableListView.getLayoutParams().height =height;
+                Log.e("height", String.valueOf(height));
+            }
+        });
+    }
 
     @Override
     public int getItemCount() {
@@ -122,14 +132,19 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
     public class Holder extends RecyclerView.ViewHolder {
         ExpandableListView expandableListView;
         TextView tvTripName, tvDate;
-        ImageView ivDel;
+        Button btnEdit;
+        LinearLayout lineartrip;
+        TextView tvnotrip, tvDestination;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
             tvTripName = itemView.findViewById(R.id.tvTripName);
             tvDate = itemView.findViewById(R.id.tvDate);
             expandableListView = itemView.findViewById(R.id.expandableListView);
-            ivDel = itemView.findViewById(R.id.ivDel);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
+            lineartrip = itemView.findViewById(R.id.lineartrip);
+            tvDestination = itemView.findViewById(R.id.tvDestination);
+
         }
     }
 

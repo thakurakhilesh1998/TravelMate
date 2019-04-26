@@ -13,7 +13,8 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity_weather1"></activity>
+        <activity android:name=".viewmytripactivity"></activity>
+        <activity android:name=".activity_weather1" />
         <activity android:name=".nearbyplaces_activity" /> <!-- <meta-data -->
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/userprofilegrad" /> -->
@@ -49,6 +50,7 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
         <activity android:name=".NearByPlaces1" />
         <activity android:name=".map_activity" />
         <activity android:name=".TouristPlace_activity" />

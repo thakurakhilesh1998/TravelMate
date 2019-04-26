@@ -8,8 +8,9 @@
         android:id="@+id/tvListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:text="some text here"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textSize="16dp"
+      />
 
 </LinearLayout>
