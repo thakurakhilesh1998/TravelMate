@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,17 +37,8 @@ public class CabDetailsAdapter extends RecyclerView.Adapter<CabDetailsAdapter.Ho
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
 
-        if (i == 0) {
-            holder.tvHeading.setText("Most Common");
-            holder.tvDistance.setText(String.valueOf(response.body().getPrices().get(2).getDistance()));
-        }
-        if (i == 1) {
-            holder.tvHeading.setText("Economy");
-        } else {
-            holder.tvHeading.setText("More");
-        }
-
-
+        holder.tvNumbers.setText(response.body().getPrices().get(i).getDisplayName());
+        holder.tvDistance.setText(response.body().getPrices().get(i).getDistance().toString());
     }
 
     @Override
@@ -55,15 +47,14 @@ public class CabDetailsAdapter extends RecyclerView.Adapter<CabDetailsAdapter.Ho
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-
-
-        TextView tvHeading, tvTime, tvDistance, tvNumbers;
+        TextView tvTime, tvDistance, tvNumbers;
         Button btnConfirm;
+        ImageView vehicle;
         LinearLayout linearLayout;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
-            tvHeading = itemView.findViewById(R.id.tvHeading);
+            vehicle = itemView.findViewById(R.id.vehicle);
             tvDistance = itemView.findViewById(R.id.tvDistance);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvNumbers = itemView.findViewById(R.id.tvNumbers);

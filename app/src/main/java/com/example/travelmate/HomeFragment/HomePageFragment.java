@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.travelmate.BookCab;
 import com.example.travelmate.NearByPlaces1;
 import com.example.travelmate.R;
 import com.example.travelmate.activity_weather1;
@@ -22,7 +23,7 @@ import com.example.travelmate.nearbyplaces_activity;
  */
 public class HomePageFragment extends Fragment implements View.OnClickListener {
 
-    LinearLayout nearby, weather, nearbyattrac, createtrip;
+    LinearLayout nearby, weather, nearbyattrac, createtrip, bookcab;
 
     public HomePageFragment() {
 
@@ -39,14 +40,22 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        weather = view.findViewById(R.id.weather);
-        nearby = view.findViewById(R.id.nearby);
-        nearbyattrac = view.findViewById(R.id.nearbyattrac);
-        createtrip = view.findViewById(R.id.createtrip);
+
+        findId(view);
         nearby.setOnClickListener(this);
         weather.setOnClickListener(this);
         nearbyattrac.setOnClickListener(this);
         createtrip.setOnClickListener(this);
+        bookcab.setOnClickListener(this);
+    }
+
+    private void findId(View view) {
+        weather = view.findViewById(R.id.weather);
+        nearby = view.findViewById(R.id.nearby);
+        nearbyattrac = view.findViewById(R.id.nearbyattrac);
+        createtrip = view.findViewById(R.id.createtrip);
+        bookcab = view.findViewById(R.id.bookcab);
+
     }
 
 
@@ -64,8 +73,16 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.createtrip:
                 onCreateTrip();
+                break;
+            case R.id.bookcab:
+                onBookCab();
         }
     }
+
+    private void onBookCab() {
+
+
+    startActivity(new Intent(getContext(), BookCab.class));}
 
     private void onCreateTrip() {
 
