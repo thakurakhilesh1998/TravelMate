@@ -2,11 +2,11 @@ package com.example.travelmate;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.travelmate.Adapter.ChatWithUsActivityAdapter;
@@ -29,7 +29,7 @@ import java.util.Map;
 public class ChatWithUsActivity extends AppCompatActivity implements View.OnClickListener {
     ListView listView;
     EditText etMsg;
-    FloatingActionButton btnSend;
+    ImageView btnSend;
     private FirebaseListAdapter<ChatModel> adapter;
 
     @Override
@@ -41,26 +41,21 @@ public class ChatWithUsActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void displayChatMsg() {
-
-
         FirebaseDatabase.getInstance().getReference().child("Chat With Us").child("Send").child(decode(FirebaseAuth.getInstance().getCurrentUser().getEmail())).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
                     ArrayList<String> list = new ArrayList<>();
-
                     Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
                     Iterator myVeryOwnIterator = td.keySet().iterator();
                     while (myVeryOwnIterator.hasNext()) {
                         String key = (String) myVeryOwnIterator.next();
                         list.add(key);
                     }
-
                     Collections.sort(list);
                     for (int i = 0; i < list.size(); i++) {
                         Log.e("data from", list.get(i));
                     }
-
                     ChatWithUsActivityAdapter adapter = new ChatWithUsActivityAdapter(getApplicationContext(), list);
                     listView.setAdapter(adapter);
                 } else {
@@ -121,12 +116,8 @@ public class ChatWithUsActivity extends AppCompatActivity implements View.OnClic
                 .child(messageTime).setValue(new ChatModel(etMsg.getText().toString(), FirebaseAuth.getInstance().getCurrentUser().getEmail()));
         etMsg.setText("");
     }
-
-
     public String decode(String email) {
         String decoded = email.replace('@', '_');
         return decoded.replace('.', '!');
     }
-
-
 }

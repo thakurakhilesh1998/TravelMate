@@ -64,11 +64,13 @@ public class ChatWithUsActivityAdapter extends BaseAdapter {
                 params.gravity = Gravity.RIGHT;
                 ChatModel chatModel = dataSnapshot.getValue(ChatModel.class);
                 if (chatModel.getMessageUSer().equals("admin")) {
+                    params.gravity = Gravity.LEFT;
                     linearchat.setLayoutParams(params);
                     linearmessage.setBackgroundColor(Color.parseColor("#4CABFF"));
-                }
-                else {
-                    linearmessage.setBackgroundColor(Color.parseColor("#4ed50a"));
+                } else {
+                    params.gravity = Gravity.RIGHT;
+                    linearchat.setLayoutParams(params);
+                    linearmessage.setBackgroundColor(Color.parseColor("#fd5f00"));
 
                 }
                 tvDate.setText(chatModel.getMessageTime().substring(0, 11));

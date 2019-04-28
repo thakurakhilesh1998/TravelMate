@@ -374,13 +374,14 @@
                                     android:layout_width="@dimen/imgwidth"
                                     android:layout_height="@dimen/imgheight"
                                     android:layout_marginTop="25dp"
-                                    android:src="@drawable/setting" />
+                                    android:fitsSystemWindows="true"
+                                    android:src="@drawable/needhelp" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="10dp"
-                                    android:text="Setting"
+                                    android:text="Need Help"
                                     android:textColor="@color/textcolor"
                                     android:textSize="14sp"
                                     android:textStyle="bold" />
