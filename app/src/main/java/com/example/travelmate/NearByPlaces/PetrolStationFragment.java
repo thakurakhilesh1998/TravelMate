@@ -1,7 +1,6 @@
 package com.example.travelmate.NearByPlaces;
 
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,10 +18,10 @@ import com.example.travelmate.Adapter.NearByAtmAdapter;
 import com.example.travelmate.NearByAtm.NearByAtm;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
+import com.example.travelmate.utility.constants;
 import com.example.travelmate.utility.substringGeolocation;
 
 import java.util.List;
-import com.example.travelmate.utility.*;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,7 +31,6 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class PetrolStationFragment extends Fragment {
-    ProgressDialog progressDialog;
     String RADIUS = "1000";
     List<Result> atm1;
     RecyclerView rvGasStation;
@@ -52,42 +50,28 @@ public class PetrolStationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         rvGasStation = view.findViewById(R.id.rvGasStation);
-
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("wait...");
-
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvGasStation.setLayoutManager(manager);
-
         String geolocation = getArguments().getString("geolocation");
         String lat = substringGeolocation.getLatitude(geolocation);
         String longitude = substringGeolocation.getLongitude(geolocation);
-
-
         getDataFromApi(lat, longitude);
 
     }
 
     private void getDataFromApi(String lat, String longitude) {
-
-
-        progressDialog.show();
-        final String latlong = lat + "," + longitude;
+        final String latlong = lat+longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(constants.KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
             public void onResponse(Call<NearByAtm> call, Response<NearByAtm> response) {
                 if (response.isSuccessful()) {
                     atm1 = response.body().getResults();
-                    NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(), atm1,latlong);
+                    NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(), atm1, latlong);
                     rvGasStation.setAdapter(adapter);
-                    progressDialog.dismiss();
-
                 } else {
                     Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
 
                 }
             }
@@ -96,7 +80,7 @@ public class PetrolStationFragment extends Fragment {
             public void onFailure(Call<NearByAtm> call, Throwable t) {
                 Log.e("message", t.getMessage());
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
+
             }
         });
     }

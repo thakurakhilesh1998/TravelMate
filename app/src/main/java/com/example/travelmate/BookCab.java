@@ -55,8 +55,6 @@ public class BookCab extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        rvCabDeatils = findViewById(R.id.rvCabDetails);
         list = new ArrayList<>();
 
         setContentView(R.layout.activity_book_cab);
@@ -83,8 +81,9 @@ public class BookCab extends AppCompatActivity {
     }
 
     private void getData1(Response<UberCab> response) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-        rvCabDeatils.setLayoutManager(layoutManager);
+        rvCabDeatils = findViewById(R.id.rvCabDetails1);
+        LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        rvCabDeatils.setLayoutManager(manager);
         CabDetailsAdapter cabDetailsAdapter = new CabDetailsAdapter(this, response);
         rvCabDeatils.setAdapter(cabDetailsAdapter);
     }
@@ -114,7 +113,7 @@ public class BookCab extends AppCompatActivity {
                 lat2 = response.body().getResult().getGeometry().getLocation().getLat();
                 lang2 = response.body().getResult().getGeometry().getLocation().getLng();
                 showOnMap();
-                getCabData();
+
             }
 
             @Override
@@ -168,11 +167,10 @@ public class BookCab extends AppCompatActivity {
         Polyline polyline = mMap.addPolyline(options);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(list.get(1).latitude, list.get(1).longitude))
-                .zoom(15)
+                .zoom(10)
                 .build();
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
         getCabData();
 
     }

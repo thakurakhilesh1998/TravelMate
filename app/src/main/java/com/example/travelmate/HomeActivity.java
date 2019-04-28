@@ -23,8 +23,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.travelmate.HomeFragment.HomePageFragment;
-import com.example.travelmate.HomeFragment.Places;
-import com.example.travelmate.HomeFragment.mytripFragment;
 import com.example.travelmate.utility.GpsEnabled;
 import com.example.travelmate.utility.PrefLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -231,29 +229,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
-            case R.id.places:
-                Places places = new Places();
+
+
+            case R.id.home:
+                HomePageFragment homePageFragment = new HomePageFragment();
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.frame, places);
+                ft.replace(R.id.frame, homePageFragment);
                 ft.addToBackStack("fm1");
                 drawerLayout.closeDrawer(Gravity.START);
                 ft.commitAllowingStateLoss();
                 break;
-            case R.id.weather:
+            case R.id.mytrip:
                 startActivity(new Intent(getApplicationContext(), viewmytripactivity.class));
-                //   startActivity(new Intent(getApplicationContext(), weatheractivity.class).putExtra("geocoordinates1", geolocation));
                 break;
-            case R.id.checklist:
-                startActivity(new Intent(this, mytrip_activity.class));
+            case R.id.settings:
                 break;
-            case R.id.nearby:
-                mytripFragment mytripFragment = new mytripFragment();
-                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-                ft1.addToBackStack("fm2");
-                ft1.replace(R.id.frame, mytripFragment);
-                drawerLayout.closeDrawer(Gravity.START);
-                ft1.commitAllowingStateLoss();
-
+            case R.id.logout:
+                mAuth.signOut();
+                finish();
         }
         return false;
     }

@@ -1,7 +1,6 @@
 package com.example.travelmate.NearByPlaces;
 
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,13 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.travelmate.APIS.NearbyApiHitter;
 import com.example.travelmate.Adapter.NearByAtmAdapter;
 import com.example.travelmate.NearByAtm.NearByAtm;
 import com.example.travelmate.NearByAtm.Result;
-import com.example.travelmate.APIS.NearbyApiHitter;
 import com.example.travelmate.R;
+import com.example.travelmate.utility.constants;
 import com.example.travelmate.utility.substringGeolocation;
-import com.example.travelmate.utility.*;
 
 import java.util.List;
 
@@ -34,7 +33,6 @@ public class FoodFragment extends Fragment {
     List<Result> food;
     RecyclerView rvFood;
     String types = "resturants";
-    ProgressDialog progressDialog;
 
     public FoodFragment() {
 
@@ -51,10 +49,6 @@ public class FoodFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvFood = view.findViewById(R.id.rvFood);
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("wait..loading");
-
-
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvFood.setLayoutManager(manager);
 
@@ -68,8 +62,8 @@ public class FoodFragment extends Fragment {
 
 
     private void getDataFromApi(String lat, String longitude) {
-        progressDialog.show();
-        final String latlong = lat + "," + longitude;
+
+        final String latlong = lat +longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(constants.KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
@@ -78,10 +72,10 @@ public class FoodFragment extends Fragment {
                     food = response.body().getResults();
                     NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(), food, latlong);
                     rvFood.setAdapter(adapter);
-                    progressDialog.dismiss();
+
                 } else {
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
+
 
                 }
             }
@@ -89,8 +83,6 @@ public class FoodFragment extends Fragment {
             @Override
             public void onFailure(Call<NearByAtm> call, Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-
             }
         });
     }

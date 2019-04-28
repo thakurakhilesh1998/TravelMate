@@ -38,7 +38,7 @@ public class HospitalFragment extends Fragment {
     List<Result> hospital;
     RecyclerView rvHospital;
     String types = "hospital";
-    ProgressDialog progressDialog;
+
 
     public HospitalFragment() {
         // Required empty public constructor
@@ -56,14 +56,12 @@ public class HospitalFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvHospital = view.findViewById(R.id.rvHospital);
-        progressDialog = new ProgressDialog(getContext());
         setRecyclerManager();
 
     }
 
     private void setRecyclerManager() {
 
-        progressDialog.setMessage("Wait...");
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvHospital.setLayoutManager(manager);
 
@@ -77,8 +75,7 @@ public class HospitalFragment extends Fragment {
     }
 
     private void getDataFromApi(String lat, String longitude) {
-        progressDialog.show();
-        final String latlong = lat + "," + longitude;
+        final String latlong = lat+longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(constants.KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override

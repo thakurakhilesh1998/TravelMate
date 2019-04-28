@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.example.travelmate.Adapter.NearByAdapter;
 import com.example.travelmate.utility.PrefLocation;
@@ -16,6 +18,7 @@ public class NearByPlaces1 extends AppCompatActivity {
     ArrayList<String> name;
     String geolocation;
     PrefLocation prefLocation;
+    Toolbar titletoolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +26,9 @@ public class NearByPlaces1 extends AppCompatActivity {
         setContentView(R.layout.activity_near_by_places);
         prefLocation = new PrefLocation(getApplicationContext());
         findIds();
+        setSupportActionBar(titletoolbar);
         geolocation = prefLocation.getLatitude() + "," + prefLocation.getLangitude();
+        Log.e("geolocation123", geolocation);
         NearByAdapter myadapter = new NearByAdapter(getSupportFragmentManager(), this, tabLayout.getTabCount(), name, geolocation);
         viewPager.setAdapter(myadapter);
         viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -52,6 +57,7 @@ public class NearByPlaces1 extends AppCompatActivity {
     private void findIds() {
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewpager);
+        titletoolbar = findViewById(R.id.titletoolbar);
 
     }
 }

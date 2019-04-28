@@ -8,16 +8,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
-
+import com.bumptech.glide.Glide;
 import com.example.travelmate.APIS.DistanceApiHitter;
 import com.example.travelmate.Distance.Distance;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
 import com.example.travelmate.map_activity;
-import com.example.travelmate.utility.*;
+import com.example.travelmate.utility.constants;
 
 import java.util.List;
 
@@ -35,25 +37,17 @@ public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Hold
         this.context = context;
         this.atm = atm;
         this.latlong = latlong;
-
     }
-
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
-
         View view = LayoutInflater.from(context).inflate(R.layout.nearbyatm, viewGroup, false);
         return new Holder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
-
-
         String lat = String.valueOf(atm.get(i).getGeometry().getLocation().getLat());
         String lng = String.valueOf(atm.get(i).getGeometry().getLocation().getLng());
-
         getDistance(holder, i, lat, lng);
 
     }
@@ -65,13 +59,34 @@ public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Hold
         getDistance.enqueue(new Callback<Distance>() {
             @Override
             public void onResponse(Call<Distance> call, Response<Distance> response) {
+
+
                 holder.tvName.setText(atm.get(i).getName());
                 Log.e("name", atm.get(0).getName());
-                holder.tvRating.setText(String.valueOf(atm.get(i).getRating()));
-                holder.tvOpeing.setText(atm.get(i).getVicinity());
-                Double d = atm.get(i).getRating();
-                holder.tvRating.setText(String.valueOf(d));
+                try {
+                    holder.tvRating.setText(atm.get(i).getUserRatingsTotal());
+                } catch (Exception e) {
+                    holder.tvRating.setText("");
+                }
+                holder.tvAddress.setText(atm.get(i).getVicinity());
                 holder.tvDistance.setText(response.body().getRows().get(0).getElements().get(0).getDistance().getText());
+
+                try {
+                    Glide.with(context).load(atm.get(i).getIcon()).into(holder.ivImage);
+                } catch (Exception e) {
+                    Log.e("exception", e.getMessage());
+                }
+                try {
+                    holder.rbRating.setRating((float) atm.get(i).getRating());
+                } catch (Exception e) {
+                    holder.rbRating.setRating((float) 0.0);
+                }
+
+                try {
+                    holder.tvRating1.setText(String.valueOf(atm.get(i).getRating()));
+                } catch (Exception e) {
+                    holder.tvRating1.setText("");
+                }
                 holder.btnOnMap.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -97,17 +112,21 @@ public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Hold
 
     public class Holder extends RecyclerView.ViewHolder {
 
-        TextView tvName, tvOpeing, tvRating, tvDistance;
-        Button btnOnMap;
+        TextView tvName, tvRating1, tvDistance, tvRating, tvAddress;
+        LinearLayout btnOnMap;
+        ImageView ivImage;
+        RatingBar rbRating;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvName);
-            tvOpeing = itemView.findViewById(R.id.tvOpeningHours);
-            tvRating = itemView.findViewById(R.id.tvRating);
+            tvRating1 = itemView.findViewById(R.id.tvratings1);
             btnOnMap = itemView.findViewById(R.id.btnOnMap);
             tvDistance = itemView.findViewById(R.id.tvDistance);
-
+            ivImage = itemView.findViewById(R.id.ivImage);
+            rbRating = itemView.findViewById(R.id.rbRating);
+            tvRating = itemView.findViewById(R.id.tvratings);
+            tvAddress = itemView.findViewById(R.id.tvAddress);
         }
     }
 }

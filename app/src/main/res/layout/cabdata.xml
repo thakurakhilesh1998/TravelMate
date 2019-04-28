@@ -1,15 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp">
 
-    <ImageView
-        android:id="@+id/vehicle"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/vehicle"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/servicename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="@drawable/buttontrip"
+            android:padding="4dp"
+            android:text="Name"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvNumbers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/notrip" />
+        android:text="Price"
+        android:textColor="@color/black"
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tvTime"
@@ -18,8 +49,7 @@
         android:layout_gravity="center"
         android:text="Time"
         android:textColor="@color/black"
-        android:textSize="20dp" />
-
+        android:textSize="16dp" />
     <TextView
         android:id="@+id/tvDistance"
         android:layout_width="wrap_content"
@@ -27,23 +57,18 @@
         android:layout_gravity="center"
         android:text="Distance"
         android:textColor="@color/black"
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/tvNumbers"
+        android:textSize="16dp" />
+    <Button
+        android:id="@+id/btnConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Name"
-        android:textColor="@color/black"
-        android:textSize="20dp" />
-
-    <Button
-        android:id="@+id/btnConfirm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/button"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/buttontrip"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
         android:text="Confirm"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+</LinearLayout>
 </LinearLayout>

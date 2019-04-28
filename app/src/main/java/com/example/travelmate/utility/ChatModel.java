@@ -1,18 +1,21 @@
 package com.example.travelmate.utility;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class ChatModel {
 
     public String messageText;
     public String messageUSer;
-    long messageTime;
+    String messageTime;
 
     public ChatModel(String messageText, String messageUSer) {
         this.messageText = messageText;
         this.messageUSer = messageUSer;
-        messageTime = new Date().getTime();
 
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        messageTime = df.format(c.getTime());
     }
 
     public ChatModel() {
@@ -35,11 +38,11 @@ public class ChatModel {
         this.messageUSer = messageUSer;
     }
 
-    public long getMessageTime() {
+    public String getMessageTime() {
         return messageTime;
     }
 
-    public void setMessageTime(long messageTime) {
+    public void setMessageTime(String messageTime) {
         this.messageTime = messageTime;
     }
 

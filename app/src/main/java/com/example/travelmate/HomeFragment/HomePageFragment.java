@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.travelmate.BookCab;
+import com.example.travelmate.ChatWithUsActivity;
 import com.example.travelmate.NearByPlaces1;
 import com.example.travelmate.R;
 import com.example.travelmate.activity_weather1;
@@ -23,7 +24,7 @@ import com.example.travelmate.nearbyplaces_activity;
  */
 public class HomePageFragment extends Fragment implements View.OnClickListener {
 
-    LinearLayout nearby, weather, nearbyattrac, createtrip, bookcab;
+    LinearLayout nearby, weather, nearbyattrac, createtrip, bookcab, setting;
 
     public HomePageFragment() {
 
@@ -47,6 +48,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         nearbyattrac.setOnClickListener(this);
         createtrip.setOnClickListener(this);
         bookcab.setOnClickListener(this);
+        setting.setOnClickListener(this);
     }
 
     private void findId(View view) {
@@ -55,6 +57,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         nearbyattrac = view.findViewById(R.id.nearbyattrac);
         createtrip = view.findViewById(R.id.createtrip);
         bookcab = view.findViewById(R.id.bookcab);
+        setting = view.findViewById(R.id.setting);
 
     }
 
@@ -76,22 +79,26 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.bookcab:
                 onBookCab();
+                break;
+            case R.id.setting:
+                onSettingClick();
+
         }
     }
 
+    private void onSettingClick() {
+        startActivity(new Intent(getContext(), ChatWithUsActivity.class));
+    }
+
     private void onBookCab() {
-
-
-    startActivity(new Intent(getContext(), BookCab.class));}
+        startActivity(new Intent(getContext(), BookCab.class));
+    }
 
     private void onCreateTrip() {
-
         startActivity(new Intent(getContext(), mytrip_activity.class));
-
     }
 
     private void onNearByAttarc() {
-
         startActivity(new Intent(getContext(), NearByPlaces1.class));
     }
 

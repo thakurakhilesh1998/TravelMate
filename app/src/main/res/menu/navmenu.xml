@@ -29,18 +29,5 @@
             android:iconTint="@color/background"
             android:title="LogOut" />
     </group>
-    <group android:id="@+id/group3">
-        <item
-            android:id="@+id/places"
-            android:title="Places" />
-        <item
-            android:id="@+id/weather"
-            android:title="Weather" />
-        <item
-            android:id="@+id/nearby"
-            android:title="NearBy" />
-        <item
-            android:id="@+id/checklist"
-            android:title="Checklist" />
-    </group>
+
 </menu>

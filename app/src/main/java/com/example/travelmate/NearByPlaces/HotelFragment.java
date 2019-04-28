@@ -39,7 +39,7 @@ public class HotelFragment extends Fragment {
     List<Result> hotel;
     RecyclerView rvHotel;
     String types = "resturants";
-    ProgressDialog progressDialog;
+
 
     public HotelFragment() {
 
@@ -56,8 +56,6 @@ public class HotelFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvHotel = view.findViewById(R.id.rvHotel);
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("wait..loading");
 
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -72,8 +70,8 @@ public class HotelFragment extends Fragment {
     }
 
     private void getDataFromApi(String lat, String longitude) {
-        progressDialog.show();
-        final String latlong = lat + "," + longitude;
+
+        final String latlong = lat+longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(constants.KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
@@ -82,19 +80,14 @@ public class HotelFragment extends Fragment {
                     hotel = response.body().getResults();
                     NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(), hotel, latlong);
                     rvHotel.setAdapter(adapter);
-                    progressDialog.dismiss();
                 } else {
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
-
                 }
             }
 
             @Override
             public void onFailure(Call<NearByAtm> call, Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-
             }
         });
 
