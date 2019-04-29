@@ -1,4 +1,4 @@
-package com.example.travelmate.MyTrip;
+package com.example.travelmate;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.example.travelmate.MyTrip;
+package com.example.travelmate;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
