@@ -100,6 +100,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         linearLayout = findViewById(R.id.linearparent);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Uploading Image...");
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog1 = new ProgressDialog(this);
         progressDialog1.setMessage("Registering");
         btnLogin = findViewById(R.id.btnLogin);
@@ -115,6 +116,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.ivProfile:
                 chooseImage();
+                break;
             case R.id.btnLogin:
                 onLoginClick();
 
@@ -195,12 +197,12 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
             }
         });
         progressDialog1.dismiss();
-        //   startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+
 
     }
 
     private void saveDataInFirebase(String email, String uid, String imageurl) {
-        saveData = new SaveData(Name, Phone, email, Gender, imageurl);
+        saveData = new SaveData(Name, Phone, email, Gender, imageurl,Age,Name);
         saveData1 = new SaveData(interest1, interest2, interest3, interest4, interest5, interest6);
         myRef = database.getReference("User Profile");
         myRef.child(uid).setValue(saveData);

@@ -3,10 +3,9 @@ package com.example.travelmate;
 class SaveData {
 
 
-    String Name, Phone, Email, Gender;
+    String Name, Phone, Email, Gender,Age;
     String Profile;
-
-
+    String Name1;
     String interest1, interest6, interest2, interest3, interest4, interest5;
 
     SaveData(String Interest1, String Interest2, String Interest3, String Interest4, String Interest5, String Interest6) {
@@ -18,13 +17,18 @@ class SaveData {
         this.interest6 = Interest6;
     }
 
-    SaveData(String name, String phone, String email, String gender, String profile) {
+    SaveData(String name, String phone, String email, String gender, String profile, String age, String name1) {
         Name = name;
         Phone = phone;
         Email = email;
         Gender = gender;
         Profile = profile;
+        Age = age;
+        Name1 = name1;
     }
+
+
+
 
     public String getInterest1() {
         return interest1;

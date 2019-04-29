@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -279,12 +280,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                Log.e("msg", String.valueOf(dataSnapshot.hasChild(useruid)));
                 if (dataSnapshot.hasChildren()) {
                     if (dataSnapshot.hasChild(useruid)) {
+
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     } else {
                         startActivity(new Intent(getApplicationContext(), Register2Activity.class));
                     }
+                } else {
+                    startActivity(new Intent(getApplicationContext(), Register2Activity.class));
                 }
 
             }

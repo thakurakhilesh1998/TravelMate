@@ -164,11 +164,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         reference.child("User Profile").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String Email = dataSnapshot.child("Email").getValue().toString();
-                String Name = dataSnapshot.child("Name").getValue().toString();
-                String profile = dataSnapshot.child("Profile").getValue().toString();
-                Log.e("akhilesh", "akhilesh thakur");
-                showData(Email, Name, profile);
+                try {
+                    if (dataSnapshot.hasChildren()) {
+                        String Email = dataSnapshot.child("Email").getValue().toString();
+                        String Name = dataSnapshot.child("Name").getValue().toString();
+                        String profile = dataSnapshot.child("Profile").getValue().toString();
+                        Log.e("akhilesh", "akhilesh thakur");
+                        showData(Email, Name, profile);
+                    }
+                } catch (Exception e) {
+                    Log.e("msg", e.getMessage());
+                }
             }
 
             @Override

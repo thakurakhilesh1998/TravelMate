@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -85,6 +86,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
                 etName.setText(data.getName());
                 tvEmail.setText(data.getEmail());
                 etPhone.setText(data.getPhone());
+                Log.e("dataage", data.getAge());
                 etAge.setText(data.getAge());
                 Glide.with(getApplicationContext()).load(data.getProfile()).into(ivProfile);
                 Iterator myVeryOwnIterator = data.getInterests().values().iterator();
@@ -93,9 +95,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
                     list.add(value);
                 }
                 setCheckbox(list);
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -124,9 +124,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
                     cb5.setChecked(true);
 
             }
-
         }
-
     }
 
     private void findIds() {
@@ -216,7 +214,5 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         cb6.setEnabled(true);
         btnEditDetails.setVisibility(View.GONE);
         btnsaveDetails.setVisibility(View.VISIBLE);
-
-
     }
 }
