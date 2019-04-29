@@ -31,7 +31,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.jgabrielfreitas.core.BlurImageView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,7 +68,6 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         mStorageRef = FirebaseStorage.getInstance().getReference();
         btnRegister.setOnClickListener(this);
         ivProfile.setOnClickListener(this);
-
 
 
     }
@@ -123,37 +121,36 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
     private void onRegister(View v) {
         progressDialog1.show();
         findInterests();
-        if (emptycheck(v)) ;
-        {
+        Boolean check = emptycheck(v);
+        Log.e("check", String.valueOf(check));
+        if (check == true) {
             Name = etName.getText().toString().trim();
             Phone = etPhone.getText().toString().trim();
             Age = etAge.getText().toString().trim();
             Gender = findGender();
-
             saveDataOnFirebase();
+        } else {
+            progressDialog1.dismiss();
         }
 
 
     }
 
     private boolean emptycheck(View v) {
-
         if (etName.getText().toString().isEmpty()) {
             etName.setError("Name field can not empty");
             etName.setFocusable(true);
 
-        } else if (etAge.getText().toString().isEmpty()) {
-            etAge.setError("Name field can not empty");
-            etAge.setFocusable(true);
-
-
         } else if (etPhone.getText().toString().isEmpty()) {
             etPhone.setError("Phone can not be empty");
             etPhone.setFocusable(true);
-        } else if (!cb1.isChecked() || !cb2.isChecked() || !cb3.isChecked() || !cb4.isChecked() || !cb5.isChecked()) {
-            Snackbar.make(v, "Check At Least One interest", BaseTransientBottomBar.LENGTH_LONG).show();
+        } else if (etAge.getText().toString().isEmpty()) {
+            etAge.setError("Age field can not empty");
+            etAge.setFocusable(true);
         } else if (findGender() == null) {
             Snackbar.make(v, "Select your gender", BaseTransientBottomBar.LENGTH_LONG).show();
+        } else if (!cb1.isChecked() && !cb2.isChecked() && !cb3.isChecked() && !cb4.isChecked() && !cb5.isChecked()) {
+            Snackbar.make(v, "Check At Least One interest", BaseTransientBottomBar.LENGTH_LONG).show();
         } else {
             return true;
         }
@@ -170,8 +167,6 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                 saveDataInFirebase(Email, uid, imageurl);
             }
         });
-
-
         progressDialog1.dismiss();
         //   startActivity(new Intent(getApplicationContext(), HomeActivity.class));
 

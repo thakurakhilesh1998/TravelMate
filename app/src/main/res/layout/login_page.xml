@@ -2,129 +2,132 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.3"
-        android:background="@drawable/back4"/>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".MainActivity">
+        android:background="@drawable/back4" />
 
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".MainActivity">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fitsSystemWindows="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/logo" />
 
-        <com.github.florent37.materialtextfield.MaterialTextField
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mtf_backgroundColor="@color/background"
-            app:mtf_image="@drawable/email"
-            app:mtf_labelColor="@color/black">
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/etEmail"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fitsSystemWindows="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/logo" />
+
+            <com.github.florent37.materialtextfield.MaterialTextField
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="@string/digits"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:maxLength="40"
-                android:maxLines="1"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="15sp" />
-        </com.github.florent37.materialtextfield.MaterialTextField>
+                app:mtf_backgroundColor="@color/background"
+                app:mtf_image="@drawable/email"
+                app:mtf_labelColor="@color/black">
 
-        <com.github.florent37.materialtextfield.MaterialTextField
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12sp"
-            app:mtf_backgroundColor="@color/background"
-            app:mtf_image="@drawable/lock"
-            app:mtf_labelColor="@color/black">
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="@string/digits"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="40"
+                    android:maxLines="1"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="15sp" />
+            </com.github.florent37.materialtextfield.MaterialTextField>
 
-            <EditText
-                android:id="@+id/etPassword"
+            <com.github.florent37.materialtextfield.MaterialTextField
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="@string/password"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:maxLength="12"
-                android:maxLines="1"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:layout_marginTop="12sp"
+                app:mtf_backgroundColor="@color/background"
+                app:mtf_image="@drawable/lock"
+                app:mtf_labelColor="@color/black">
+
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="@string/password"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:maxLength="12"
+                    android:maxLines="1"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="15sp" />
+            </com.github.florent37.materialtextfield.MaterialTextField>
+
+            <TextView
+                android:id="@+id/tvforgotPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="12dp"
+                android:alpha="0.8"
+                android:text="Forgot Password? Click Here"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
-        </com.github.florent37.materialtextfield.MaterialTextField>
 
-        <TextView
-            android:id="@+id/tvforgotPass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="12dp"
-            android:alpha="0.8"
-            android:text="Forgot Password? Click Here"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16sp"
+                android:background="@drawable/button"
+                android:text="Login"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16sp"
-            android:background="@drawable/button"
-            android:text="Login"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="15sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:alpha="0.8"
+                android:text="OR"
+                android:textColor="@color/black" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="12dp"
-            android:alpha="0.8"
-            android:text="OR"
-            android:textColor="@color/black" />
+            <com.shobhitpuri.custombuttons.GoogleSignInButton
+                android:id="@+id/googlesigninButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/button"
+                android:text="@string/google_sign_in"
+                android:textAlignment="center"
+                android:textSize="15sp"
+                app:isDarkTheme="true" />
 
-        <com.shobhitpuri.custombuttons.GoogleSignInButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/button"
-            android:text="@string/google_sign_in"
-            android:textAlignment="center"
-            android:textSize="15sp"
-            app:isDarkTheme="true" />
-
-        <TextView
-            android:id="@+id/btnRegister"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16sp"
-            android:alpha="0.8"
-            android:text="Not Memeber yet? Sign Up."
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+            <TextView
+                android:id="@+id/btnRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16sp"
+                android:alpha="0.8"
+                android:text="Not Memeber yet? Sign Up."
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
 </FrameLayout>

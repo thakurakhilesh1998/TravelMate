@@ -10,4 +10,6 @@
     <string name="passwordempty">Password Field Can not be empty</string>
     <string name="regesxpassword"><![CDATA[^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&])(?=\\S+$).{4,}$]]></string>
     <string name="loggingprogress">Logging..Wait...</string>
+    <string name="serverid">15256756336-al3ol53pi194ui41kbiepo3jsc7vg6jb.apps.googleusercontent.com</string>
+
 </resources>

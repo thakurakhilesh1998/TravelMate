@@ -53,50 +53,25 @@ public class ChatWithUsActivity extends AppCompatActivity implements View.OnClic
                         list.add(key);
                     }
                     Collections.sort(list);
-                    for (int i = 0; i < list.size(); i++) {
-                        Log.e("data from", list.get(i));
-                    }
                     ChatWithUsActivityAdapter adapter = new ChatWithUsActivityAdapter(getApplicationContext(), list);
                     listView.setAdapter(adapter);
                 } else {
                     Log.e("no msg", "no message found");
                 }
-
             }
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
-
-
-//        adapter = new FirebaseListAdapter<ChatModel>(this,ChatModel.class,R.layout.message,FirebaseDatabase.getInstance().getReference()) {
-//            @Override
-//            protected void populateView(View v, ChatModel model, int position) {
-//                TextView tvDate = v.findViewById(R.id.tvDate);
-//                TextView tvUser = v.findViewById(R.id.tvUser);
-//                TextView tvMsg = v.findViewById(R.id.tvMsg);
-//                tvDate.setText(String.valueOf(model.getMessageTime()));
-//                tvUser.setText(model.getMessageUSer());
-//                tvMsg.setText(model.getMessageText());
-//            }
-//        };
-
         listView.setAdapter(adapter);
-
     }
 
     private void findIds() {
         listView = findViewById(R.id.listview);
         etMsg = findViewById(R.id.etMsg);
         btnSend = findViewById(R.id.btnSend);
-
         btnSend.setOnClickListener(this);
-
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -104,13 +79,10 @@ public class ChatWithUsActivity extends AppCompatActivity implements View.OnClic
                 onSendMsg();
         }
     }
-
     private void onSendMsg() {
-
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String messageTime = df.format(c.getTime());
-
         FirebaseDatabase.getInstance().getReference().child("Chat With Us")
                 .child("Send").child(decode(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
                 .child(messageTime).setValue(new ChatModel(etMsg.getText().toString(), FirebaseAuth.getInstance().getCurrentUser().getEmail()));
