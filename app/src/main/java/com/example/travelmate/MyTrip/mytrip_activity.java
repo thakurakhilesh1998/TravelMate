@@ -1,4 +1,4 @@
-package com.example.travelmate;
+package com.example.travelmate.MyTrip;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.allyants.notifyme.NotifyMe;
+import com.example.travelmate.R;
 import com.example.travelmate.utility.savetripdata;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

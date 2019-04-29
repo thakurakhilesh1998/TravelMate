@@ -1,4 +1,4 @@
-package com.example.travelmate;
+package com.example.travelmate.MyTrip;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.travelmate.Adapter.TripAdapter;
+import com.example.travelmate.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -142,7 +143,7 @@ public class viewmytripactivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btncreatetrip:
-                startActivity(new Intent(getApplicationContext(), mytrip_activity.class));
+                startActivity(new Intent(getApplicationContext(),mytrip_activity.class));
         }
     }
 }
