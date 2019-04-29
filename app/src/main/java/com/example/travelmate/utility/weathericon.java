@@ -16,8 +16,6 @@ public class weathericon {
                 iconw = R.mipmap.second;
                 break;
             case 3:
-
-
                 break;
             case 4:
                 iconw = R.mipmap.four;

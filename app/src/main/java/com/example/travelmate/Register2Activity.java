@@ -1,6 +1,8 @@
 package com.example.travelmate;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -12,6 +14,7 @@ import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,10 +23,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.example.travelmate.utility.util;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +47,7 @@ import java.util.regex.Pattern;
 public class Register2Activity extends AppCompatActivity implements View.OnClickListener {
 
     int PICK_IMAGE = 1;
+    TextView btnLogin;
     ImageView ivProfile;
     EditText etName, etPhone, etAge;
     Button btnRegister;
@@ -93,6 +102,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         progressDialog.setMessage("Uploading Image...");
         progressDialog1 = new ProgressDialog(this);
         progressDialog1.setMessage("Registering");
+        btnLogin = findViewById(R.id.btnLogin);
 
     }
 
@@ -105,13 +115,19 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.ivProfile:
                 chooseImage();
+            case R.id.btnLogin:
+                onLoginClick();
 
         }
 
     }
 
-    private void chooseImage() {
+    private void onLoginClick() {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
+    }
 
+    private void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_PICK);
@@ -124,16 +140,27 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         Boolean check = emptycheck(v);
         Log.e("check", String.valueOf(check));
         if (check == true) {
-            Name = etName.getText().toString().trim();
-            Phone = etPhone.getText().toString().trim();
-            Age = etAge.getText().toString().trim();
-            Gender = findGender();
-            saveDataOnFirebase();
+
+            if (!isNameCorrect()) {
+                etName.setError(getString(R.string.namepattern));
+                etName.setFocusable(true);
+            } else if (!isPhoneCorrect() && etPhone.getText().toString().length() <= 10) {
+                etPhone.setError("Phone number pattern is not correct");
+                etPhone.setFocusable(true);
+            } else if (etAge.getText().toString().substring(0, 1).equals("0")) {
+                etAge.setError("age is not correct");
+                etAge.setFocusable(true);
+            } else {
+                Name = etName.getText().toString().trim();
+                Phone = etPhone.getText().toString().trim();
+                Age = etAge.getText().toString().trim();
+                Gender = findGender();
+                saveDataOnFirebase();
+                progressDialog1.dismiss();
+            }
         } else {
             progressDialog1.dismiss();
         }
-
-
     }
 
     private boolean emptycheck(View v) {
@@ -173,11 +200,8 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
     }
 
     private void saveDataInFirebase(String email, String uid, String imageurl) {
-
         saveData = new SaveData(Name, Phone, email, Gender, imageurl);
         saveData1 = new SaveData(interest1, interest2, interest3, interest4, interest5, interest6);
-
-
         myRef = database.getReference("User Profile");
         myRef.child(uid).setValue(saveData);
         myRef.child(uid).child("interests").setValue(saveData1);
@@ -235,9 +259,8 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
 
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Filepath = data.getData();
-            Log.e("image url", String.valueOf(Filepath));
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Filepath);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),Filepath);
                 ivProfile.setImageBitmap(bitmap);
                 saveImage();
             } catch (Exception e) {
@@ -261,7 +284,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressDialog.dismiss();
-                util.toast(getApplicationContext(), e.getMessage());
+                util.toast(getApplicationContext(),e.getMessage());
             }
         });
 
@@ -272,8 +295,53 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         Pattern pattern = Pattern.compile(new String("^[a-zA-Z\\s]*$"));
         Matcher matcher = pattern.matcher(etName.getText().toString());
         return matcher.matches();
-
-
     }
 
+    public boolean isPhoneCorrect() {
+        Boolean check = Patterns.PHONE.matcher(etPhone.getText().toString()).matches();
+        return check;
+    }
+
+    @Override
+    public void onBackPressed() {
+        showAlertDialog();
+    }
+
+    private void showAlertDialog() {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Do You Want To enter Home Page?");
+        alertDialogBuilder.setTitle("Exit Screen");
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    Intent intent = getIntent();
+                    AuthCredential authCredential = EmailAuthProvider.
+                            getCredential(intent.getStringExtra("email"), intent.getStringExtra("password"));
+                    FirebaseAuth.getInstance().getCurrentUser().reauthenticate(authCredential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseAuth.getInstance().getCurrentUser().delete();
+                                finish();
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("msg", e.getMessage());
+                    FirebaseAuth.getInstance().getCurrentUser().delete();
+                    finish();
+                }
+            }
+        });
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.setTitle("AlertDialogExample");
+        alert.show();
+    }
 }

@@ -140,7 +140,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void OnCompleteregisterUser() {
         progressDialog.dismiss();
-        startActivity(new Intent(getApplicationContext(), Register2Activity.class));
+        startActivity(new Intent(getApplicationContext(), Register2Activity.class)
+                .putExtra("email", etEmail.getText().toString())
+                .putExtra("password", etPassword.getText().toString()));
     }
 
     private boolean isEmailCorrect() {
