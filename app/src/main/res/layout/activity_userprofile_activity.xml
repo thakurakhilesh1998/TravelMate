@@ -11,19 +11,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@color/background"
-        app:logo="@drawable/backicon"
-        app:title="My Profile"
-        app:titleMarginStart="100dp"
         app:titleTextColor="@color/white">
-
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="My Profile"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textSize="28dp"-->
-        <!--android:textStyle="bold" />-->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/backicon" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:text="My Profile"
+            android:textColor="@color/white"
+            android:textSize="24dp" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.NestedScrollView
@@ -78,8 +78,7 @@
                             android:layout_height="120dp"
                             android:layout_gravity="center"
                             android:layout_margin="12dp"
-                            android:src="@drawable/profile"
-                           >
+                            android:src="@drawable/profile">
 
                         </de.hdodenhof.circleimageview.CircleImageView>
 
@@ -126,7 +125,6 @@
                     android:layout_below="@id/llemail"
                     android:layout_marginTop="@dimen/margintop1"
                     android:paddingHorizontal="12dp">
-
 
                     <EditText
                         android:id="@+id/etPhone"

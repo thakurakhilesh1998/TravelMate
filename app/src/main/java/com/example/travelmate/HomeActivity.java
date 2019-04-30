@@ -195,7 +195,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ft.commitAllowingStateLoss();
 
     }
-
     private void findIds() {
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.navigation);

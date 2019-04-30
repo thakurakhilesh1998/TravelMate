@@ -1,5 +1,6 @@
 package com.example.travelmate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -32,6 +33,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
     EditText tvEmail;
     EditText etPhone, etAge;
     TextView etName;
+    ImageView logo;
     CheckBox cb1, cb2, cb3, cb4, cb5, cb6;
     Button btnEditDetails, btnsaveDetails;
     FirebaseDatabase database;
@@ -58,6 +60,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         btnEditDetails.setVisibility(View.VISIBLE);
         btnEditDetails.setOnClickListener(this);
         btnsaveDetails.setOnClickListener(this);
+        logo.setOnClickListener(this);
         getDataFromFirebase();
     }
 
@@ -71,14 +74,11 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
-
     }
 
     private void getDataFromFirebase() {
-
         reference.child("User Profile").child(mUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -96,6 +96,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
                 }
                 setCheckbox(list);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -122,13 +123,13 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
                     break;
                 case "Forest":
                     cb5.setChecked(true);
-
             }
         }
     }
 
     private void findIds() {
         toolbar = findViewById(R.id.toolbar);
+        logo = findViewById(R.id.logo);
         ivProfile = findViewById(R.id.ivProfile);
         etName = findViewById(R.id.etName);
         tvEmail = findViewById(R.id.tvEmail);
@@ -143,7 +144,6 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         linearLayout = findViewById(R.id.linearLayout);
         btnEditDetails = findViewById(R.id.btnEditDetails);
         btnsaveDetails = findViewById(R.id.btnSaveDetails);
-
     }
 
     @Override
@@ -156,13 +156,19 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
             case R.id.btnSaveDetails:
                 onSaveDetails(v);
                 break;
+            case R.id.logo:
+                onLogogClick();
         }
+    }
 
+    private void onLogogClick() {
+        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }
 
     private void onSaveDetails(View v) {
         btnsaveDetails.setVisibility(View.GONE);
         String name = etName.getText().toString();
+
         ArrayList<String> list = new ArrayList<>();
         if (cb1.isChecked()) {
             interest1 = (String) cb1.getText();
@@ -188,7 +194,6 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
             SaveData data = new SaveData(interest1, interest2, interest3, interest4, interest5, interest6);
             reference.child("User Profile").child(mUser.getUid()).child("Name").setValue(name);
             reference.child("User Profile").child(mUser.getUid()).child("interests").setValue(data);
-
             btnEditDetails.setVisibility(View.VISIBLE);
             etName.setEnabled(false);
             cb1.setEnabled(false);
@@ -198,7 +203,6 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
             cb5.setEnabled(false);
             cb6.setEnabled(false);
         } else {
-
             btnsaveDetails.setVisibility(View.VISIBLE);
             Snackbar.make(v, "Please Select At least One Interest", Snackbar.LENGTH_LONG).show();
         }
@@ -206,6 +210,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
 
     private void onEditDetails() {
         etName.setEnabled(true);
+
         cb1.setEnabled(true);
         cb2.setEnabled(true);
         cb3.setEnabled(true);
@@ -215,4 +220,5 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         btnEditDetails.setVisibility(View.GONE);
         btnsaveDetails.setVisibility(View.VISIBLE);
     }
+
 }
