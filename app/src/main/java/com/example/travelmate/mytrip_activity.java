@@ -1,6 +1,7 @@
 package com.example.travelmate;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -192,22 +193,24 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
             Snackbar.make(v, "Please Pick Right Date", Snackbar.LENGTH_SHORT).show();
             dialog.dismiss();
         } else {
+            Intent intent = new Intent(getApplicationContext(), viewmytripactivity.class);
             String tripname = etTripname.getText().toString().trim();
             String destination = etDestination.getText().toString().trim();
             savetripdata data = new savetripdata(tripname, formattedDate, list, destination);
             reference = database.getReference();
             reference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(formattedDate).setValue(data);
             NotifyMe notifyMe = new NotifyMe.Builder(getApplicationContext())
-                    .title("Trip remainder")
-                    .content("Hi,Your Trip is started.Look at your item list so you can not miss items during your trip")
+                    .title("Trip remainder,Your Trip is started")
+                    .content("Look at your item list so you can not miss items during your trip")
                     .color(255, 0, 0, 255)
                     .led_color(255, 255, 255, 255)
-                    .small_icon(R.drawable.tripicon)
+                    .small_icon(R.drawable.logo1)
                     .large_icon(R.drawable.tripicon)
+                    .addAction(intent, "View My Trip")
                     .time(now)
                     .key("test")
                     .build();
-            Snackbar.make(v, "Trip Created,And Remainder Set", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(v, "Trip Created,And Remainder Set For Your Trip", Snackbar.LENGTH_LONG).show();
             dialog.dismiss();
         }
     }
@@ -218,6 +221,4 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         String formattedDate = df.format(now.getTime());
         tvPickDate.setText(formattedDate);
     }
-
-
 }
