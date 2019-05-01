@@ -38,12 +38,14 @@ public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Hold
         this.atm = atm;
         this.latlong = latlong;
     }
+
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(context).inflate(R.layout.nearbyatm, viewGroup, false);
         return new Holder(view);
     }
+
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
         String lat = String.valueOf(atm.get(i).getGeometry().getLocation().getLat());
@@ -69,7 +71,13 @@ public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Hold
                     holder.tvRating.setText("");
                 }
                 holder.tvAddress.setText(atm.get(i).getVicinity());
-                holder.tvDistance.setText(response.body().getRows().get(0).getElements().get(0).getDistance().getText());
+
+
+                try {
+                    holder.tvDistance.setText(response.body().getRows().get(0).getElements().get(0).getDistance().getText());
+                } catch (Exception e) {
+                    Log.e("exception", e.getMessage());
+                }
 
                 try {
                     Glide.with(context).load(atm.get(i).getIcon()).into(holder.ivImage);

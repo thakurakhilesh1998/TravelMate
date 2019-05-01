@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.travelmate.R;
+import com.example.travelmate.utility.weathericon;
 import com.example.travelmate.weather.Weather;
 
 import java.text.ParseException;
@@ -63,6 +64,8 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
         SimpleDateFormat outFormat = new SimpleDateFormat("EEEE");
         String goal = outFormat.format(date);
         holder.tvDayName.setText(goal);
+        int icon = weathericon.WeatherIcon(response.body().getDailyForecasts().get(0).getDay().getIcon());
+        holder.ivWeatherIcon.setImageResource(icon);
     }
 
     @Override

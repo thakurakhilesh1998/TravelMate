@@ -63,7 +63,6 @@ public class nearbyplaces_activity extends AppCompatActivity {
         rvPlaces = findViewById(R.id.rvPlaces);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvPlaces.setLayoutManager(manager);
-
         mprogressDialog = new ProgressDialog(this);
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -78,9 +77,9 @@ public class nearbyplaces_activity extends AppCompatActivity {
         name = new ArrayList<String>();
         geolocation = new ArrayList<>();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
         mprogressDialog.setMessage("Wait...Fetching...Your Places");
         mprogressDialog.setCanceledOnTouchOutside(false);
+        mprogressDialog.show();
         fetchInterests(mUser.getUid());
     }
 

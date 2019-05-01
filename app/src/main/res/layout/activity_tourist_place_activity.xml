@@ -14,10 +14,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"
-        app:logo="@drawable/backicon"
-        app:title="My Place"
+        app:title="q"
         app:titleMarginStart="120dp"
-        app:titleTextColor="@color/white"></android.support.v7.widget.Toolbar>
+        app:titleTextColor="@color/background">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="My Place"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textSize"
+            android:textStyle="bold"/>
+
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

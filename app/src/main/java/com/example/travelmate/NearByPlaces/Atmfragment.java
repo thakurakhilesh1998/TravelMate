@@ -18,6 +18,7 @@ import com.example.travelmate.Adapter.NearByAtmAdapter;
 import com.example.travelmate.NearByAtm.NearByAtm;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
+import com.example.travelmate.utility.constants;
 import com.example.travelmate.utility.substringGeolocation;
 
 import java.util.List;
@@ -66,7 +67,7 @@ public class Atmfragment extends Fragment {
 
     private void getDataFromApi(String lat, String longitude) {
         final String latlong = lat + longitude;
-        Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(KEY, latlong, RADIUS, types);
+        Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(constants.KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
             public void onResponse(Call<NearByAtm> call, Response<NearByAtm> response) {

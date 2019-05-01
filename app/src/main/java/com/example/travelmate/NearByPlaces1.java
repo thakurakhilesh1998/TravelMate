@@ -57,7 +57,7 @@ public class NearByPlaces1 extends AppCompatActivity {
     private void findIds() {
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewpager);
-        titletoolbar = findViewById(R.id.titletoolbar);
+        titletoolbar = findViewById(R.id.titletoolbar1);
 
     }
 }

@@ -115,8 +115,8 @@ public class mytripFragment extends Fragment {
         if (listfinal.size() != 0) {
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             rvMyTrips.setLayoutManager(manager);
-            TripAdapter tripAdapter = new TripAdapter(getContext(), listfinal);
-            rvMyTrips.setAdapter(tripAdapter);
+        //    TripAdapter tripAdapter = new TripAdapter(viewmytripactivity.this, getContext(), listfinal);
+          //  rvMyTrips.setAdapter(tripAdapter);
             rvMyTrips.setVisibility(View.VISIBLE);
         } else if (list.size() == 0) {
 

@@ -1,10 +1,14 @@
 package com.example.travelmate;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +26,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class activity_weather1 extends AppCompatActivity {
+    Toolbar toolbar;
     TextView tvName, tvTemp, tvStatus, tvRain, tvTempMinMax;
     ImageView ivIcon;
     RecyclerView recyclerView;
@@ -30,12 +35,33 @@ public class activity_weather1 extends AppCompatActivity {
     String locationkey;
     PrefLocation prefLocation;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather1);
         findids();
-        getLocationKey(prefLocation.getLatitude(), prefLocation.getLangitude());
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        onBackButton();
+        try {
+            getLocationKey(prefLocation.getLatitude(),prefLocation.getLangitude());
+        }
+        catch (Exception e)
+        {
+            Snackbar.make(findViewById(android.R.id.content), "weather", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+    private void onBackButton() {
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
+            }
+        });
     }
 
     private void forecastWeather(Response<Weather> response, String cityName) {
@@ -56,7 +82,7 @@ public class activity_weather1 extends AppCompatActivity {
     }
 
     private void findids() {
-
+        toolbar = findViewById(R.id.weathertoolbar);
         tvName = findViewById(R.id.tvName);
         tvTemp = findViewById(R.id.tvTemp);
         tvStatus = findViewById(R.id.tvStatus);
@@ -69,9 +95,7 @@ public class activity_weather1 extends AppCompatActivity {
 
 
     private void getLocationKey(String lat, String longitude) {
-
         String latlong = lat + "%2C" + longitude;
-
         Call<LocationKey> locationkey = LocationKeyApi.LocationKeyApi().getLocationKey(constants.WeatherKEY, latlong, details);
         locationkey.enqueue(new Callback<LocationKey>() {
             @Override

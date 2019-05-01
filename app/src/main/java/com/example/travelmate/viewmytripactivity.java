@@ -108,7 +108,7 @@ public class viewmytripactivity extends AppCompatActivity implements View.OnClic
         if (listfinal.size() != 0) {
             LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
             rvMyTrips.setLayoutManager(manager);
-            TripAdapter tripAdapter = new TripAdapter(getApplicationContext(), listfinal);
+            TripAdapter tripAdapter = new TripAdapter(viewmytripactivity.this,getApplicationContext(), listfinal);
             rvMyTrips.setAdapter(tripAdapter);
             rvMyTrips.setVisibility(View.VISIBLE);
         } else if (list.size() == 0) {

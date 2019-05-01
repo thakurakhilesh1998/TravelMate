@@ -59,12 +59,15 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tourist_place_activity);
+        findIds();
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         images = new ArrayList<>();
         name = new ArrayList<>();
+        onBackButton();
         setName();
         setImageList();
-        findIds();
         photos = new ArrayList<>();
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocordinates");
@@ -77,6 +80,17 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         tvviewMap.setOnClickListener(this);
         weather.setOnClickListener(this);
         setNearByrecyclerView();
+    }
+
+    private void onBackButton() {
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
+            }
+        });
     }
 
     private void setName() {
