@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -188,6 +189,35 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                        REQUEST_CODE);
+            }
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    if (location != null) {
+                        Log.e("location", String.valueOf(location.getLatitude()));
+                        prefLocation = new PrefLocation(getApplicationContext());
+                        prefLocation.setLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your location not accessible", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        } else {
+            Snackbar.make(findViewById(android.R.id.content), "Please allow location to use function of app", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
     private void showData(String email, String name, String profile) {
         tvName.setText(name);
         tvEmail.setText(email);
@@ -198,6 +228,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ft.commitAllowingStateLoss();
         progressDialog.dismiss();
     }
+
     private void findIds() {
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.navigation);
@@ -237,8 +268,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
-
-
             case R.id.home:
                 HomePageFragment homePageFragment = new HomePageFragment();
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -291,7 +320,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout.closeDrawer(Gravity.START);
         } else {
             finish();
-            System.exit(0);
         }
     }
 

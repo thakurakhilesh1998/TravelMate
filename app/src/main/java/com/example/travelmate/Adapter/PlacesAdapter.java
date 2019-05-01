@@ -21,6 +21,7 @@ import com.example.travelmate.R;
 import com.example.travelmate.TouristPlace_activity;
 import com.example.travelmate.utility.PrefLocation;
 import com.example.travelmate.utility.constants;
+import com.example.travelmate.utility.util;
 import com.google.android.gms.location.FusedLocationProviderClient;
 
 import java.util.ArrayList;
@@ -80,10 +81,14 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
             public void onResponse(Call<Distance> call, Response<Distance> response) {
 
                 if (true) {
-                    holder.tvName.setText(name.get(i));
-                    Glide.with(context).load(placesimages.get(i)).into(holder.ivImage);
-                    holder.tvDistance.setText(response.body().getRows().get(0).getElements().get(0).getDistance().getText());
-                    holder.tvTime.setText(" " + response.body().getRows().get(0).getElements().get(0).getDuration().getText());
+                    try {
+                        holder.tvName.setText(name.get(i));
+                        Glide.with(context).load(placesimages.get(i)).into(holder.ivImage);
+                        holder.tvDistance.setText(response.body().getRows().get(0).getElements().get(0).getDistance().getText());
+                        holder.tvTime.setText(" " + response.body().getRows().get(0).getElements().get(0).getDuration().getText());
+                    } catch (Exception e) {
+                        util.toast(context, e.getMessage());
+                    }
                     holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

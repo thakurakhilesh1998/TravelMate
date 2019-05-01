@@ -108,7 +108,6 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     }
 
     private void onNearBy() {
-
         Intent intent = new Intent(getContext(), nearbyplaces_activity.class);
         startActivity(intent);
     }

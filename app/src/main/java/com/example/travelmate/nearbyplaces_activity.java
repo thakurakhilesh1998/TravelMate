@@ -329,21 +329,24 @@ public class nearbyplaces_activity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
-                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    }
-                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                filtered = getDataFirebase.isInside(location.getLatitude(), location.getLongitude(), temp);
-                                Log.e("size", String.valueOf(temp.size()));
-                                getFromFirebase(filtered);
-                            }
-                        }
-                    });
+//
+//                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//                            && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                    }
+//                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+//                        @Override
+//                        public void onSuccess(Location location) {
+//                            if (location != null) {
+                    filtered = getDataFirebase.isInside(Double.parseDouble(prefLocation.getLatitude()), Double.parseDouble(prefLocation.getLangitude()), temp);
+                    Log.e("size", String.valueOf(filtered.size()));
+                    getFromFirebase(filtered);
+//                            }
+//                        }
+//                    });
 
-                } else {
-                    Toast.makeText(getApplicationContext(), "permission denied", Toast.LENGTH_SHORT);
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "permission denied", Toast.LENGTH_SHORT);
+//                }
                 }
         }
     }
