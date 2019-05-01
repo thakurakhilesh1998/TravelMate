@@ -1,6 +1,7 @@
 package com.example.travelmate;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -56,13 +57,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ArrayList<String> temp, filtered, placename;
     DrawerLayout drawerLayout;
     FusedLocationProviderClient fusedLocationProviderClient;
-    String geolocation;
     PrefLocation prefLocation;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        progressDialog = new ProgressDialog(getApplicationContext());
+        progressDialog.setMessage("Please Wait..");
+        progressDialog.setCanceledOnTouchOutside(false);
         findIds();
         subscribetocloudmessaging();
         mAuth = FirebaseAuth.getInstance();
@@ -73,8 +77,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         temp = new ArrayList<>();
         filtered = new ArrayList<>();
         placename = new ArrayList<>();
-
-
+        if (drawerLayout.isDrawerOpen(Gravity.START)) {
+            drawerLayout.closeDrawer(Gravity.START);
+        }
         try {
 
             if (GpsEnabled.isEnabled(getApplicationContext())) {
@@ -183,17 +188,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
     private void showData(String email, String name, String profile) {
         tvName.setText(name);
         tvEmail.setText(email);
         Glide.with(this).load(profile).into(ivprofile);
-
         HomePageFragment homePageFragment = new HomePageFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frame, homePageFragment);
         ft.commitAllowingStateLoss();
-
+        progressDialog.dismiss();
     }
     private void findIds() {
         toolbar = findViewById(R.id.toolbar);
@@ -287,7 +290,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (drawerLayout.isDrawerOpen(Gravity.START)) {
             drawerLayout.closeDrawer(Gravity.START);
         } else {
-            super.onBackPressed();
+            finish();
+            System.exit(0);
         }
     }
 

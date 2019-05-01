@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,10 +105,10 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
                     if (dataSnapshot.hasChildren()) {
                         list3 = new ArrayList<>();
                         list3 = (ArrayList<String>) dataSnapshot.getValue();
-                        ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(context, list);
+                        ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(context, list3);
                         holder.expandableListView.setAdapter(adapter);
-                        onExpandViewExapned(holder, list);
-                        onExpandViewCollapsed(holder, list);
+                        onExpandViewExapned(holder, list3);
+                        onExpandViewCollapsed(holder, list3);
                     } else {
 
                     }
@@ -139,10 +140,13 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
             public void onGroupExpand(int groupPosition) {
                 int height = 0;
                 for (int i = 0; i < list1.size(); i++) {
-                    height += 70;
+                    height += 60;
                 }
-                holder.expandableListView.getLayoutParams().height = height;
+
                 Log.e("height", String.valueOf(height));
+                holder.expandableListView.getLayoutParams().height = height;
+                height=0;
+
             }
         });
     }
@@ -251,11 +255,14 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
                     item.setVisibility(View.VISIBLE);
                     itemlist.addView(item);
                     etItemname.setText("");
-
                 }
             }
         });
+    }
 
+    public int pxToDp(int px) {
+        DisplayMetrics displayMetrics =context.getResources().getDisplayMetrics();
+        return Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     public class Holder extends RecyclerView.ViewHolder {
@@ -264,6 +271,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
         Button btnEdit;
         LinearLayout lineartrip;
         TextView tvnotrip, tvDestination;
+
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -276,5 +284,4 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
 
         }
     }
-
 }

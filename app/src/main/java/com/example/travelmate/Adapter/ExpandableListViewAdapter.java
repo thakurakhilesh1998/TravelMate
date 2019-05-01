@@ -1,7 +1,6 @@
 package com.example.travelmate.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     Context context;
     ArrayList<String> list;
+    int i = 1;
 
 
     public ExpandableListViewAdapter(Context context, ArrayList<String> list) {
@@ -62,9 +62,9 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
-            LayoutInflater layoutInflater = (LayoutInflater) this.context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.parent, null);
+        LayoutInflater layoutInflater = (LayoutInflater) this.context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = layoutInflater.inflate(R.layout.parent, null);
 
         TextView expandedListTextView = (TextView) convertView
                 .findViewById(R.id.tvList);
@@ -74,14 +74,15 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-            LayoutInflater layoutInflater = (LayoutInflater) this.context.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.expaned, null);
+        LayoutInflater layoutInflater = (LayoutInflater) this.context.
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = layoutInflater.inflate(R.layout.expaned, null);
 
 
         final TextView listTitleTextView = (TextView) convertView
                 .findViewById(R.id.tvListView);
-        listTitleTextView.setText(list.get(childPosition));
+        listTitleTextView.setText(i +". "+ list.get(childPosition));
+        i++;
         return convertView;
     }
 

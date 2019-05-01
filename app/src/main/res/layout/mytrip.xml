@@ -9,7 +9,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:cardBackgroundColor="#fd5f00"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp">
@@ -23,8 +23,8 @@
                 android:id="@+id/lineartrip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-               >
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -32,91 +32,86 @@
                     android:orientation="vertical"
                     android:paddingHorizontal="12dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Trip name:"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/viewtriptext"
-                        />
+                        android:layout_marginTop="12dp">
 
-                    <TextView
-                        android:id="@+id/tvTripName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:text="Trip name:"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/viewtriptext"
-                         />
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Trip name:"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/viewtriptext" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/tvTripName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="4dp"
+                            android:text="Trip name:"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/viewtriptext" />
+                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Destination:"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/viewtriptext"
-                         />
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tvDestination"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Destination:"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/viewtriptext" />
+
+                        <TextView
+                            android:id="@+id/tvDestination"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="Destination"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/viewtriptext" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:text="Destination"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/viewtriptext"
-                         />
-                </LinearLayout>
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Trip Date:"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/viewtriptext" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/tvDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="Date of traveling"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/viewtriptext" />
+                    </LinearLayout>
+
+
+                    <ExpandableListView
+                        android:id="@+id/expandableListView"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Trip Date:"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/viewtriptext"
-                        />
-
-                    <TextView
-                        android:id="@+id/tvDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:text="Date of traveling"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/viewtriptext"
-                         />
-                </LinearLayout>
-
-                <ExpandableListView
-                    android:id="@+id/expandableListView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:divider="@color/white"
-                    android:dividerHeight="0.8dp"
-                    android:fitsSystemWindows="true"
-                    android:indicatorRight="?android:attr/expandableListPreferredItemIndicatorRight"
-                    android:nestedScrollingEnabled="true"
-                    android:paddingVertical="8dp" />
+                        android:layout_marginTop="8dp"
+                        android:divider="@color/white"
+                        android:dividerHeight="0.8dp"
+                        android:fitsSystemWindows="true"
+                        android:indicatorRight="?android:attr/expandableListPreferredItemIndicatorRight"
+                        android:nestedScrollingEnabled="true"
+                        android:paddingVertical="8dp" />
                 </LinearLayout>
 
                 <Button
