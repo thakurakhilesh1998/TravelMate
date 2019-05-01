@@ -2,8 +2,10 @@ package com.example.travelmate.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,16 +29,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> implements View.OnClickListener {
+public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
 
     Context context;
-    ArrayList<String> list;
+    ArrayList<String> list, list2, list3;
     FirebaseDatabase database;
     DatabaseReference databaseReference;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
-    String name, date, destination;
     Dialog dialog;
     viewmytripactivity viewmytripactivity;
     Button edittrip;
@@ -45,17 +47,18 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> implem
     LinearLayout itemlist;
     String listitem;
     TextView item;
+    View view;
+
     public TripAdapter(viewmytripactivity viewmytripactivity, Context context, ArrayList<String> list) {
         this.context = context;
         this.list = list;
         this.viewmytripactivity = viewmytripactivity;
-
     }
 
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.mytrip, viewGroup, false);
+        view = LayoutInflater.from(context).inflate(R.layout.mytrip, viewGroup, false);
         return new Holder(view);
     }
 
@@ -79,20 +82,28 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> implem
         });
     }
 
-    private void getDataSetData(DataSnapshot dataSnapshot, final Holder holder, int i) {
+    private void getDataSetData(DataSnapshot dataSnapshot, final Holder holder, final int i) {
         if (dataSnapshot.hasChildren()) {
+            String name, date, destination, date1;
             name = dataSnapshot.child("tripname").getValue().toString();
-            date = dataSnapshot.child("date").getValue().toString().substring(0, 11);
+            date = dataSnapshot.child("date").getValue().toString();
+            date1 = date.substring(0, 11);
             destination = dataSnapshot.child("destination").getValue().toString();
             holder.tvTripName.setText(name);
-            holder.tvDate.setText(date);
+            holder.tvDate.setText(date1);
             holder.tvDestination.setText(destination);
-            holder.btnEdit.setOnClickListener(this);
+            holder.btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onButtonEditClick(i);
+                }
+            });
             databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).child("list").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.hasChildren()) {
-                        ArrayList<String> list = (ArrayList<String>) dataSnapshot.getValue();
+                        list3 = new ArrayList<>();
+                        list3 = (ArrayList<String>) dataSnapshot.getValue();
                         ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(context, list);
                         holder.expandableListView.setAdapter(adapter);
                         onExpandViewExapned(holder, list);
@@ -120,8 +131,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> implem
                 holder.expandableListView.getLayoutParams().height = 70;
             }
         });
-
-
     }
 
     private void onExpandViewExapned(final Holder holder, final ArrayList<String> list1) {
@@ -143,57 +152,68 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> implem
         return list.size();
     }
 
-    @Override
-    public void onClick(View v) {
+    private void onEditTrip(int adapterPosition) {
 
-        switch (v.getId()) {
-            case R.id.btnEdit:
-                onButtonEditClick();
+        if (tripname.getText().toString().isEmpty() || tripname.getText().toString().length() < 3) {
+            tripname.setError("tripname can not be empty");
+            tripname.setFocusable(true);
+        } else if (destination1.getText().toString().isEmpty() || destination1.getText().toString().length() < 3) {
+
+            destination1.setError("destination can not be empty");
+            destination1.setFocusable(true);
+        } else {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("tripname", tripname.getText().toString().trim());
+            map.put("destination", destination1.getText().toString().trim());
+            Log.e("list2", String.valueOf(list2.size()));
+            list2.addAll(list3);
+            map.put("list", list2);
+            tripname.getText().toString().trim();
+            destination1.getText().toString().trim();
+            FirebaseDatabase.getInstance().getReference().child("User Profile").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MyTrip").child(list.get(adapterPosition)).updateChildren(map, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                    Intent intent = viewmytripactivity.getIntent();
+                    context.startActivity(intent);
+                    viewmytripactivity.finish();
+                }
+            });
+
         }
 
 
     }
 
-    private void onEditTrip() {
-        name = tripname.getText().toString().trim();
-        destination = destination1.getText().toString().trim();
-        listitem = etItemname.getText().toString().trim();
-        btnadditem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("item",listitem);
-                item = new TextView(context);
-                item.setText(listitem);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(20, 6, 0, 0);
-                item.setLayoutParams(params);
-                item.setTextSize(24);
-                item.setTextColor(Color.parseColor("#4CABFF"));
-                item.setVisibility(View.VISIBLE);
-                itemlist.addView(item);
-            }
-        });
+    private void onButtonEditClick(final int adapterPosition) {
 
-    }
-
-    private void onButtonEditClick() {
         dialog = new Dialog(viewmytripactivity);
         dialog.setContentView(R.layout.edittrip);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
-        btnadditem = dialog.findViewById(R.id.btnaddItem);
-        tripname = dialog.findViewById(R.id.tripname);
-        destination1 = dialog.findViewById(R.id.destination);
-        pickdate = dialog.findViewById(R.id.pickdate);
-        etItemname = dialog.findViewById(R.id.etItemName);
-        edittrip = dialog.findViewById(R.id.edittrip);
+        findDialogIds();
+        FirebaseDatabase.getInstance().getReference().child("User Profile").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MyTrip").child(list.get(adapterPosition)).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()) {
+                    tripname.setText(dataSnapshot.child("tripname").getValue().toString());
+                    destination1.setText(dataSnapshot.child("destination").getValue().toString());
+                    pickdate.setText(dataSnapshot.child("date").getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        list2 = new ArrayList<>();
         itemlist = dialog.findViewById(R.id.itemlist);
         ImageView ivCancel = dialog.findViewById(R.id.ivCancel);
+        onAddItem();
         edittrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onEditTrip();
+                onEditTrip(adapterPosition);
             }
         });
         ivCancel.setOnClickListener(new View.OnClickListener() {
@@ -202,6 +222,40 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> implem
                 dialog.dismiss();
             }
         });
+    }
+
+    private void findDialogIds() {
+        btnadditem = dialog.findViewById(R.id.btnaddItem);
+        tripname = dialog.findViewById(R.id.tripname);
+        destination1 = dialog.findViewById(R.id.destination);
+        pickdate = dialog.findViewById(R.id.pickdate);
+        etItemname = dialog.findViewById(R.id.etItemName);
+        edittrip = dialog.findViewById(R.id.edittrip);
+    }
+
+    private void onAddItem() {
+        btnadditem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (etItemname.getText().toString().trim().isEmpty()) {
+                    etItemname.setError("please enter item name");
+                } else {
+                    item = new TextView(context);
+                    item.setText(etItemname.getText().toString().trim());
+                    list2.add(etItemname.getText().toString().trim());
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(20, 6, 0, 0);
+                    item.setLayoutParams(params);
+                    item.setTextSize(24);
+                    item.setTextColor(Color.parseColor("#4CABFF"));
+                    item.setVisibility(View.VISIBLE);
+                    itemlist.addView(item);
+                    etItemname.setText("");
+
+                }
+            }
+        });
+
     }
 
     public class Holder extends RecyclerView.ViewHolder {

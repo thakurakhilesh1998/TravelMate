@@ -12,5 +12,6 @@
     <string name="loggingprogress">Logging..Wait...</string>
     <string name="serverid">15256756336-al3ol53pi194ui41kbiepo3jsc7vg6jb.apps.googleusercontent.com</string>
     <string name="namepattern">Pattern of name is not correct</string>
+    <string name="alphabetnumber">abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
 </resources>

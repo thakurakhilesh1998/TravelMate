@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.travelmate.Adapter.TripAdapter;
-import com.example.travelmate.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class viewmytripactivity extends AppCompatActivity implements View.OnClickListener {
 
-
+    Toolbar mytoolbar;
     RecyclerView rvMyTrips;
     FirebaseDatabase database;
     DatabaseReference databaseReference;
@@ -47,13 +47,17 @@ public class viewmytripactivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewmytripactivity);
-
+        mytoolbar = findViewById(R.id.mytoolbar);
         btncreatetrip = findViewById(R.id.btncreatetrip);
         rvMyTrips = findViewById(R.id.rvMytrips);
         notriplayout = findViewById(R.id.notriplayout);
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
+        setSupportActionBar(mytoolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setBackButton();
         list = new ArrayList<>();
         listfinal = new ArrayList<>();
         btncreatetrip.setOnClickListener(this);
@@ -108,7 +112,7 @@ public class viewmytripactivity extends AppCompatActivity implements View.OnClic
         if (listfinal.size() != 0) {
             LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
             rvMyTrips.setLayoutManager(manager);
-            TripAdapter tripAdapter = new TripAdapter(viewmytripactivity.this,getApplicationContext(), listfinal);
+            TripAdapter tripAdapter = new TripAdapter(viewmytripactivity.this, getApplicationContext(), listfinal);
             rvMyTrips.setAdapter(tripAdapter);
             rvMyTrips.setVisibility(View.VISIBLE);
         } else if (list.size() == 0) {
@@ -143,7 +147,20 @@ public class viewmytripactivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btncreatetrip:
-                startActivity(new Intent(getApplicationContext(),mytrip_activity.class));
+                startActivity(new Intent(getApplicationContext(), mytrip_activity.class));
         }
+    }
+
+    private void setBackButton() {
+
+        mytoolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+        mytoolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
+            }
+        });
+
     }
 }
