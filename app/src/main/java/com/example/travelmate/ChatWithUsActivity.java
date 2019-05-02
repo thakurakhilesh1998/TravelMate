@@ -1,8 +1,10 @@
 package com.example.travelmate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -30,13 +32,17 @@ public class ChatWithUsActivity extends AppCompatActivity implements View.OnClic
     ListView listView;
     EditText etMsg;
     ImageView btnSend;
-    private FirebaseListAdapter<ChatModel> adapter;
+    Toolbar chatwithus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_with_us);
         findIds();
+        setSupportActionBar(chatwithus);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        onBackButton();
         displayChatMsg();
     }
 
@@ -59,19 +65,21 @@ public class ChatWithUsActivity extends AppCompatActivity implements View.OnClic
                     Log.e("no msg", "no message found");
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-        listView.setAdapter(adapter);
     }
 
     private void findIds() {
         listView = findViewById(R.id.listview);
         etMsg = findViewById(R.id.etMsg);
         btnSend = findViewById(R.id.btnSend);
+        chatwithus = findViewById(R.id.chatwithus);
         btnSend.setOnClickListener(this);
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -79,6 +87,7 @@ public class ChatWithUsActivity extends AppCompatActivity implements View.OnClic
                 onSendMsg();
         }
     }
+
     private void onSendMsg() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -88,8 +97,22 @@ public class ChatWithUsActivity extends AppCompatActivity implements View.OnClic
                 .child(messageTime).setValue(new ChatModel(etMsg.getText().toString(), FirebaseAuth.getInstance().getCurrentUser().getEmail()));
         etMsg.setText("");
     }
+
     public String decode(String email) {
         String decoded = email.replace('@', '_');
         return decoded.replace('.', '!');
     }
+
+    private void onBackButton() {
+        chatwithus.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+        chatwithus.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
+            }
+        });
+    }
+
+
 }

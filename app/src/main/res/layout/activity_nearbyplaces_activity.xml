@@ -12,11 +12,17 @@
         android:id="@+id/toolbar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:logo="@drawable/backicon"
-        app:title="NearByPlaces"
-        app:titleMarginStart="90dp"
-        app:titleTextColor="@color/white">
+        app:title="q"
+        app:titleTextColor="@color/background">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Around Me"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textSize"
+            android:textStyle="bold" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView

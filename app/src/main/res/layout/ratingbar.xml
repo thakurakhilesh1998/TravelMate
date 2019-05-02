@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="How is that place.Please Rate!"
+        android:textColor="@color/black"
+        android:textSize="24dp" />
+
+    <RatingBar
+        android:id="@+id/rbRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:numStars="5"
+        android:progressTint="#f8d568" />
+
+    <EditText
+        android:id="@+id/review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:background="@drawable/ratingedittext"
+        android:gravity="top"
+        android:hint="Type Your Review...."
+        android:inputType="textMultiLine"
+        android:maxLines="4"
+        android:minLines="8"
+        android:padding="8dp"
+        android:scrollbars="vertical"
+        android:textColorHint="@color/black" />
+
+    <Button
+        android:id="@+id/btnrate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/button"
+        android:text="Rate"
+        android:textColor="@color/white"
+        android:textSize="24dp" />
+</LinearLayout>

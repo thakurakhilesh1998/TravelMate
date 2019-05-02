@@ -1,6 +1,7 @@
 package com.example.travelmate;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,18 +11,25 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.travelmate.APIS.LocationKeyApi;
 import com.example.travelmate.APIS.WeatherApi;
 import com.example.travelmate.Adapter.NearByImageAdapter;
 import com.example.travelmate.Adapter.PlacePhotosAdapter;
+import com.example.travelmate.Adapter.ViewMyRatingAdapter;
 import com.example.travelmate.locationkey.LocationKey;
+import com.example.travelmate.utility.SaveRating;
 import com.example.travelmate.utility.constants;
+import com.example.travelmate.utility.util;
 import com.example.travelmate.utility.weathericon;
 import com.example.travelmate.weather.Weather;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +45,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TouristPlace_activity extends AppCompatActivity implements View.OnClickListener {
-    RecyclerView rvPhotos;
+    RecyclerView rvPhotos, rvratings;
     ArrayList<String> photos;
     TextView tvPlaceName, tvAbout, tvviewMap, tvRainProbablity;
     ImageView ivWeatherIcon;
@@ -54,6 +62,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     String details = "true";
     ArrayList<Integer> images;
     ArrayList<String> name;
+    Button btnaddrating, btnviewrating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +88,8 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         // getWeatherForecast(locationkey);
         tvviewMap.setOnClickListener(this);
         weather.setOnClickListener(this);
+        btnaddrating.setOnClickListener(this);
+        btnviewrating.setOnClickListener(this);
         setNearByrecyclerView();
     }
 
@@ -212,7 +223,6 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void putWeatgerData(Response<Weather> response) {
-
         tvHeadline.setText(String.valueOf(response.body().getDailyForecasts().get(0).getRealFeelTemperature().getMinimum().getValue()) + "°C");
         Double temp = response.body().getDailyForecasts().get(0).getRealFeelTemperature().getMaximum().getValue();
         tvTemp.setText(String.valueOf(temp) + "°C");
@@ -237,6 +247,9 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         overflow = findViewById(R.id.view_pager_indicator);
         tvRainProbablity = findViewById(R.id.tvRainProbablity);
         rvnearby = findViewById(R.id.rvnearby);
+        btnaddrating = findViewById(R.id.btnaddrating);
+        btnviewrating = findViewById(R.id.btnviewrating);
+        rvratings = findViewById(R.id.rvViewRatings);
 
     }
 
@@ -249,9 +262,8 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         rvPhotos.setAdapter(placePhotosAdapter);
         overflow.attachToRecyclerView(rvPhotos);
         SimpleSnapHelper pagerSnapHelper = new SimpleSnapHelper(overflow);
+        rvPhotos.setOnFlingListener(null);
         pagerSnapHelper.attachToRecyclerView(rvPhotos);
-
-
     }
 
     @Override
@@ -262,13 +274,65 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.weatherlayout:
                 onWeatherClick();
+                break;
+            case R.id.btnaddrating:
+                onRatingClicked();
+                break;
+            case R.id.btnviewrating:
+                onViewRatings();
         }
+    }
+
+    private void onViewRatings() {
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        rvratings.setLayoutManager(manager);
+
+        ViewMyRatingAdapter viewMyRatingAdapter = new ViewMyRatingAdapter(getApplicationContext());
+
+    }
+
+    private void onRatingClicked() {
+
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.ratingbar);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        savinguserratings(dialog);
+    }
+
+    private void savinguserratings(final Dialog dialog) {
+
+        final Button btnrating = dialog.findViewById(R.id.btnrate);
+        final EditText review = dialog.findViewById(R.id.review);
+        final RatingBar rbRating = dialog.findViewById(R.id.rbRating);
+        btnrating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRatingSubmit(btnrating, review, rbRating, dialog);
+            }
+        });
+
+
+    }
+
+    private void onRatingSubmit(Button btnrating, EditText review, RatingBar rbRating, Dialog dialog) {
+
+        if (rbRating.getRating() == 0) {
+            util.toast(getApplicationContext(), "please select a rating");
+        } else {
+            SaveRating saveRating = new SaveRating(rbRating.getRating(), review.getText().toString().trim(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            Log.e("name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            Log.e("email", decode(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
+            FirebaseDatabase.getInstance().getReference().child(geolocation1).child("Rating").child(decode(FirebaseAuth.getInstance().getCurrentUser().getEmail())).setValue(saveRating);
+            dialog.dismiss();
+        }
+
+
     }
 
 
     private void onWeatherClick() {
-
-
         startActivity(new Intent(this, weatheractivity.class).putExtra("geocoordinates1", geolocation));
     }
 
@@ -277,9 +341,10 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         startActivity(new Intent(this, map_2_activity.class).putExtra("geocoordinatesmap", geolocation));
     }
 
-    public String addChar(String str, char ch, int position) {
-        StringBuilder sb = new StringBuilder(str);
-        sb.insert(position, ch);
-        return sb.toString();
+    public String decode(String email) {
+        String decoded = email.replace('@', '_');
+        return decoded.replace('.', '!');
     }
+
+
 }

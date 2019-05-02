@@ -34,6 +34,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -202,12 +203,22 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
     }
 
     private void saveDataInFirebase(String email, String uid, String imageurl) {
-        saveData = new SaveData(Name, Phone, email, Gender, imageurl,Age,Name);
+        saveData = new SaveData(Name, Phone, email, Gender, imageurl, Age, Name);
         saveData1 = new SaveData(interest1, interest2, interest3, interest4, interest5, interest6);
         myRef = database.getReference("User Profile");
         myRef.child(uid).setValue(saveData);
         myRef.child(uid).child("interests").setValue(saveData1);
-
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(Name)
+                .build();
+        FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.e("msg", "user profile updated successfully");
+                }
+            }
+        });
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }
 
@@ -262,7 +273,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Filepath = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),Filepath);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Filepath);
                 ivProfile.setImageBitmap(bitmap);
                 saveImage();
             } catch (Exception e) {
@@ -286,7 +297,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressDialog.dismiss();
-                util.toast(getApplicationContext(),e.getMessage());
+                util.toast(getApplicationContext(), e.getMessage());
             }
         });
 

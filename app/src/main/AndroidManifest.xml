@@ -8,9 +8,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/logo"
+        android:icon="@mipmap/logoimage"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/logo"
+        android:roundIcon="@mipmap/logoimage"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".viewmytripactivity"></activity>

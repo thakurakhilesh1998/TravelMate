@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -14,14 +13,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.travelmate.Adapter.PlacesAdapter;
 import com.example.travelmate.FirebaseData.getDataFirebase;
 import com.example.travelmate.utility.PrefLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -58,8 +55,10 @@ public class nearbyplaces_activity extends AppCompatActivity {
         setContentView(R.layout.activity_nearbyplaces_activity);
         toolbar = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        onBackButton();
         prefLocation = new PrefLocation(this);
-        Log.e("location", prefLocation.getLangitude());
         rvPlaces = findViewById(R.id.rvPlaces);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvPlaces.setLayoutManager(manager);
@@ -361,4 +360,16 @@ public class nearbyplaces_activity extends AppCompatActivity {
                     REQUEST_CODE);
         }
     }
+
+    private void onBackButton() {
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
+            }
+        });
+    }
+
 }

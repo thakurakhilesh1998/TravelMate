@@ -199,6 +199,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
             savetripdata data = new savetripdata(tripname, formattedDate, list, destination);
             reference = database.getReference();
             reference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(formattedDate).setValue(data);
+            Log.e("now", String.valueOf(now));
             NotifyMe notifyMe = new NotifyMe.Builder(getApplicationContext())
                     .title("Trip remainder,Your Trip is started")
                     .content("Look at your item list so you can not miss items during your trip")
