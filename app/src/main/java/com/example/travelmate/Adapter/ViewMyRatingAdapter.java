@@ -10,13 +10,27 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.travelmate.R;
+import com.example.travelmate.utility.SaveRating;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class ViewMyRatingAdapter extends RecyclerView.Adapter<ViewMyRatingAdapter.Holder> {
 
     Context context;
 
-    public ViewMyRatingAdapter(Context context) {
+    DataSnapshot dataSnapshot;
+    ArrayList<String> size;
+    String geolocation1;
+
+    public ViewMyRatingAdapter(Context context, ArrayList<String> size, DataSnapshot dataSnapshot, String geolocation1) {
         this.context = context;
+        this.size = size;
+        this.dataSnapshot = dataSnapshot;
+        this.geolocation1 = geolocation1;
     }
 
     @NonNull
@@ -27,13 +41,30 @@ public class ViewMyRatingAdapter extends RecyclerView.Adapter<ViewMyRatingAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Holder holder, int i) {
+    public void onBindViewHolder(@NonNull final Holder holder, int i) {
 
+        FirebaseDatabase.getInstance().getReference().child(geolocation1).child("Rating").child(size.get(i)).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()) {
+                    SaveRating rating = dataSnapshot.getValue(SaveRating.class);
+                    holder.tvRatingName.setText(rating.getDisplayName());
+                    holder.tvUserReview.setText(rating.getReview());
+                    holder.rbUserRating.setRating(rating.getRating());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return size.size();
     }
 
     public class Holder extends RecyclerView.ViewHolder {

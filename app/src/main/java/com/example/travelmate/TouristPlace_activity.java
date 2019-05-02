@@ -46,7 +46,7 @@ import retrofit2.Response;
 
 public class TouristPlace_activity extends AppCompatActivity implements View.OnClickListener {
     RecyclerView rvPhotos, rvratings;
-    ArrayList<String> photos;
+    ArrayList<String> photos, reviews;
     TextView tvPlaceName, tvAbout, tvviewMap, tvRainProbablity;
     ImageView ivWeatherIcon;
     TextView tvTemp, tvHeadline, tvWindspeed;
@@ -72,6 +72,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        reviews = new ArrayList<>();
         images = new ArrayList<>();
         name = new ArrayList<>();
         onBackButton();
@@ -284,10 +285,30 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void onViewRatings() {
+
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         rvratings.setLayoutManager(manager);
+        FirebaseDatabase.getInstance().getReference().child(geolocation1).child("Rating").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-        ViewMyRatingAdapter viewMyRatingAdapter = new ViewMyRatingAdapter(getApplicationContext());
+                if (dataSnapshot.hasChildren()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        reviews.add(ds.getKey());
+                    }
+                    Log.e("reviews", reviews.get(0));
+                    ViewMyRatingAdapter viewMyRatingAdapter = new ViewMyRatingAdapter(getApplicationContext(), reviews, dataSnapshot, geolocation1);
+                    rvratings.setAdapter(viewMyRatingAdapter);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 
@@ -335,7 +356,6 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     private void onWeatherClick() {
         startActivity(new Intent(this, weatheractivity.class).putExtra("geocoordinates1", geolocation));
     }
-
 
     private void viewOnMap() {
         startActivity(new Intent(this, map_2_activity.class).putExtra("geocoordinatesmap", geolocation));
