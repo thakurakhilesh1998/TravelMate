@@ -3,6 +3,7 @@ package com.example.travelmate.Adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class ViewMyRatingAdapter extends RecyclerView.Adapter<ViewMyRatingAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final Holder holder, int i) {
+        Log.e("size", String.valueOf(size.size()));
 
         FirebaseDatabase.getInstance().getReference().child(geolocation1).child("Rating").child(size.get(i)).addValueEventListener(new ValueEventListener() {
             @Override

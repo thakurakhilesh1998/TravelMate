@@ -94,7 +94,6 @@ public class nearbyplaces_activity extends AppCompatActivity {
                 }
                 fetchPlaces(list);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -181,19 +180,12 @@ public class nearbyplaces_activity extends AppCompatActivity {
 
                 }
             });
-
         }
-
-
     }
-
     private void getPlaceName(ArrayList<String> placename1, ArrayList<String> name, ArrayList<String> geolocation1) {
-
-        PlacesAdapter placesAdapter = new PlacesAdapter(getApplicationContext(), placename1, name, geolocation1);
+        PlacesAdapter placesAdapter = new PlacesAdapter(getApplicationContext(), placename1, name, geolocation1,geolocation1);
         rvPlaces.setAdapter(placesAdapter);
         mprogressDialog.dismiss();
-
-
     }
 
     private void call2(final ArrayList<String> temp, final ArrayList<String> interest1) {

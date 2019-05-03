@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,9 +21,14 @@ import com.example.travelmate.Distance.Distance;
 import com.example.travelmate.R;
 import com.example.travelmate.TouristPlace_activity;
 import com.example.travelmate.utility.PrefLocation;
+import com.example.travelmate.utility.SaveRating;
 import com.example.travelmate.utility.constants;
 import com.example.travelmate.utility.util;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -34,21 +40,27 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
 
 
     Context context;
-    ArrayList<String> placesimages, name, geolocation;
+    ArrayList<String> placesimages, name, geolocation, geolocation1;
     ProgressDialog mmprogressDialog;
     FusedLocationProviderClient fusedLocationProviderClient;
     String currentLatlong;
     String units = "metric";
     PrefLocation prefLocation;
+    ArrayList<Float> ratings = new ArrayList<>();
+    long childnumber;
 
-
-    public PlacesAdapter(Context context, ArrayList<String> placesimages, ArrayList<String> name, ArrayList<String> geolocation) {
+    public PlacesAdapter(Context context, ArrayList<String> placesimages, ArrayList<String> name, ArrayList<String> geolocation, ArrayList<String> geolocation1) {
         this.name = name;
-
         this.placesimages = placesimages;
         this.context = context;
         this.geolocation = geolocation;
+        this.geolocation1 = geolocation1;
+    }
 
+    public String removeChar(String str, int position) {
+        StringBuilder sb = new StringBuilder(str);
+        sb.deleteCharAt(position);
+        return sb.toString();
     }
 
     @NonNull
@@ -56,8 +68,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
     public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.places, viewGroup, false);
-
-
         return new Holder(view);
     }
 
@@ -72,6 +82,46 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
     }
 
     private void getDistanceTime(String currentLatlong, final int i, final Holder holder) {
+        FirebaseDatabase.getInstance().getReference().child(geolocation.get(i)).child("Rating").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()) {
+                    childnumber=dataSnapshot.getChildrenCount();
+                    geolocation1.set(i, removeChar(geolocation1.get(i), 2));
+                    geolocation1.set(i, removeChar(geolocation1.get(i), 11));
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        FirebaseDatabase.getInstance().getReference().child(geolocation1.get(i)).child("Rating").child(ds.getKey()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                if (dataSnapshot.hasChildren()) {
+                                    SaveRating saveRating = dataSnapshot.getValue(SaveRating.class);
+                                    ratings.add(saveRating.getRating());
+                                    sum(ratings);
+                                    Log.e("number", String.valueOf(dataSnapshot.getChildrenCount()));
+                                    Log.e("ratings float", String.valueOf(sum(ratings) /childnumber));
+                                 //  holder.rbRating.setRating(sum(ratings) /childnumber);
+                                    holder.totalRating.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+                                    holder.rating.setText(String.valueOf(sum(ratings) /childnumber));
+                                    Log.e("sum is:", String.valueOf(sum(ratings)));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("error", databaseError.getMessage());
+            }
+        });
+
         geolocation.set(i, addChar(geolocation.get(i), '.', 2));
         geolocation.set(i, addChar(geolocation.get(i), '.', 12));
 
@@ -118,7 +168,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
     private void click(int i) {
 
         Intent intent = new Intent(context, TouristPlace_activity.class);
-        intent.putExtra("geocordinates", geolocation.get(i));
         context.startActivity(intent);
 
 
@@ -130,11 +179,22 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
         return sb.toString();
     }
 
+    public float sum(ArrayList<Float> ratings) {
+        float sum = 0;
+        for (int i = 0; i < ratings.size(); i++)
+            sum += ratings.get(i);
+        return sum;
+
+    }
+
+
     public class Holder extends RecyclerView.ViewHolder {
 
         ImageView ivImage;
         TextView tvName, tvDistance, tvTime;
         LinearLayout linearLayout;
+        TextView rating, totalRating;
+        RatingBar rbRating;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -143,7 +203,9 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
             tvDistance = itemView.findViewById(R.id.tvDistance);
             tvTime = itemView.findViewById(R.id.tvTime);
             linearLayout = itemView.findViewById(R.id.linearLayout);
-
+            rating = itemView.findViewById(R.id.ratings);
+            totalRating = itemView.findViewById(R.id.totalrating);
+            rbRating = itemView.findViewById(R.id.rbRating);
         }
     }
 }

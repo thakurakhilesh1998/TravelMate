@@ -81,7 +81,10 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         photos = new ArrayList<>();
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocordinates");
-        Log.e("geo", geolocation);
+
+        geolocation=addChar(geolocation, '.', 2);
+        geolocation=addChar(geolocation, '.', 12);
+
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
         //  findlatlong(geolocation);
@@ -132,6 +135,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         geolocation1 = geolocation;
         geolocation1 = geolocation1.substring(0, 2) + geolocation1.substring(3);
         geolocation1 = geolocation1.substring(0, 11) + geolocation1.substring(12);
+        Log.e("check", geolocation1);
         mRef.child(geolocation1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -148,13 +152,16 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void getFirebaseData(DataSnapshot dataSnapshot) {
-
-
-        tvPlaceName.setText(dataSnapshot.child("Placename").getValue().toString());
-        tvAbout.setText(dataSnapshot.child("About").getValue().toString());
-        photos.add(dataSnapshot.child("Photos").child("Photo1").getValue().toString());
-        photos.add(dataSnapshot.child("Photos").child("Photo2").getValue().toString());
-        photos.add(dataSnapshot.child("Photos").child("Photo3").getValue().toString());
+        try {
+            tvPlaceName.setText(dataSnapshot.child("Placename").getValue().toString());
+            tvAbout.setText(dataSnapshot.child("About").getValue().toString());
+            Log.e("photo1", dataSnapshot.child("Photos").child("Photo1").getValue().toString());
+            photos.add(dataSnapshot.child("Photos").child("Photo1").getValue().toString());
+            photos.add(dataSnapshot.child("Photos").child("Photo2").getValue().toString());
+            photos.add(dataSnapshot.child("Photos").child("Photo3").getValue().toString());
+        } catch (Exception e) {
+            Log.e("msg", e.getMessage());
+        }
         recyclerViewPhotos(photos);
 
     }
@@ -286,7 +293,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
     private void onViewRatings() {
 
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         rvratings.setLayoutManager(manager);
         FirebaseDatabase.getInstance().getReference().child(geolocation1).child("Rating").addValueEventListener(new ValueEventListener() {
             @Override
@@ -296,8 +303,8 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         reviews.add(ds.getKey());
                     }
-                    Log.e("reviews", reviews.get(0));
-                    ViewMyRatingAdapter viewMyRatingAdapter = new ViewMyRatingAdapter(getApplicationContext(), reviews, dataSnapshot, geolocation1);
+                    Log.e("reviews",geolocation1);
+                    ViewMyRatingAdapter viewMyRatingAdapter = new ViewMyRatingAdapter(getApplicationContext(),reviews,dataSnapshot,geolocation1);
                     rvratings.setAdapter(viewMyRatingAdapter);
                 }
 
@@ -358,7 +365,8 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void viewOnMap() {
-        startActivity(new Intent(this, map_2_activity.class).putExtra("geocoordinatesmap", geolocation));
+
+    startActivity(new Intent(this, map_2_activity.class).putExtra("geocoordinatesmap",geolocation));
     }
 
     public String decode(String email) {
@@ -366,5 +374,10 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         return decoded.replace('.', '!');
     }
 
+    public String addChar(String str, char ch, int position) {
+        StringBuilder sb = new StringBuilder(str);
+        sb.insert(position, ch);
+        return sb.toString();
+    }
 
 }

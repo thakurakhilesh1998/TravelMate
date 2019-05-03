@@ -23,7 +23,6 @@ import com.example.travelmate.Adapter.PlacesAdapter;
 import com.example.travelmate.FirebaseData.getDataFirebase;
 import com.example.travelmate.R;
 import com.example.travelmate.utility.GpsEnabled;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -252,7 +251,7 @@ public class Places extends Fragment {
 
     private void getPlaceName(ArrayList<String> placename1, ArrayList<String> name, ArrayList<String> geolocation1) {
 
-        PlacesAdapter placesAdapter = new PlacesAdapter(getContext(), placename1, name, geolocation1);
+        PlacesAdapter placesAdapter = new PlacesAdapter(getContext(), placename1, name, geolocation1, geolocation1);
         rvPlaces.setAdapter(placesAdapter);
         mprogressDialog.dismiss();
 

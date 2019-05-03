@@ -8,8 +8,8 @@ public class PrefLocation {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
-  public PrefLocation(Context context) {
-        sharedPreferences = context.getSharedPreferences("Shared Preference",Context.MODE_PRIVATE);
+    public PrefLocation(Context context) {
+        sharedPreferences = context.getSharedPreferences("Shared Preference", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
 
@@ -17,7 +17,7 @@ public class PrefLocation {
         editor.putString("lat", latitude);
         editor.putString("lang", langitude);
         editor.commit();
-  }
+    }
 
     public String getLatitude() {
         return sharedPreferences.getString("lat", "0");
