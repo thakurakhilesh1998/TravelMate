@@ -81,10 +81,11 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         photos = new ArrayList<>();
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocordinates");
-
-        geolocation=addChar(geolocation, '.', 2);
-        geolocation=addChar(geolocation, '.', 12);
-
+        Log.e("geolocation", geolocation);
+        if(geolocation.length()<19) {
+            geolocation = addChar(geolocation, '.', 2);
+            geolocation = addChar(geolocation, '.', 12);
+        }
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
         //  findlatlong(geolocation);
@@ -303,8 +304,8 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         reviews.add(ds.getKey());
                     }
-                    Log.e("reviews",geolocation1);
-                    ViewMyRatingAdapter viewMyRatingAdapter = new ViewMyRatingAdapter(getApplicationContext(),reviews,dataSnapshot,geolocation1);
+                    Log.e("reviews", geolocation1);
+                    ViewMyRatingAdapter viewMyRatingAdapter = new ViewMyRatingAdapter(getApplicationContext(), reviews, dataSnapshot, geolocation1);
                     rvratings.setAdapter(viewMyRatingAdapter);
                 }
 
@@ -366,7 +367,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
     private void viewOnMap() {
 
-    startActivity(new Intent(this, map_2_activity.class).putExtra("geocoordinatesmap",geolocation));
+        startActivity(new Intent(this, map_2_activity.class).putExtra("geocoordinatesmap", geolocation));
     }
 
     public String decode(String email) {

@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -46,8 +47,8 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
     String currentLatlong;
     String units = "metric";
     PrefLocation prefLocation;
-    ArrayList<Float> ratings = new ArrayList<>();
-    long childnumber;
+
+
 
     public PlacesAdapter(Context context, ArrayList<String> placesimages, ArrayList<String> name, ArrayList<String> geolocation, ArrayList<String> geolocation1) {
         this.name = name;
@@ -82,15 +83,19 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
     }
 
     private void getDistanceTime(String currentLatlong, final int i, final Holder holder) {
+       final ArrayList<Float> ratings = new ArrayList<>();
+        final long[] childnumber = new long[1];
         FirebaseDatabase.getInstance().getReference().child(geolocation.get(i)).child("Rating").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
-                    childnumber=dataSnapshot.getChildrenCount();
-                    geolocation1.set(i, removeChar(geolocation1.get(i), 2));
-                    geolocation1.set(i, removeChar(geolocation1.get(i), 11));
+                    childnumber[0] = dataSnapshot.getChildrenCount();
+                    ArrayList<String> geo1 = new ArrayList<>();
+                    geo1 = geolocation1;
+                    geo1.set(i, removeChar(geolocation1.get(i), 2));
+                    geo1.set(i, removeChar(geolocation1.get(i), 11));
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        FirebaseDatabase.getInstance().getReference().child(geolocation1.get(i)).child("Rating").child(ds.getKey()).addValueEventListener(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child(geo1.get(i)).child("Rating").child(ds.getKey()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -98,12 +103,10 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
                                     SaveRating saveRating = dataSnapshot.getValue(SaveRating.class);
                                     ratings.add(saveRating.getRating());
                                     sum(ratings);
-                                    Log.e("number", String.valueOf(dataSnapshot.getChildrenCount()));
-                                    Log.e("ratings float", String.valueOf(sum(ratings) /childnumber));
-                                 //  holder.rbRating.setRating(sum(ratings) /childnumber);
-                                    holder.totalRating.setText(String.valueOf(dataSnapshot.getChildrenCount()));
-                                    holder.rating.setText(String.valueOf(sum(ratings) /childnumber));
-                                    Log.e("sum is:", String.valueOf(sum(ratings)));
+                                    Log.e("ratings float", String.valueOf(roundOneDecimals(sum(ratings) / childnumber[0])));
+                                    holder.totalRating.setText(String.valueOf(childnumber[0]));
+                                    holder.rating.setText(String.valueOf(roundOneDecimals(sum(ratings) / childnumber[0])));
+                                    holder.rbRating.setRating(roundOneDecimals(sum(ratings) / childnumber[0]));
                                 }
                             }
 
@@ -113,7 +116,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
                         });
                     }
                 }
-
             }
 
             @Override
@@ -121,15 +123,12 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
                 Log.e("error", databaseError.getMessage());
             }
         });
-
         geolocation.set(i, addChar(geolocation.get(i), '.', 2));
         geolocation.set(i, addChar(geolocation.get(i), '.', 12));
-
         Call<Distance> getDistance = DistanceApiHitter.DistanceApiHitter().getDistance(units, currentLatlong, geolocation.get(i), constants.KEY);
         getDistance.enqueue(new Callback<Distance>() {
             @Override
             public void onResponse(Call<Distance> call, Response<Distance> response) {
-
                 if (true) {
                     try {
                         holder.tvName.setText(name.get(i));
@@ -156,7 +155,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
                 Log.e("error", t.getMessage());
             }
         });
-
     }
 
     @Override
@@ -164,13 +162,10 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
         return name.size();
     }
 
-
     private void click(int i) {
 
-        Intent intent = new Intent(context, TouristPlace_activity.class);
+        Intent intent = new Intent(context, TouristPlace_activity.class).putExtra("geocordinates", geolocation1.get(i));
         context.startActivity(intent);
-
-
     }
 
     public String addChar(String str, char ch, int position) {
@@ -185,6 +180,12 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
             sum += ratings.get(i);
         return sum;
 
+    }
+
+    float roundOneDecimals(float d) {
+        DecimalFormat twoDForm = new DecimalFormat("#.#");
+
+        return Float.valueOf(twoDForm.format(d));
     }
 
 
@@ -205,7 +206,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
             linearLayout = itemView.findViewById(R.id.linearLayout);
             rating = itemView.findViewById(R.id.ratings);
             totalRating = itemView.findViewById(R.id.totalrating);
-            rbRating = itemView.findViewById(R.id.rbRating);
+            rbRating = itemView.findViewById(R.id.rbRatings);
         }
     }
 }
