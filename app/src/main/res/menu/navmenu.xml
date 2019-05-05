@@ -18,11 +18,7 @@
             android:icon="@drawable/settingn"
             android:iconTint="@color/background"
             android:title="Setting" />
-        <item
-            android:id="@+id/share"
-            android:icon="@drawable/share"
-            android:iconTint="@color/background"
-            android:title="Share" />
+
         <item
             android:id="@+id/logout"
             android:icon="@drawable/logout"

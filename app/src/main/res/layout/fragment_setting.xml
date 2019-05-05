@@ -2,21 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingHorizontal="12dp"
     tools:context=".HomeFragment.Setting">
 
-    <Button
-        android:id="@+id/btnchangepass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Change Password" />
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="40dp"
+       android:text="Setting"
+       android:textAlignment="center"
+       android:textColor="@color/black"
+       android:textSize="40dp"
+       android:textStyle="bold"/>
 
-    <Button
-        android:id="@+id/btndelete"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Delete Account" />
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnchangepass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:text="Change Password"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btndelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/deletebutton"
+            android:text="Delete Account"
+            android:textColor="@color/white" />
+    </LinearLayout>
 </LinearLayout>

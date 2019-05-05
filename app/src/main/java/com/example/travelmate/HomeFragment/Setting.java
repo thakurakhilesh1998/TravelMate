@@ -32,9 +32,7 @@ public class Setting extends Fragment implements View.OnClickListener {
     String uid;
 
     public Setting() {
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,14 +64,38 @@ public class Setting extends Fragment implements View.OnClickListener {
     }
 
     private void onDelete() {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.alertdel);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        Button yes = dialog.findViewById(R.id.btnYes);
+        Button no = dialog.findViewById(R.id.btnNo);
 
-        FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+        yes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    util.toast(getContext(), "User Deleted Successfully");
-                    deleteUser();
-                }
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            util.toast(getContext(), "User Deleted Successfully");
+                            deleteUser();
+                        }
+                        else {
+
+                            Log.e("error","error");
+                        }
+                    }
+                });
+
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -98,9 +120,7 @@ public class Setting extends Fragment implements View.OnClickListener {
     }
 
     private void onChangePass() {
-
         dialog = new Dialog(getContext());
-
         dialog.setContentView(R.layout.resetpass);
         final EditText etEmail = dialog.findViewById(R.id.etEmail);
         etEmail.setEnabled(false);
