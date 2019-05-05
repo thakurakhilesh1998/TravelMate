@@ -18,6 +18,7 @@ public class NearByPlacesActivity extends AppCompatActivity {
     ArrayList<String> name;
     String geolocation;
     Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +37,6 @@ public class NearByPlacesActivity extends AppCompatActivity {
         });
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocoordinates");
-
-
         NearByAdapter myadapter = new NearByAdapter(getSupportFragmentManager(), this, tabLayout.getTabCount(), name, geolocation);
         viewPager.setAdapter(myadapter);
         viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -47,25 +46,17 @@ public class NearByPlacesActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
             }
-
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
             }
         });
-
-
     }
-
-
     private void findIds() {
-
-        toolbar=findViewById(R.id.titletoolbar1);
+        toolbar = findViewById(R.id.titletoolbar1);
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewpager);
 

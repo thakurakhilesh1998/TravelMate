@@ -142,30 +142,41 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
-                <Button
-                    android:id="@+id/btnaddrating"
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/button"
-                    android:text="Add Rating"
-                    android:textSize="24dp" />
+                    android:layout_marginTop="16dp"
+                    app:cardElevation="4dp">
+
+                    <Button
+                        android:id="@+id/btnaddrating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/greencolour"
+                        android:paddingHorizontal="8dp"
+                        android:text="@string/rate_this_place"
+                        android:textAlignment="textStart"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="24dp" />
+                </android.support.v7.widget.CardView>
 
                 <Button
                     android:id="@+id/btnviewrating"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/button"
-                    android:text="View Ratings"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/background"
+                    android:text="@string/view_ratings"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
                     android:textSize="24dp" />
 
                 <android.support.v7.widget.RecyclerView
-                    android:visibility="gone"
                     android:id="@+id/rvViewRatings"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"></android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

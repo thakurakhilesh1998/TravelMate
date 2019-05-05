@@ -13,5 +13,9 @@
     <string name="serverid">15256756336-al3ol53pi194ui41kbiepo3jsc7vg6jb.apps.googleusercontent.com</string>
     <string name="namepattern">Pattern of name is not correct</string>
     <string name="alphabetnumber">abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="selectrating">please select a rating</string>
+    <string name="rate_this_place">Love this place ! Rate Place</string>
+    <string name="view_ratings">View Place Reviews and Ratings</string>
+    <string name="hide_rating">Hide Review</string>
 
 </resources>

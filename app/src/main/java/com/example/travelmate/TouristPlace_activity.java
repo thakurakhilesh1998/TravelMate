@@ -296,9 +296,9 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void onViewRatings() {
-        if (btnviewrating.getText().equals("View Ratings")) {
+        if (btnviewrating.getText().equals(getResources().getString(R.string.view_ratings))) {
             rvratings.setVisibility(View.VISIBLE);
-            btnviewrating.setText("Hide Rating");
+            btnviewrating.setText(getResources().getString(R.string.hide_rating));
             RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
             rvratings.setLayoutManager(manager);
             FirebaseDatabase.getInstance().getReference().child(geolocation1).child("Rating").addValueEventListener(new ValueEventListener() {
@@ -318,9 +318,9 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
                     Log.e("error", databaseError.getMessage());
                 }
             });
-        } else if (btnviewrating.getText().equals("Hide Rating")) {
+        } else if (btnviewrating.getText().equals(getResources().getString(R.string.hide_rating))) {
             rvratings.setVisibility(View.GONE);
-            btnviewrating.setText("View Ratings");
+            btnviewrating.setText(getResources().getString(R.string.view_ratings));
             reviews.clear();
         }
 
@@ -328,7 +328,6 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void onRatingClicked() {
-
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.ratingbar);
         dialog.setCancelable(true);
@@ -338,18 +337,24 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void savinguserratings(final Dialog dialog) {
-
         final LinearLayout linearsave = dialog.findViewById(R.id.linearsave);
+        Button btnok = dialog.findViewById(R.id.btnok);
         linearsave.setVisibility(View.VISIBLE);
         final LinearLayout linearlayoutrating = dialog.findViewById(R.id.linearlayoutrating);
         final Button btnrating = dialog.findViewById(R.id.btnrate);
         final EditText review = dialog.findViewById(R.id.review);
         final RatingBar rbRating = dialog.findViewById(R.id.rbRating);
         final EditText reviewtitle = dialog.findViewById(R.id.reviewtite);
+        btnok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         btnrating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onRatingSubmit(btnrating, review, rbRating, dialog, reviewtitle, linearlayoutrating,linearsave);
+                onRatingSubmit(btnrating, review, rbRating, dialog, reviewtitle, linearlayoutrating, linearsave);
             }
         });
     }
@@ -357,7 +362,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     private void onRatingSubmit(Button btnrating, final EditText review, final RatingBar rbRating, final Dialog dialog, final EditText reviewtitle, final LinearLayout linearlayoutrating, final LinearLayout linearsave) {
 
         if (rbRating.getRating() == 0) {
-            util.toast(getApplicationContext(), "please select a rating");
+            util.toast(getApplicationContext(), getResources().getString(R.string.selectrating));
         } else {
             FirebaseDatabase.getInstance().getReference().child("User Profile").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -371,7 +376,6 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
         }
@@ -396,5 +400,4 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         sb.insert(position, ch);
         return sb.toString();
     }
-
 }
