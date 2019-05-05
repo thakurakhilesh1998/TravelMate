@@ -7,9 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.travelmate.R;
 import com.example.travelmate.utility.SaveRating;
 import com.google.firebase.database.DataSnapshot;
@@ -50,13 +52,16 @@ public class ViewMyRatingAdapter extends RecyclerView.Adapter<ViewMyRatingAdapte
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
                     SaveRating rating = dataSnapshot.getValue(SaveRating.class);
-                    holder.tvRatingName.setText(rating.getDisplayName());
+                    holder.tvRatingName.setText(rating.getReviewtitle());
                     holder.tvUserReview.setText(rating.getReview());
                     holder.rbUserRating.setRating(rating.getRating());
+                    int i = rating.getDisplayName().indexOf(' ');
+                    String word = rating.getDisplayName().substring(0,i);
+                    holder.name.setText(word);
+                    Glide.with(context).load(rating.getPhotoUrl()).into(holder.profile);
+                    holder.rating.setText(String.valueOf(rating.getRating()));
                 }
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -70,14 +75,18 @@ public class ViewMyRatingAdapter extends RecyclerView.Adapter<ViewMyRatingAdapte
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-        TextView tvRatingName, tvUserReview;
+        TextView tvRatingName, tvUserReview,name,rating;
+        ImageView profile;
         RatingBar rbUserRating;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
+            name=itemView.findViewById(R.id.name);
+            profile=itemView.findViewById(R.id.profile);
             tvRatingName = itemView.findViewById(R.id.tvRatingName);
             tvUserReview = itemView.findViewById(R.id.tvUserReview);
             rbUserRating = itemView.findViewById(R.id.rbUserRating);
+            rating=itemView.findViewById(R.id.rating);
         }
     }
 }

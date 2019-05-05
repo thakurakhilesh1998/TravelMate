@@ -41,8 +41,8 @@ public class weatheractivity extends AppCompatActivity {
         setContentView(R.layout.activity_weatheractivity);
         findids();
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
         Snackbar.make(findViewById(android.R.id.content),"message",Snackbar.LENGTH_SHORT).show();
         setBackButton();
         Intent intent = getIntent();
@@ -90,7 +90,7 @@ public class weatheractivity extends AppCompatActivity {
         tvTempMinMax = findViewById(R.id.tvTempMinMax);
         ivIcon = findViewById(R.id.ivIcon);
         recyclerView = findViewById(R.id.rvweatherforecast);
-        toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.weathertoolbar);
     }
 
 

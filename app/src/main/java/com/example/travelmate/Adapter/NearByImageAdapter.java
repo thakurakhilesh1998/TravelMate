@@ -40,7 +40,7 @@ public class NearByImageAdapter extends RecyclerView.Adapter<NearByImageAdapter.
     @Override
     public void onBindViewHolder(@NonNull Holder holder, final int i) {
         holder.image.setImageResource(images.get(i));
-        holder.tvName.setText(name.get(i));
+    //    holder.tvName.setText(name.get(i));
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

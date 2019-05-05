@@ -16,4 +16,6 @@
     <color name="yellow">#f9d812</color>
     <color name="tripclor">#fd5f00</color>
     <color name="red">#FF0000</color>
+    <color name="ratingcolor">#f8d568</color>
+    <color name="green">#82C915</color>
 </resources>

@@ -210,6 +210,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         myRef.child(uid).child("interests").setValue(saveData1);
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(Name)
+                .setPhotoUri(Uri.parse(imageurl))
                 .build();
         FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

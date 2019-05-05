@@ -24,8 +24,8 @@ public class NearByPlacesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_near_by_places);
         findIds();
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

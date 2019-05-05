@@ -49,7 +49,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
     PrefLocation prefLocation;
 
 
-
     public PlacesAdapter(Context context, ArrayList<String> placesimages, ArrayList<String> name, ArrayList<String> geolocation, ArrayList<String> geolocation1) {
         this.name = name;
         this.placesimages = placesimages;
@@ -83,7 +82,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
     }
 
     private void getDistanceTime(String currentLatlong, final int i, final Holder holder) {
-       final ArrayList<Float> ratings = new ArrayList<>();
+        final ArrayList<Float> ratings = new ArrayList<>();
         final long[] childnumber = new long[1];
         FirebaseDatabase.getInstance().getReference().child(geolocation.get(i)).child("Rating").addValueEventListener(new ValueEventListener() {
             @Override
@@ -103,8 +102,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
                                     SaveRating saveRating = dataSnapshot.getValue(SaveRating.class);
                                     ratings.add(saveRating.getRating());
                                     sum(ratings);
-                                    Log.e("ratings float", String.valueOf(roundOneDecimals(sum(ratings) / childnumber[0])));
-                                    holder.totalRating.setText(String.valueOf(childnumber[0]));
+                                    holder.totalRating.setText(String.valueOf("(" + childnumber[0] + ")"));
                                     holder.rating.setText(String.valueOf(roundOneDecimals(sum(ratings) / childnumber[0])));
                                     holder.rbRating.setRating(roundOneDecimals(sum(ratings) / childnumber[0]));
                                 }
@@ -112,6 +110,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Log.e("error", databaseError.getMessage());
                             }
                         });
                     }

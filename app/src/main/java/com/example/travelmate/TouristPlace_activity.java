@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.travelmate.APIS.LocationKeyApi;
@@ -63,6 +64,8 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     ArrayList<Integer> images;
     ArrayList<String> name;
     Button btnaddrating, btnviewrating;
+    ScrollView scrollview;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +73,8 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_tourist_place_activity);
         findIds();
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
         reviews = new ArrayList<>();
         images = new ArrayList<>();
         name = new ArrayList<>();
@@ -82,7 +85,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocordinates");
         Log.e("geolocation", geolocation);
-        if(geolocation.length()<19) {
+        if (geolocation.length() < 19) {
             geolocation = addChar(geolocation, '.', 2);
             geolocation = addChar(geolocation, '.', 12);
         }
@@ -259,7 +262,7 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         btnaddrating = findViewById(R.id.btnaddrating);
         btnviewrating = findViewById(R.id.btnviewrating);
         rvratings = findViewById(R.id.rvViewRatings);
-
+        scrollview = findViewById(R.id.scrollview);
     }
 
 
@@ -293,29 +296,33 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
     }
 
     private void onViewRatings() {
-
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        rvratings.setLayoutManager(manager);
-        FirebaseDatabase.getInstance().getReference().child(geolocation1).child("Rating").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.hasChildren()) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        reviews.add(ds.getKey());
+        if (btnviewrating.getText().equals("View Ratings")) {
+            rvratings.setVisibility(View.VISIBLE);
+            btnviewrating.setText("Hide Rating");
+            RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+            rvratings.setLayoutManager(manager);
+            FirebaseDatabase.getInstance().getReference().child(geolocation1).child("Rating").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChildren()) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            reviews.add(ds.getKey());
+                        }
+                        ViewMyRatingAdapter viewMyRatingAdapter = new ViewMyRatingAdapter(getApplicationContext(), reviews, dataSnapshot, geolocation1);
+                        rvratings.setAdapter(viewMyRatingAdapter);
                     }
-                    Log.e("reviews", geolocation1);
-                    ViewMyRatingAdapter viewMyRatingAdapter = new ViewMyRatingAdapter(getApplicationContext(), reviews, dataSnapshot, geolocation1);
-                    rvratings.setAdapter(viewMyRatingAdapter);
                 }
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("error", databaseError.getMessage());
+                }
+            });
+        } else if (btnviewrating.getText().equals("Hide Rating")) {
+            rvratings.setVisibility(View.GONE);
+            btnviewrating.setText("View Ratings");
+            reviews.clear();
+        }
 
 
     }
@@ -332,34 +339,43 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
 
     private void savinguserratings(final Dialog dialog) {
 
+        final LinearLayout linearsave = dialog.findViewById(R.id.linearsave);
+        linearsave.setVisibility(View.VISIBLE);
+        final LinearLayout linearlayoutrating = dialog.findViewById(R.id.linearlayoutrating);
         final Button btnrating = dialog.findViewById(R.id.btnrate);
         final EditText review = dialog.findViewById(R.id.review);
         final RatingBar rbRating = dialog.findViewById(R.id.rbRating);
+        final EditText reviewtitle = dialog.findViewById(R.id.reviewtite);
         btnrating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onRatingSubmit(btnrating, review, rbRating, dialog);
+                onRatingSubmit(btnrating, review, rbRating, dialog, reviewtitle, linearlayoutrating,linearsave);
             }
         });
-
-
     }
 
-    private void onRatingSubmit(Button btnrating, EditText review, RatingBar rbRating, Dialog dialog) {
+    private void onRatingSubmit(Button btnrating, final EditText review, final RatingBar rbRating, final Dialog dialog, final EditText reviewtitle, final LinearLayout linearlayoutrating, final LinearLayout linearsave) {
 
         if (rbRating.getRating() == 0) {
             util.toast(getApplicationContext(), "please select a rating");
         } else {
-            SaveRating saveRating = new SaveRating(rbRating.getRating(), review.getText().toString().trim(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-            Log.e("name", FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-            Log.e("email", decode(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
-            FirebaseDatabase.getInstance().getReference().child(geolocation1).child("Rating").child(decode(FirebaseAuth.getInstance().getCurrentUser().getEmail())).setValue(saveRating);
-            dialog.dismiss();
+            FirebaseDatabase.getInstance().getReference().child("User Profile").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    SaveRating saveRating = new SaveRating(rbRating.getRating(), review.getText().toString().trim(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), dataSnapshot.child("Profile").getValue().toString(), reviewtitle.getText().toString().trim());
+                    FirebaseDatabase.getInstance().getReference().child(geolocation1).child("Rating").child(decode(FirebaseAuth.getInstance().getCurrentUser().getEmail())).setValue(saveRating);
+                    linearsave.setVisibility(View.GONE);
+                    linearlayoutrating.setVisibility(View.VISIBLE);
+//                    dialog.dismiss();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
-
-
     }
-
 
     private void onWeatherClick() {
         startActivity(new Intent(this, weatheractivity.class).putExtra("geocoordinates1", geolocation));

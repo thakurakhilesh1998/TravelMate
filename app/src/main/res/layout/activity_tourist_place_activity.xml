@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:background="@color/background"
         app:title="q"
-        app:titleMarginStart="120dp"
         app:titleTextColor="@color/background">
 
         <TextView
@@ -31,6 +30,7 @@
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -161,6 +161,7 @@
                     android:textSize="24dp" />
 
                 <android.support.v7.widget.RecyclerView
+                    android:visibility="gone"
                     android:id="@+id/rvViewRatings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

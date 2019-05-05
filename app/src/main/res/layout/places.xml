@@ -98,20 +98,27 @@
                 android:id="@+id/ratings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4.5"
+                android:text="0"
+
                 android:textColor="@color/black"/>
             <RatingBar
                 android:id="@+id/rbRatings"
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:progressTint="@color/ratingcolor"
                 android:layout_gravity="center"
                 android:numStars="5"/>
             <TextView
                 android:id="@+id/totalrating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(23)"
+                android:layout_marginStart="4dp"
+                android:text="(0)"
                 android:textColor="@color/black"/>
         </LinearLayout>
     </LinearLayout>

@@ -42,8 +42,8 @@ public class activity_weather1 extends AppCompatActivity {
         setContentView(R.layout.activity_weather1);
         findids();
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
         onBackButton();
         try {
             getLocationKey(prefLocation.getLatitude(),prefLocation.getLangitude());
