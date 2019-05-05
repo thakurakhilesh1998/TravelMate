@@ -1,12 +1,16 @@
 package com.example.travelmate;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.example.travelmate.APIS.DirectionApiHitter;
 import com.example.travelmate.APIS.PlaceIDApi;
@@ -47,20 +51,37 @@ import retrofit2.Response;
 public class BookCab extends AppCompatActivity {
     Double lat1, lang1, lat2, lang2;
     String content_type = "%20application/json";
+    LinearLayout select;
     RecyclerView rvCabDeatils;
     GoogleMap mMap;
+    Toolbar toolbarcab;
     List<com.example.travelmate.Direction.Route> Route;
     ArrayList<LatLng> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        list = new ArrayList<>();
-
         setContentView(R.layout.activity_book_cab);
+        select = findViewById(R.id.select);
+        list = new ArrayList<>();
+        toolbarcab = findViewById(R.id.toolbarcab);
+        setSupportActionBar(toolbarcab);
+        select.setVisibility(View.VISIBLE);
+        onBackButton();
         Places.initialize(getApplicationContext(), constants.KEY);
         autocomplete1();
         autocomplete12();
+    }
+
+    private void onBackButton() {
+        toolbarcab.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+        toolbarcab.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
+            }
+        });
     }
 
     private void getCabData() {
@@ -81,7 +102,9 @@ public class BookCab extends AppCompatActivity {
     }
 
     private void getData1(Response<UberCab> response) {
+        select.setVisibility(View.GONE);
         rvCabDeatils = findViewById(R.id.rvCabDetails1);
+        rvCabDeatils.setVisibility(View.VISIBLE);
         LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         rvCabDeatils.setLayoutManager(manager);
         CabDetailsAdapter cabDetailsAdapter = new CabDetailsAdapter(this, response);
@@ -177,7 +200,6 @@ public class BookCab extends AppCompatActivity {
 
 
     void getLatitudeandlongitude(Place place) {
-
         Call<PlaceID> getLocation = PlaceIDApi.PlaceIDApi().getLatlang(place.getId(), constants.KEY);
         getLocation.enqueue(new Callback<PlaceID>() {
             @Override

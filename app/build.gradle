@@ -88,4 +88,8 @@ dependencies {
     //google sign in button
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
+    //uber cab
+
+    implementation 'com.uber.sdk:rides-android:0.5.3'
+
 }

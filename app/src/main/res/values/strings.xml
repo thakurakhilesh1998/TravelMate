@@ -17,5 +17,6 @@
     <string name="rate_this_place">Love this place ! Rate Place</string>
     <string name="view_ratings">View Place Reviews and Ratings</string>
     <string name="hide_rating">Hide Review</string>
+    <string name="available_cabs">Available Cabs</string>
 
 </resources>

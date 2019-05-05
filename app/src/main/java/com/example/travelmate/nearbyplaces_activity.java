@@ -86,14 +86,19 @@ public class nearbyplaces_activity extends AppCompatActivity {
         reference.child("User Profile").child(uid).child("interests").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-                Iterator myVeryOwnIterator = td.keySet().iterator();
-                while (myVeryOwnIterator.hasNext()) {
-                    String key = (String) myVeryOwnIterator.next();
-                    list.add((String) td.get(key));
+                try {
+                    Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
+                    Iterator myVeryOwnIterator = td.keySet().iterator();
+                    while (myVeryOwnIterator.hasNext()) {
+                        String key = (String) myVeryOwnIterator.next();
+                        list.add((String) td.get(key));
+                    }
+                    fetchPlaces(list);
+                } catch (Exception e) {
+                    Log.e("msg", e.getMessage());
                 }
-                fetchPlaces(list);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -182,8 +187,9 @@ public class nearbyplaces_activity extends AppCompatActivity {
             });
         }
     }
+
     private void getPlaceName(ArrayList<String> placename1, ArrayList<String> name, ArrayList<String> geolocation1) {
-        PlacesAdapter placesAdapter = new PlacesAdapter(getApplicationContext(), placename1, name, geolocation1,geolocation1);
+        PlacesAdapter placesAdapter = new PlacesAdapter(getApplicationContext(), placename1, name, geolocation1, geolocation1);
         rvPlaces.setAdapter(placesAdapter);
         mprogressDialog.dismiss();
     }

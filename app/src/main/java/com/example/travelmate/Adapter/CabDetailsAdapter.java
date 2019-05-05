@@ -31,7 +31,7 @@ public class CabDetailsAdapter extends RecyclerView.Adapter<CabDetailsAdapter.Ho
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.cabdata, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.cabdata, viewGroup,false);
         return new Holder(view);
     }
 

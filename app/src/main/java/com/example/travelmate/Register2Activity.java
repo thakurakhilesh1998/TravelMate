@@ -197,6 +197,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                 saveDataInFirebase(Email, uid, imageurl);
             }
         });
+        util.toast(getApplicationContext(),"Image uploaded");
         progressDialog1.dismiss();
 
 
@@ -216,11 +217,12 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     Log.e("msg", "user profile updated successfully");
                 }
             }
         });
-        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+
     }
 
     private void findInterests() {
@@ -331,8 +333,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     Intent intent = getIntent();
-                    AuthCredential authCredential = EmailAuthProvider.
-                            getCredential(intent.getStringExtra("email"), intent.getStringExtra("password"));
+                    AuthCredential authCredential = EmailAuthProvider.getCredential(intent.getStringExtra("email"), intent.getStringExtra("password"));
                     FirebaseAuth.getInstance().getCurrentUser().reauthenticate(authCredential).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -344,8 +345,14 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                     });
                 } catch (Exception e) {
                     Log.e("msg", e.getMessage());
-                    FirebaseAuth.getInstance().getCurrentUser().delete();
-                    finish();
+                    try {
+                        FirebaseAuth.getInstance().getCurrentUser().delete();
+                        finish();
+                    } catch (Exception e1) {
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    }
+
+
                 }
             }
         });

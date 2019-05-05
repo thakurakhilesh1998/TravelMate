@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.travelmate.HomeFragment.HomePageFragment;
+import com.example.travelmate.HomeFragment.Setting;
 import com.example.travelmate.utility.GpsEnabled;
 import com.example.travelmate.utility.PrefLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -280,12 +281,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(getApplicationContext(), viewmytripactivity.class));
                 break;
             case R.id.settings:
+                onSettingClicked();
                 break;
             case R.id.logout:
                 mAuth.signOut();
                 finish();
         }
         return false;
+    }
+
+    private void onSettingClicked() {
+        Setting setting = new Setting();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frame, setting);
+        ft.addToBackStack("fm1");
+        drawerLayout.closeDrawer(Gravity.START);
+        ft.commitAllowingStateLoss();
+
     }
 
 
