@@ -19,5 +19,7 @@
     <string name="hide_rating">Hide Review</string>
     <string name="available_cabs">Available Cabs</string>
     <string name="deleteaccount">Alert ! By performing this action your account is permanently deleted and do not be restore again.Do you really want to delete your account?.</string>
+    <string name="client_id">HGoX_WnTounjX2waJVsFZqG5eY2PEoHH</string>
+    <string name="server_token">MtfVUKXStNDY29eXd8_G72YupVSnnxZsE9LtlQOU</string>
 
 </resources>

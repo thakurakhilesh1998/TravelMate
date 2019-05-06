@@ -13,7 +13,10 @@
         android:roundIcon="@mipmap/logoimage"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".viewmytripactivity"></activity>
+        <activity android:name=".Book_Cab2">
+
+        </activity>
+        <activity android:name=".viewmytripactivity" />
         <activity android:name=".activity_weather1" />
         <activity android:name=".nearbyplaces_activity" /> <!-- <meta-data -->
         <!-- android:name="com.google.android.actions" -->
@@ -64,12 +67,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <service android:name=".PushNotification">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
     </application>
-
 </manifest>

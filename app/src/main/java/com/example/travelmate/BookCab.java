@@ -72,7 +72,6 @@ public class BookCab extends AppCompatActivity {
         autocomplete1();
         autocomplete12();
     }
-
     private void onBackButton() {
         toolbarcab.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         toolbarcab.setNavigationOnClickListener(new View.OnClickListener() {

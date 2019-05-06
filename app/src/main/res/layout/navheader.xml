@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:text="Akhilesh Thakur"
+        android:text="User Name"
         android:textColor="@color/white"
         android:textSize="20dp"
         android:textStyle="bold" />
@@ -29,7 +29,7 @@
         android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="thakurakhilesh20@gmail.com"
+        android:text="user@example.com"
         android:textColor="@color/white"
         android:textSize="16dp" />
 </LinearLayout>
