@@ -16,6 +16,7 @@
         <activity android:name=".Book_Cab2">
 
         </activity>
+        <activity android:name="com.neno0o.ubersdk.Activites.Authentication" />
         <activity android:name=".viewmytripactivity" />
         <activity android:name=".activity_weather1" />
         <activity android:name=".nearbyplaces_activity" /> <!-- <meta-data -->
@@ -63,10 +64,10 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name=".PushNotification">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

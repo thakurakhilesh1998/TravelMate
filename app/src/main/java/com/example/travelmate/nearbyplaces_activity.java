@@ -17,6 +17,7 @@ import android.view.View;
 import com.example.travelmate.Adapter.PlacesAdapter;
 import com.example.travelmate.FirebaseData.getDataFirebase;
 import com.example.travelmate.utility.PrefLocation;
+import com.example.travelmate.utility.util;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
@@ -71,6 +72,7 @@ public class nearbyplaces_activity extends AppCompatActivity {
         list = new ArrayList<>();
         list1 = new ArrayList<>();
         temp = new ArrayList<>();
+        Log.e("temp size", String.valueOf(temp.size()));
         filtered = new ArrayList<>();
         placename = new ArrayList<>();
         name = new ArrayList<String>();
@@ -95,7 +97,9 @@ public class nearbyplaces_activity extends AppCompatActivity {
                     }
                     fetchPlaces(list);
                 } catch (Exception e) {
-                    Log.e("msg", e.getMessage());
+                    mprogressDialog.dismiss();
+                    util.toast(getApplicationContext(), "error1");
+                    Log.e("msg1", e.getMessage());
                 }
             }
 
@@ -112,6 +116,8 @@ public class nearbyplaces_activity extends AppCompatActivity {
         try {
             call1(interest1.get(0), interest1);
         } catch (Exception e) {
+            mprogressDialog.dismiss();
+            util.toast(getApplicationContext(), "error2");
             Log.e("msg", e.getMessage());
         }
 
@@ -124,7 +130,6 @@ public class nearbyplaces_activity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-
                 Iterator myVeryOwnIterator = td.keySet().iterator();
                 while (myVeryOwnIterator.hasNext()) {
                     String key = (String) myVeryOwnIterator.next();
@@ -146,15 +151,20 @@ public class nearbyplaces_activity extends AppCompatActivity {
     }
 
     private void getData(ArrayList<String> temp) {
-        try {
-            findCurrentLocation(temp);
-        } catch (Exception e) {
-            Log.e("msg", e.getMessage());
+
+
+        for (int i = 0; i < temp.size(); i++) {
+            Log.e("data", temp.get(i));
         }
+
+        findCurrentLocation(temp);
+        mprogressDialog.dismiss();
+        util.toast(getApplicationContext(), "error3");
 
     }
 
     private void findCurrentLocation(final ArrayList<String> temp) {
+
         filtered = getDataFirebase.isInside(Double.parseDouble(prefLocation.getLatitude()), Double.parseDouble(prefLocation.getLangitude()), temp);
         getFromFirebase(filtered);
     }
@@ -189,6 +199,8 @@ public class nearbyplaces_activity extends AppCompatActivity {
     }
 
     private void getPlaceName(ArrayList<String> placename1, ArrayList<String> name, ArrayList<String> geolocation1) {
+
+
         PlacesAdapter placesAdapter = new PlacesAdapter(getApplicationContext(), placename1, name, geolocation1, geolocation1);
         rvPlaces.setAdapter(placesAdapter);
         mprogressDialog.dismiss();
@@ -234,7 +246,6 @@ public class nearbyplaces_activity extends AppCompatActivity {
                 while (myVeryOwnIterator.hasNext()) {
                     String key = (String) myVeryOwnIterator.next();
                     temp.add((String) td.get(key));
-
                 }
                 if (3 < interest1.size()) {
 

@@ -250,7 +250,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private void onLogOut() {
 
-
         mAuth.signOut();
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
@@ -331,9 +330,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (drawerLayout.isDrawerOpen(Gravity.START)) {
             drawerLayout.closeDrawer(Gravity.START);
         } else {
-
-
-            finish();
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
         }
     }
 

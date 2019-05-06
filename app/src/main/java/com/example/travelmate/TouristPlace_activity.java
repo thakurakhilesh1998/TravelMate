@@ -400,4 +400,9 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         sb.insert(position, ch);
         return sb.toString();
     }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+    }
 }

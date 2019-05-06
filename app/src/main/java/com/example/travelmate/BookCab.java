@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,14 +15,12 @@ import android.widget.LinearLayout;
 
 import com.example.travelmate.APIS.DirectionApiHitter;
 import com.example.travelmate.APIS.PlaceIDApi;
-import com.example.travelmate.APIS.UberCabApi;
 import com.example.travelmate.Adapter.CabDetailsAdapter;
 import com.example.travelmate.Direction.Direction;
 import com.example.travelmate.Direction.Leg;
 import com.example.travelmate.Direction.Route;
 import com.example.travelmate.Direction.Step;
 import com.example.travelmate.PlaceID.PlaceID;
-import com.example.travelmate.UberCab.UberCab;
 import com.example.travelmate.utility.Decodepoly;
 import com.example.travelmate.utility.constants;
 import com.google.android.gms.common.api.Status;
@@ -38,11 +37,15 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.neno0o.ubersdk.Endpoints.Models.Prices.Prices;
+import com.neno0o.ubersdk.Endpoints.Models.Products.Products;
+import com.neno0o.ubersdk.Uber;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import retrofit.RetrofitError;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,6 +65,7 @@ public class BookCab extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_cab);
+        initializeUberCab();
         select = findViewById(R.id.select);
         list = new ArrayList<>();
         toolbarcab = findViewById(R.id.toolbarcab);
@@ -72,6 +76,14 @@ public class BookCab extends AppCompatActivity {
         autocomplete1();
         autocomplete12();
     }
+
+    private void initializeUberCab() {
+
+        Uber.getInstance()
+                .init(getResources().getString(R.string.client_id), getResources().getString(R.string.client_secret), getResources().getString(R.string.server_token), getResources().getString(R.string.redirect_uri));
+
+    }
+
     private void onBackButton() {
         toolbarcab.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         toolbarcab.setNavigationOnClickListener(new View.OnClickListener() {
@@ -84,30 +96,41 @@ public class BookCab extends AppCompatActivity {
     }
 
     private void getCabData() {
-        Log.e("latlang", String.valueOf(lat1 + "," + lang1 + "," + lat2 + "," + lang2));
-        final Call<UberCab> getData = UberCabApi.UberCab().getCabDetails(content_type, constants.Server_Token, String.valueOf(lat1), String.valueOf(lang1), String.valueOf(lat2), String.valueOf(lang2));
-        getData.enqueue(new Callback<UberCab>() {
+
+        Uber.getInstance().getUberAPIService().getProducts(lat1, lang1, new retrofit.Callback<Products>() {
             @Override
-            public void onResponse(Call<UberCab> call, Response<UberCab> response) {
-                getData1(response);
+            public void success(Products products, retrofit.client.Response response) {
+                getData1(products);
             }
 
             @Override
-            public void onFailure(Call<UberCab> call, Throwable t) {
+            public void failure(RetrofitError error) {
+                Log.e("uber cab error", error.getUrl());
+            }
+        });
+    }
+
+    private void getData1(final Products products) {
+
+        Uber.getInstance().getUberAPIService().getPriceEstimates(lat1, lang1, lat2, lang2, new retrofit.Callback<Prices>() {
+            @Override
+            public void success(Prices prices, retrofit.client.Response response) {
+                select.setVisibility(View.GONE);
+                rvCabDeatils = findViewById(R.id.rvCabDetails1);
+                rvCabDeatils.setVisibility(View.VISIBLE);
+                LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                rvCabDeatils.setLayoutManager(manager);
+                CabDetailsAdapter cabDetailsAdapter = new CabDetailsAdapter(BookCab.this, getApplicationContext(), products, prices);
+                rvCabDeatils.setAdapter(cabDetailsAdapter);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
 
             }
         });
 
-    }
 
-    private void getData1(Response<UberCab> response) {
-        select.setVisibility(View.GONE);
-        rvCabDeatils = findViewById(R.id.rvCabDetails1);
-        rvCabDeatils.setVisibility(View.VISIBLE);
-        LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-        rvCabDeatils.setLayoutManager(manager);
-        CabDetailsAdapter cabDetailsAdapter = new CabDetailsAdapter(this, response);
-        rvCabDeatils.setAdapter(cabDetailsAdapter);
     }
 
     private void autocomplete12() {
@@ -162,7 +185,6 @@ public class BookCab extends AppCompatActivity {
         });
 
     }
-
     private void drawOnMap(final Response<Direction> response) {
 
         ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
@@ -196,8 +218,6 @@ public class BookCab extends AppCompatActivity {
         getCabData();
 
     }
-
-
     void getLatitudeandlongitude(Place place) {
         Call<PlaceID> getLocation = PlaceIDApi.PlaceIDApi().getLatlang(place.getId(), constants.KEY);
         getLocation.enqueue(new Callback<PlaceID>() {
@@ -213,7 +233,6 @@ public class BookCab extends AppCompatActivity {
             }
         });
     }
-
     public void autocomplete1() {
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment1);
@@ -222,9 +241,6 @@ public class BookCab extends AppCompatActivity {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
-                Log.e("placename", place.getName());
-                Log.e("placeid", place.getId());
-                Log.e("get", String.valueOf(place.getLatLng()));
                 getLatitudeandlongitude(place);
             }
 
@@ -235,7 +251,6 @@ public class BookCab extends AppCompatActivity {
         });
 
     }
-
     private ArrayList<LatLng> getDirectionPolylines(List<Route> route) {
 
         ArrayList<LatLng> directionList = new ArrayList<LatLng>();
@@ -254,6 +269,7 @@ public class BookCab extends AppCompatActivity {
             }
         }
         return directionList;
+
     }
 
 
