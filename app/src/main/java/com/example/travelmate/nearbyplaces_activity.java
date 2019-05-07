@@ -159,8 +159,6 @@ public class nearbyplaces_activity extends AppCompatActivity {
 
         findCurrentLocation(temp);
         mprogressDialog.dismiss();
-        util.toast(getApplicationContext(), "error3");
-
     }
 
     private void findCurrentLocation(final ArrayList<String> temp) {

@@ -162,9 +162,13 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
     }
 
     private void click(int i) {
+        try {
+            Intent intent = new Intent(context, TouristPlace_activity.class).putExtra("geocordinates", geolocation1.get(i));
+            context.startActivity(intent);
+        } catch (Exception e) {
+            Log.e("error", e.getMessage());
+        }
 
-        Intent intent = new Intent(context, TouristPlace_activity.class).putExtra("geocordinates", geolocation1.get(i));
-        context.startActivity(intent);
     }
 
     public String addChar(String str, char ch, int position) {
