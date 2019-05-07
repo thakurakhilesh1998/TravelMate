@@ -96,6 +96,12 @@ public class nearbyplaces_activity extends AppCompatActivity {
                         list.add((String) td.get(key));
                     }
                     fetchPlaces(list);
+
+                    for (int i = 0; i < list.size(); i++) {
+                        Log.e("interesrts", list.get(i));
+                    }
+
+
                 } catch (Exception e) {
                     mprogressDialog.dismiss();
                     util.toast(getApplicationContext(), "error1");
@@ -269,14 +275,12 @@ public class nearbyplaces_activity extends AppCompatActivity {
         reference.child("Places").child(interest1.get(3)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-
                 Iterator myVeryOwnIterator = td.keySet().iterator();
-
                 while (myVeryOwnIterator.hasNext()) {
                     String key = (String) myVeryOwnIterator.next();
                     temp.add((String) td.get(key));
-
                 }
                 if (4 < interest1.size()) {
                     call5(temp, interest1);
@@ -302,13 +306,10 @@ public class nearbyplaces_activity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Map<String, String> td = (HashMap<String, String>) dataSnapshot.getValue();
-
                 Iterator myVeryOwnIterator = td.keySet().iterator();
-
                 while (myVeryOwnIterator.hasNext()) {
                     String key = (String) myVeryOwnIterator.next();
                     temp.add((String) td.get(key));
-
                 }
                 getData(temp);
 

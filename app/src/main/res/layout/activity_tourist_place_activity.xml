@@ -110,7 +110,6 @@
                     android:gravity="left"
                     android:lineHeight="20dp"
                     android:paddingVertical="8dp"
-                    android:text="hgdfg bdhcjdsghsb cnbhdsbc sdhgdhsfbsdhs chdbcdsn cshdfsnfbdnfghsdj dfbhsdbfsjdbfhjsd sdhfbsdnf"
                     android:textColor="@color/black"
                     android:textSize="16dp" />
 
@@ -152,7 +151,7 @@
                         android:id="@+id/btnaddrating"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/greencolour"
+                        android:background="@color/tripclor"
                         android:paddingHorizontal="8dp"
                         android:text="@string/rate_this_place"
                         android:textAlignment="textStart"
@@ -166,7 +165,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:background="@color/background"
+                    android:background="@color/tripclor"
                     android:text="@string/view_ratings"
                     android:textAllCaps="false"
                     android:textColor="@color/white"

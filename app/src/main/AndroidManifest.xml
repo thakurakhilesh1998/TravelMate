@@ -13,9 +13,14 @@
         android:roundIcon="@mipmap/logoimage"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Book_Cab2">
+        <activity android:name=".SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity android:name=".Book_Cab2"></activity>
         <activity android:name="com.neno0o.ubersdk.Activites.Authentication" />
         <activity android:name=".viewmytripactivity" />
         <activity android:name=".activity_weather1" />
@@ -62,10 +67,7 @@
         <activity android:name=".Register2Activity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <service android:name=".PushNotification">
@@ -74,4 +76,5 @@
             </intent-filter>
         </service>
     </application>
+
 </manifest>

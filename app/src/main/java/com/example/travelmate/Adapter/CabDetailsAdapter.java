@@ -49,7 +49,7 @@ public class CabDetailsAdapter extends RecyclerView.Adapter<CabDetailsAdapter.Ho
         Glide.with(context).load(response.getProducts().get(i).getImage()).into(holder.vehicle);
         holder.tvDistance.setText(response.getProducts().get(i).getDescription());
         holder.btnConfirm.setText(response.getProducts().get(i).getDisplayName());
-        holder.tvCapacity.setText(String.valueOf(response.getProducts().get(i).getCapacity()));
+        holder.tvCapacity.setText(String.valueOf("Capacity: "+response.getProducts().get(i).getCapacity()));
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

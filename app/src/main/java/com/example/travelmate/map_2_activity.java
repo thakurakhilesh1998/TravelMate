@@ -76,6 +76,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
         destLatlang = intent.getStringExtra("geocoordinatesmap");
+
 //        destLatlang= addChar(destLatlang, '.', 2);
 //        destLatlang=addChar(destLatlang, '.', 12);
         Log.e("destLatlang",destLatlang);
@@ -83,7 +84,6 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
         ivcurrent.setOnClickListener(this);
         relativeLayout.setVisibility(View.VISIBLE);
         onChangeMode();
-
 
     }
 

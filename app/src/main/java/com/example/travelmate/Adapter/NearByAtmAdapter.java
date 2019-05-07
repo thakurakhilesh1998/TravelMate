@@ -18,6 +18,7 @@ import com.example.travelmate.APIS.DistanceApiHitter;
 import com.example.travelmate.Distance.Distance;
 import com.example.travelmate.NearByAtm.Result;
 import com.example.travelmate.R;
+import com.example.travelmate.map_2_activity;
 import com.example.travelmate.map_activity;
 import com.example.travelmate.utility.constants;
 
@@ -80,7 +81,7 @@ public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Hold
                 }
 
                 try {
-                    Glide.with(context).load(atm.get(i).getIcon()).into(holder.ivImage);
+                   // Glide.with(context).load(atm.get(i).getIcon()).into(holder.ivImage);
                 } catch (Exception e) {
                     Log.e("exception", e.getMessage());
                 }
@@ -98,7 +99,11 @@ public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Hold
                 holder.btnOnMap.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.e("latlong", String.valueOf(lat + lng));
                         context.startActivity(new Intent(context, map_activity.class).putExtra("lat", lat).putExtra("lang", lng));
+
+
+
                     }
                 });
             }
@@ -131,7 +136,7 @@ public class NearByAtmAdapter extends RecyclerView.Adapter<NearByAtmAdapter.Hold
             tvRating1 = itemView.findViewById(R.id.tvratings1);
             btnOnMap = itemView.findViewById(R.id.btnOnMap);
             tvDistance = itemView.findViewById(R.id.tvDistance);
-            ivImage = itemView.findViewById(R.id.ivImage);
+//            ivImage = itemView.findViewById(R.id.ivImage);
             rbRating = itemView.findViewById(R.id.rbRating);
             tvRating = itemView.findViewById(R.id.tvratings);
             tvAddress = itemView.findViewById(R.id.tvAddress);

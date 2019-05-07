@@ -102,7 +102,7 @@ public class NearBy extends RecyclerView.Adapter<NearBy.Holder> {
                     }
                 });
 
-                Glide.with(context).load(atm1.get(0).getIcon()).into(holder.ivImage);
+//                Glide.with(context).load(atm1.get(0).getIcon()).into(holder.ivImage);
                 holder.tvTotal.setText(String.valueOf("(" + atm1.get(i).getUserRatingsTotal() + ")"));
                 try {
                     Float a = (float) atm1.get(i).getRating();
@@ -138,7 +138,7 @@ public class NearBy extends RecyclerView.Adapter<NearBy.Holder> {
 
         public Holder(@NonNull View itemView) {
             super(itemView);
-            ivImage = itemView.findViewById(R.id.ivImage);
+//            ivImage = itemView.findViewById(R.id.ivImage);
             tvPlaceName = itemView.findViewById(R.id.tvPlaceName);
             tvPlaceAddress = itemView.findViewById(R.id.tvPlaceAddress);
             tvRatings = itemView.findViewById(R.id.tvratings);

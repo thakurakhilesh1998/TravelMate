@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -81,7 +80,6 @@ public class BookCab extends AppCompatActivity {
 
         Uber.getInstance()
                 .init(getResources().getString(R.string.client_id), getResources().getString(R.string.client_secret), getResources().getString(R.string.server_token), getResources().getString(R.string.redirect_uri));
-
     }
 
     private void onBackButton() {
@@ -185,6 +183,7 @@ public class BookCab extends AppCompatActivity {
         });
 
     }
+
     private void drawOnMap(final Response<Direction> response) {
 
         ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
@@ -211,13 +210,14 @@ public class BookCab extends AppCompatActivity {
         Polyline polyline = mMap.addPolyline(options);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(list.get(1).latitude, list.get(1).longitude))
-                .zoom(10)
+                .zoom(14)
                 .build();
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         getCabData();
 
     }
+
     void getLatitudeandlongitude(Place place) {
         Call<PlaceID> getLocation = PlaceIDApi.PlaceIDApi().getLatlang(place.getId(), constants.KEY);
         getLocation.enqueue(new Callback<PlaceID>() {
@@ -233,6 +233,7 @@ public class BookCab extends AppCompatActivity {
             }
         });
     }
+
     public void autocomplete1() {
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment1);
@@ -246,11 +247,12 @@ public class BookCab extends AppCompatActivity {
 
             @Override
             public void onError(@NonNull Status status) {
-
+                Log.e("error", status.getStatusMessage());
             }
         });
 
     }
+
     private ArrayList<LatLng> getDirectionPolylines(List<Route> route) {
 
         ArrayList<LatLng> directionList = new ArrayList<LatLng>();
