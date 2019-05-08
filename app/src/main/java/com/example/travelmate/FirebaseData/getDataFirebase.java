@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class getDataFirebase {
 
-    static int RADIUS = 1000000;
+    static int RADIUS =100000;
 
     public static ArrayList<String> isInside(double latitude, double longitude, ArrayList<String> temp) {
 

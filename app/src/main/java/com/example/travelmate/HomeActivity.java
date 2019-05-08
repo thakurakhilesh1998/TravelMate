@@ -1,7 +1,9 @@
 package com.example.travelmate;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -252,6 +254,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         mAuth.signOut();
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
     }
 
     @Override
@@ -284,6 +287,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.logout:
                 mAuth.signOut();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
         }
         return false;
@@ -323,6 +327,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void onClickOnProfile() {
 
         startActivity(new Intent(this, userprofile_activity.class));
+        finish();
     }
 
     @Override
@@ -330,10 +335,36 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (drawerLayout.isDrawerOpen(Gravity.START)) {
             drawerLayout.closeDrawer(Gravity.START);
         } else {
-            Intent a = new Intent(Intent.ACTION_MAIN);
-            a.addCategory(Intent.CATEGORY_HOME);
-            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(a);
+
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("Do You Want To Exit From Application?");
+            alertDialogBuilder.setTitle("Exit Screen");
+            alertDialogBuilder.setCancelable(false);
+
+            alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent a = new Intent(Intent.ACTION_MAIN);
+                    a.addCategory(Intent.CATEGORY_HOME);
+                    a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(a);
+
+                }
+            });
+            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            AlertDialog alert = alertDialogBuilder.create();
+
+            alert.setTitle("AlertDialogExample");
+            alert.show();
+
+
+//            finish();
         }
     }
 

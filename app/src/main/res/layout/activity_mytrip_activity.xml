@@ -52,7 +52,7 @@
                     android:focusable="true"
                     android:hint="TripName(e.g. summer vacation)"
                     android:inputType="text"
-                    android:maxLength="40"
+                    android:maxLength="35"
                     android:maxLines="1"
                     android:padding="12dp"
                     android:textSize="20dp" />

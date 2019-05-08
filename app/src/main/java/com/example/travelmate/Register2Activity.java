@@ -197,7 +197,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                 saveDataInFirebase(Email, uid, imageurl);
             }
         });
-        util.toast(getApplicationContext(),"Image uploaded");
+        util.toast(getApplicationContext(), "Image uploaded");
         progressDialog1.dismiss();
 
 
@@ -217,8 +217,10 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    clearValuesFromView();
+                    finish();
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    Log.e("msg", "user profile updated successfully");
+                    util.toast(getApplicationContext(), "user profile updated successfully");
                 }
             }
         });
@@ -325,12 +327,13 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
 
     private void showAlertDialog() {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Do You Want To enter Home Page?");
-        alertDialogBuilder.setTitle("Exit Screen");
+        alertDialogBuilder.setMessage("Do You Want To Stop Register Process?");
+        alertDialogBuilder.setTitle("Cancel Register");
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                clearValuesFromView();
                 try {
                     Intent intent = getIntent();
                     AuthCredential authCredential = EmailAuthProvider.getCredential(intent.getStringExtra("email"), intent.getStringExtra("password"));
@@ -350,6 +353,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                         finish();
                     } catch (Exception e1) {
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        finish();
                     }
 
 
@@ -364,5 +368,19 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         AlertDialog alert = alertDialogBuilder.create();
         alert.setTitle("AlertDialogExample");
         alert.show();
+    }
+
+
+    public void clearValuesFromView() {
+        ivProfile.setImageResource(R.drawable.uploadpic);
+        etName.setText("");
+        etPhone.setText("");
+        etAge.setText("");
+        cb1.setChecked(false);
+        cb2.setChecked(false);
+        cb3.setChecked(false);
+        cb4.setChecked(false);
+        cb5.setChecked(false);
+
     }
 }

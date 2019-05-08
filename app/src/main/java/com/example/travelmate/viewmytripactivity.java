@@ -148,6 +148,7 @@ public class viewmytripactivity extends AppCompatActivity implements View.OnClic
         switch (v.getId()) {
             case R.id.btncreatetrip:
                 startActivity(new Intent(getApplicationContext(), mytrip_activity.class));
+                finish();
         }
     }
 
@@ -162,5 +163,11 @@ public class viewmytripactivity extends AppCompatActivity implements View.OnClic
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+        finish();
     }
 }

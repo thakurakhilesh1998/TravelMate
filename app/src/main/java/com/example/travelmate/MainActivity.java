@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnResetPass = dialog.findViewById(R.id.btnResetPass);
         final ImageView ivCancel = dialog.findViewById(R.id.ivCancel);
         final TextView error = dialog.findViewById(R.id.error);
-        dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         ivCancel.setOnClickListener(new View.OnClickListener() {
@@ -234,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void onLoginSuccessFull() {
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+        finish();
         progressDialog.dismiss();
     }
 
@@ -270,8 +270,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 });
-
-
     }
 
     private void checkForUserInDatabase(final String useruid) {
@@ -283,26 +281,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("msg", String.valueOf(dataSnapshot.hasChild(useruid)));
                 if (dataSnapshot.hasChildren()) {
                     if (dataSnapshot.hasChild(useruid)) {
-
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        finish();
                     } else {
                         startActivity(new Intent(getApplicationContext(), Register2Activity.class));
+                        finish();
                     }
                 } else {
                     startActivity(new Intent(getApplicationContext(), Register2Activity.class));
+                    finish();
                 }
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
 
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

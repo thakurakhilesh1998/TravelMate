@@ -96,16 +96,9 @@ public class nearbyplaces_activity extends AppCompatActivity {
                         list.add((String) td.get(key));
                     }
                     fetchPlaces(list);
-
-                    for (int i = 0; i < list.size(); i++) {
-                        Log.e("interesrts", list.get(i));
-                    }
-
-
                 } catch (Exception e) {
                     mprogressDialog.dismiss();
-                    util.toast(getApplicationContext(), "error1");
-                    Log.e("msg1", e.getMessage());
+                    util.toast(getApplicationContext(), e.getMessage());
                 }
             }
 
@@ -122,15 +115,14 @@ public class nearbyplaces_activity extends AppCompatActivity {
         try {
             call1(interest1.get(0), interest1);
         } catch (Exception e) {
+
             mprogressDialog.dismiss();
-            util.toast(getApplicationContext(), "error2");
-            Log.e("msg", e.getMessage());
+            Log.e("exception", "exception1");
         }
 
     }
 
     private void call1(String list, final ArrayList<String> interest1) {
-
 
         reference.child("Places").child(list).addValueEventListener(new ValueEventListener() {
             @Override
@@ -142,7 +134,12 @@ public class nearbyplaces_activity extends AppCompatActivity {
                     temp.add((String) td.get(key));
                 }
                 if (1 < interest1.size()) {
-                    call2(temp, interest1);
+                    try {
+                        call2(temp, interest1);
+                    } catch (Exception e) {
+                        mprogressDialog.dismiss();
+                        Log.e("exception", "exception2");
+                    }
                 } else {
                     getData(temp);
                 }
@@ -222,7 +219,11 @@ public class nearbyplaces_activity extends AppCompatActivity {
 
                 }
                 if (2 < interest1.size()) {
-                    call3(temp, interest1);
+                    try {
+                        call3(temp, interest1);
+                    } catch (Exception e) {
+                        Log.e("exception 3", "exception 3");
+                    }
                 } else {
                     getData(temp);
                 }
@@ -235,8 +236,6 @@ public class nearbyplaces_activity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     private void call3(final ArrayList<String> temp, final ArrayList<String> interest1) {
@@ -252,8 +251,12 @@ public class nearbyplaces_activity extends AppCompatActivity {
                     temp.add((String) td.get(key));
                 }
                 if (3 < interest1.size()) {
+                    try {
+                        call4(temp, interest1);
+                    } catch (Exception e) {
+                        Log.e("exception4", "exception4");
+                    }
 
-                    call4(temp, interest1);
                 } else {
                     getData(temp);
                 }
@@ -283,7 +286,11 @@ public class nearbyplaces_activity extends AppCompatActivity {
                     temp.add((String) td.get(key));
                 }
                 if (4 < interest1.size()) {
-                    call5(temp, interest1);
+                    try {
+                        call5(temp, interest1);
+                    } catch (Exception e) {
+                        Log.e("exception 4", "exception 4");
+                    }
                 } else {
                     getData(temp);
                 }

@@ -12,6 +12,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.travelmate.utility.util;
 import com.google.android.gms.auth.api.Auth;
@@ -43,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     EditText etEmail, etPassword;
     Button btnRegister;
     String Email, Password;
+    TextView btnLogin;
     FirebaseAuth mAuth;
     public final int REQUEST_CODE = 11;
     GoogleSignInOptions googleSignInOptions;
@@ -58,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mAuth = FirebaseAuth.getInstance();
         btnRegister.setOnClickListener(this);
         btngooglesignin.setOnClickListener(this);
+        btnLogin.setOnClickListener(this);
         progressDialog = new ProgressDialog(getApplicationContext());
         progressDialog1 = new ProgressDialog(getApplicationContext());
         googleSignIn();
@@ -80,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         etPassword = findViewById(R.id.etPassword);
         btnRegister = findViewById(R.id.btnRegister);
         btngooglesignin = findViewById(R.id.btngooglesignin);
+        btnLogin = findViewById(R.id.btnLogin);
     }
 
     @Override
@@ -90,8 +94,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.btngooglesignin:
                 onGoogleSignIn();
+                break;
+            case R.id.btnLogin:
+                onLogin();
         }
 
+    }
+
+    private void onLogin() {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
     }
 
     private void onGoogleSignIn() {
@@ -140,10 +152,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void OnCompleteregisterUser() {
         progressDialog.dismiss();
+
         startActivity(new Intent(getApplicationContext(), Register2Activity.class)
                 .putExtra("email", etEmail.getText().toString())
                 .putExtra("password", etPassword.getText().toString()));
+        finish();
+        onCLear();
     }
+
 
     private boolean isEmailCorrect() {
         if (Patterns.EMAIL_ADDRESS.matcher(etEmail.getText().toString()).matches()) {
@@ -216,18 +232,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     if (dataSnapshot.hasChild(useruid)) {
                         progressDialog1.dismiss();
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        finish();
                     } else {
                         progressDialog1.dismiss();
                         startActivity(new Intent(getApplicationContext(), Register2Activity.class));
+                        finish();
                     }
                 } else {
                     progressDialog1.dismiss();
                     startActivity(new Intent(getApplicationContext(), Register2Activity.class));
+                    finish();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                util.toast(getApplicationContext(), databaseError.getMessage());
             }
         });
     }
@@ -235,6 +256,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         finish();
-        super.onBackPressed();
     }
+
+    public void onCLear() {
+        etEmail.setText("");
+        etPassword.setText("");
+    }
+
 }

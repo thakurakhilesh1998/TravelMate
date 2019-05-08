@@ -19,7 +19,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce1);
         appLogo = findViewById(R.id.appLogo);
         appLogo.setVisibility(View.VISIBLE);
         appLogo.startAnimation(animation);
@@ -40,7 +40,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             public void run() {
                 checkUser();
             }
-        },2000);
+        }, 2000);
 
 
     }
@@ -50,8 +50,10 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
 
         if (!(FirebaseAuth.getInstance().getCurrentUser() == null)) {
             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            finish();
         } else {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
         }
     }
 

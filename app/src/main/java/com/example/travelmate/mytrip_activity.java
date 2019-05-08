@@ -1,6 +1,6 @@
 package com.example.travelmate;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,7 +47,6 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
     FirebaseAuth mAuth;
     FirebaseUser mUser;
     int i = 1;
-    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,6 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         findIds();
         findDateTime();
         list = new ArrayList<>();
-        dialog = new ProgressDialog(this);
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -110,7 +109,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
 
-
+        Log.e("minute", String.valueOf(minute));
         now.set(Calendar.HOUR_OF_DAY, hourOfDay);
         now.set(Calendar.MINUTE, minute);
         now.set(Calendar.SECOND, second);
@@ -128,11 +127,9 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
 
                 break;
             case R.id.btnCreate:
-                try {
-                    notification(v);
-                } catch (Exception e) {
-                    Log.e("exception", e.getMessage());
-                }
+
+                notification(v);
+
                 break;
             case R.id.btnaddItem:
                 addItem();
@@ -148,6 +145,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         } else {
             textView = new TextView(this);
             list.add(textItem);
+            etItemname.setText("");
             addItemToTextView(textItem);
         }
 
@@ -165,18 +163,12 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         linearLayout.addView(textView);
     }
 
-    private void notification(View v) throws ParseException {
-        dialog.setMessage("Creating Trip");
-        dialog.show();
-        dialog.setCanceledOnTouchOutside(false);
+    private void notification(View v) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(now.getTime());
-
-
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate1 = df1.format(c.getTime());
-
 
         if (etTripname.getText().toString().trim().isEmpty()) {
             etTripname.setError("Enter Trip Name");
@@ -191,7 +183,6 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
             tvPickDate.setError("pick right date");
             tvPickDate.setFocusable(true);
             Snackbar.make(v, "Please Pick Right Date", Snackbar.LENGTH_SHORT).show();
-            dialog.dismiss();
         } else {
             Intent intent = new Intent(getApplicationContext(), viewmytripactivity.class);
             String tripname = etTripname.getText().toString().trim();
@@ -199,9 +190,8 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
             savetripdata data = new savetripdata(tripname, formattedDate, list, destination);
             reference = database.getReference();
             reference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(formattedDate).setValue(data);
-            Log.e("now", String.valueOf(now));
-            NotifyMe notifyMe = new NotifyMe.Builder(getApplicationContext())
-                    .title("Trip remainder,Your Trip is started")
+            NotifyMe notifyMe = new NotifyMe.Builder(this)
+                    .title("Trip remainder,Your Trip"+etTripname.getText().toString()+"is started")
                     .content("Look at your item list so you can not miss items during your trip")
                     .color(255, 0, 0, 255)
                     .led_color(255, 255, 255, 255)
@@ -211,8 +201,21 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
                     .time(now)
                     .key("test")
                     .build();
-            Snackbar.make(v, "Trip Created,And Remainder Set For Your Trip", Snackbar.LENGTH_LONG).show();
-            dialog.dismiss();
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.mytripdialog);
+            dialog.show();
+            dialog.setCanceledOnTouchOutside(false);
+            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+            Button btnOk = dialog.findViewById(R.id.btnok);
+            ImageView image = dialog.findViewById(R.id.image1);
+            image.startAnimation(animation);
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clearData();
+                    dialog.dismiss();
+                }
+            });
         }
     }
 
@@ -221,5 +224,12 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(now.getTime());
         tvPickDate.setText(formattedDate);
+    }
+
+    public void clearData() {
+
+        etTripname.setText("");
+        etDestination.setText("");
+        tvPickDate.setText("");
     }
 }

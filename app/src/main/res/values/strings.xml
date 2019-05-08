@@ -12,7 +12,7 @@
     <string name="loggingprogress">Logging..Wait...</string>
     <string name="serverid">15256756336-al3ol53pi194ui41kbiepo3jsc7vg6jb.apps.googleusercontent.com</string>
     <string name="namepattern">Pattern of name is not correct</string>
-    <string name="alphabetnumber">abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="alphabetnumber">abcdefghijklmnopqrstuv wxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="selectrating">please select a rating</string>
     <string name="rate_this_place">Love this place ! Rate Place</string>
     <string name="view_ratings">View Place Reviews and Ratings</string>
@@ -24,5 +24,7 @@
 
     <string name="redirect_uri">travelmate://oauth/callback</string>
     <string name="server_token">MtfVUKXStNDY29eXd8_G72YupVSnnxZsE9LtlQOU</string>
+    <string name="next_step">Next Step</string>
+    <string name="tripsuccessfully">Trip Created Successfully And Remainder Set</string>
 
 </resources>
