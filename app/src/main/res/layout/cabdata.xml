@@ -42,15 +42,6 @@
             android:textColor="@color/black"
             android:textSize="16dp" />
 
-        <TextView
-            android:id="@+id/tvDistance"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Distance"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="12dp" />
 
         <Button
             android:id="@+id/btnConfirm"
@@ -59,9 +50,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:background="@drawable/buttontrip"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="4dp"
             android:text="Confirm"
+            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="12dp" />
     </LinearLayout>

@@ -26,5 +26,6 @@
     <string name="server_token">MtfVUKXStNDY29eXd8_G72YupVSnnxZsE9LtlQOU</string>
     <string name="next_step">Next Step</string>
     <string name="tripsuccessfully">Trip Created Successfully And Remainder Set</string>
+    <string name="msgcab">please select source and destination and enter in order</string>
 
 </resources>

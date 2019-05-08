@@ -47,7 +47,6 @@ public class CabDetailsAdapter extends RecyclerView.Adapter<CabDetailsAdapter.Ho
     public void onBindViewHolder(@NonNull Holder holder, final int i) {
         holder.servicename.setText(response.getProducts().get(i).getDisplayName());
         Glide.with(context).load(response.getProducts().get(i).getImage()).into(holder.vehicle);
-        holder.tvDistance.setText(response.getProducts().get(i).getDescription());
         holder.btnConfirm.setText(response.getProducts().get(i).getDisplayName());
         holder.tvCapacity.setText(String.valueOf("Capacity: "+response.getProducts().get(i).getCapacity()));
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +79,7 @@ public class CabDetailsAdapter extends RecyclerView.Adapter<CabDetailsAdapter.Ho
     }
 
     public class Holder extends RecyclerView.ViewHolder {
-        TextView tvDistance, tvNumbers, servicename, tvCapacity;
+        TextView tvNumbers, servicename, tvCapacity;
         Button btnConfirm;
         ImageView vehicle;
         LinearLayout linearLayout;
@@ -89,7 +88,6 @@ public class CabDetailsAdapter extends RecyclerView.Adapter<CabDetailsAdapter.Ho
             super(itemView);
             tvCapacity = itemView.findViewById(R.id.tvCapacity);
             vehicle = itemView.findViewById(R.id.vehicle);
-            tvDistance = itemView.findViewById(R.id.tvDistance);
             btnConfirm = itemView.findViewById(R.id.btnConfirm);
             linearLayout = itemView.findViewById(R.id.linearLayout);
             servicename = itemView.findViewById(R.id.servicename);

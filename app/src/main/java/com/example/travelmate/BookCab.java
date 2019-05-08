@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -59,6 +60,8 @@ public class BookCab extends AppCompatActivity {
     Toolbar toolbarcab;
     List<com.example.travelmate.Direction.Route> Route;
     ArrayList<LatLng> list;
+    String source = "";
+    String destination = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +142,7 @@ public class BookCab extends AppCompatActivity {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
+
                 getLatitudeandlongitude1(place);
             }
 
@@ -149,13 +153,20 @@ public class BookCab extends AppCompatActivity {
     }
 
     private void getLatitudeandlongitude1(Place place) {
+        destination = place.getId();
         Call<PlaceID> getLocation = PlaceIDApi.PlaceIDApi().getLatlang(place.getId(), constants.KEY);
         getLocation.enqueue(new Callback<PlaceID>() {
             @Override
             public void onResponse(Call<PlaceID> call, Response<PlaceID> response) {
                 lat2 = response.body().getResult().getGeometry().getLocation().getLat();
                 lang2 = response.body().getResult().getGeometry().getLocation().getLng();
-                showOnMap();
+                if (!(destination.equals("") || source.equals(""))) {
+                    showOnMap();
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.msgcab), Snackbar.LENGTH_LONG).show();
+                    autocomplete1();
+                    autocomplete12();
+                }
 
             }
 
@@ -219,6 +230,7 @@ public class BookCab extends AppCompatActivity {
     }
 
     void getLatitudeandlongitude(Place place) {
+        source = place.getId();
         Call<PlaceID> getLocation = PlaceIDApi.PlaceIDApi().getLatlang(place.getId(), constants.KEY);
         getLocation.enqueue(new Callback<PlaceID>() {
             @Override

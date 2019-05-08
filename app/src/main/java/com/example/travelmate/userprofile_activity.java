@@ -58,8 +58,6 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         setBackButton();
         getTripNumber();
         list = new ArrayList<>();
@@ -135,7 +133,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
                 case "Ocean":
                     cb3.setChecked(true);
                     break;
-                case "Religous":
+                case "Religious":
                     cb4.setChecked(true);
                     break;
                 case "Forest":
