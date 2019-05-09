@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.travelmate">
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logoimage"
@@ -42,24 +40,20 @@
         <receiver android:name="com.allyants.notifyme.BootNotifyMe">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
-
         <activity android:name=".mytrip_activity" />
         <activity android:name=".userprofile_activity" />
         <activity android:name=".map_2_activity" />
         <activity android:name=".NearByPlacesActivity" />
         <activity android:name=".weatheractivity" />
-
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCWTWqdL9-aiocQ7dE3Fh6P5oJfnvn2Ty4" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
         <activity android:name=".NearByPlaces1" />
         <activity android:name=".map_activity" />
         <activity android:name=".TouristPlace_activity" />
@@ -67,9 +61,7 @@
         <activity android:name=".Register2Activity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity">
-
         </activity>
-
         <service android:name=".PushNotification">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -160,7 +160,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             Log.e("message", "fcm");
                         }
 
-                        //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -212,7 +211,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         prefLocation.setLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "Your location not accessible", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Your location not accessible Please enable Gps", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -300,9 +299,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ft.addToBackStack("fm1");
         drawerLayout.closeDrawer(Gravity.START);
         ft.commitAllowingStateLoss();
-
     }
-
 
     private void isDrawerOpened() {
 
@@ -323,7 +320,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
-
     private void onClickOnProfile() {
 
         startActivity(new Intent(this, userprofile_activity.class));
@@ -362,9 +358,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             alert.setTitle("AlertDialogExample");
             alert.show();
-
-
-//            finish();
         }
     }
 

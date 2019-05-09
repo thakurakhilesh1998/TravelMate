@@ -10,20 +10,17 @@
     tools:context=".NearByPlacesActivity">
 
     <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/titletoolbar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"
-        app:logo="@drawable/backicon"
-        app:title="n"
-        app:titleMarginStart="80dp"
+        app:title="q"
         app:titleTextColor="@color/background">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Near By Attraction"
+            android:text="Weather"
             android:textColor="@color/white"
             android:textSize="@dimen/textSize"
             android:textStyle="bold"/>

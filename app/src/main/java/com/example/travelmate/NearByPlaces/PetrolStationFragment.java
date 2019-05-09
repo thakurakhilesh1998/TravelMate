@@ -34,7 +34,7 @@ public class PetrolStationFragment extends Fragment {
     String RADIUS = "1000";
     List<Result> atm1;
     RecyclerView rvGasStation;
-    String types = "gas_station";
+    String types = "gas-station";
 
     public PetrolStationFragment() {
 

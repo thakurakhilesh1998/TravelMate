@@ -256,7 +256,6 @@ public class BookCab extends AppCompatActivity {
             public void onPlaceSelected(@NonNull Place place) {
                 getLatitudeandlongitude(place);
             }
-
             @Override
             public void onError(@NonNull Status status) {
                 Log.e("error", status.getStatusMessage());

@@ -27,5 +27,6 @@
     <string name="next_step">Next Step</string>
     <string name="tripsuccessfully">Trip Created Successfully And Remainder Set</string>
     <string name="msgcab">please select source and destination and enter in order</string>
+    <string name="near_by_attraction">Near By Attraction</string>
 
 </resources>
