@@ -28,5 +28,8 @@
     <string name="tripsuccessfully">Trip Created Successfully And Remainder Set</string>
     <string name="msgcab">please select source and destination and enter in order</string>
     <string name="near_by_attraction">Near By Attraction</string>
+    <string name="GPSAlertDialogTitle">Title</string>
+    <string name="GPSAlertDialogMessage">message</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

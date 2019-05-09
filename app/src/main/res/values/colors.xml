@@ -19,4 +19,5 @@
     <color name="ratingcolor">#f8d568</color>
     <color name="green">#82C915</color>
     <color name="reddel">#FF4500</color>
+    <color name="gray">#DCDCDC</color>
 </resources>

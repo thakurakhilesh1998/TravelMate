@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.travelmate.HomeFragment.HomePageFragment;
 import com.example.travelmate.HomeFragment.Setting;
+import com.example.travelmate.utility.GPSTracker;
 import com.example.travelmate.utility.GpsEnabled;
 import com.example.travelmate.utility.PrefLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -90,6 +91,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 fetchCurrentLocation();
             } else {
+                GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
+                gpsTracker.showSettingsAlert();
                 Toast.makeText(getApplicationContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
@@ -201,20 +204,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                         REQUEST_CODE);
             }
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
 
-                    if (location != null) {
-                        Log.e("location", String.valueOf(location.getLatitude()));
-                        prefLocation = new PrefLocation(getApplicationContext());
-                        prefLocation.setLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
-
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Your location not accessible Please enable Gps", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
+            GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
+            if (gpsTracker.getIsGPSTrackingEnabled()) {
+                prefLocation = new PrefLocation(getApplicationContext());
+                prefLocation.setLocation(String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude()));
+            } else {
+                gpsTracker.showSettingsAlert();
+            }
+//            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+//                @Override
+//                public void onSuccess(Location location) {
+//
+//                    if (location != null) {
+//                        Log.e("location", String.valueOf(location.getLatitude()));
+//                        prefLocation = new PrefLocation(getApplicationContext());
+//                        prefLocation.setLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+//
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "Your location not accessible Please enable Gps", Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//            });
         } else {
             Snackbar.make(findViewById(android.R.id.content), "Please allow location to use function of app", Snackbar.LENGTH_LONG).show();
         }
@@ -320,6 +331,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
+
     private void onClickOnProfile() {
 
         startActivity(new Intent(this, userprofile_activity.class));
