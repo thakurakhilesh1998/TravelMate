@@ -9,11 +9,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import com.example.travelmate.NearByPlaces.Atmfragment;
+import com.example.travelmate.NearByPlaces.BusStaionFragment;
 import com.example.travelmate.NearByPlaces.FoodFragment;
 import com.example.travelmate.NearByPlaces.HospitalFragment;
 import com.example.travelmate.NearByPlaces.HotelFragment;
 import com.example.travelmate.NearByPlaces.PetrolStationFragment;
-
+import com.example.travelmate.NearByPlaces.ShoppingMallFragment;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,6 @@ public class NearByAdapter extends FragmentPagerAdapter {
 
         switch (i) {
             case 0:
-
                 bundle.putString("geolocation", geolocation);
                 Atmfragment atmfragment = new Atmfragment();
                 atmfragment.setArguments(bundle);
@@ -65,6 +65,16 @@ public class NearByAdapter extends FragmentPagerAdapter {
                 PetrolStationFragment petrolfragment = new PetrolStationFragment();
                 petrolfragment.setArguments(bundle);
                 return petrolfragment;
+            case 5:
+                bundle.putString("geolocation", geolocation);
+                BusStaionFragment busStaionFragment = new BusStaionFragment();
+                busStaionFragment.setArguments(bundle);
+                return busStaionFragment;
+            case 6:
+                bundle.putString("geolocation", geolocation);
+                ShoppingMallFragment shoppingMallFragment = new ShoppingMallFragment();
+                shoppingMallFragment.setArguments(bundle);
+                return shoppingMallFragment;
         }
         return null;
 

@@ -16,14 +16,15 @@
         android:background="@color/background"
         app:title="q"
         app:titleTextColor="@color/background">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Weather"
+            android:text="Near By Attractions"
             android:textColor="@color/white"
             android:textSize="@dimen/textSize"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.TabLayout
@@ -40,30 +41,38 @@
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ATM" />
+            android:text="@string/atm" />
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hospitals" />
+            android:text="@string/hospitals" />
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Food" />
+            android:text="@string/food" />
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hotels" />
+            android:text="@string/hotels" />
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Petrol-Station" />
+            android:text="@string/parking" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bus_station" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shopping" />
     </android.support.design.widget.TabLayout>
-
-
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"

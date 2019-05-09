@@ -30,38 +30,42 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PetrolStationFragment extends Fragment {
-    String RADIUS = "1000";
+public class BusStaionFragment extends Fragment {
+    public static final String KEY = "AIzaSyCOggg7f0D3iWZOQSLOKbo0BWrbQ9Y6ymw";
+    public static final String RADIUS = "1000";
     List<Result> atm1;
-    RecyclerView rvGasStation;
-    String types = "parking";
+    RecyclerView rvAtm;
+    String types = "bus_station";
 
-    public PetrolStationFragment() {
-
+    public BusStaionFragment() {
+        // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_petrol_station, container, false);
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_bus_staion, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rvGasStation = view.findViewById(R.id.rvGasStation);
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        rvGasStation.setLayoutManager(manager);
+
+        rvAtm = view.findViewById(R.id.rvAtm);
         String geolocation = getArguments().getString("geolocation");
         String lat = substringGeolocation.getLatitude(geolocation);
         String longitude = substringGeolocation.getLongitude(geolocation);
+        Log.e("bdhsgfgvf", geolocation);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        rvAtm.setLayoutManager(manager);
         getDataFromApi(lat, longitude);
 
     }
 
     private void getDataFromApi(String lat, String longitude) {
-        final String latlong = lat+longitude;
+        final String latlong = lat + longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(constants.KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override
@@ -69,20 +73,19 @@ public class PetrolStationFragment extends Fragment {
                 if (response.isSuccessful()) {
                     atm1 = response.body().getResults();
                     NearByAtmAdapter adapter = new NearByAtmAdapter(getContext(), atm1, latlong);
-                    rvGasStation.setAdapter(adapter);
+                    rvAtm.setAdapter(adapter);
                 } else {
                     Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
-
                 }
             }
 
             @Override
             public void onFailure(Call<NearByAtm> call, Throwable t) {
-                Log.e("message", t.getMessage());
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-
             }
         });
+
     }
+
 
 }

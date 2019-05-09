@@ -31,5 +31,12 @@
     <string name="GPSAlertDialogTitle">Title</string>
     <string name="GPSAlertDialogMessage">message</string>
     <string name="cancel">Cancel</string>
+    <string name="atm">ATM</string>
+    <string name="hospitals">Hospitals</string>
+    <string name="food">Food</string>
+    <string name="hotels">Hotels</string>
+    <string name="parking">Parking</string>
+    <string name="bus_station">Bus Station</string>
+    <string name="shopping">Shopping</string>
 
 </resources>

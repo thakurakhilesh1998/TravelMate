@@ -32,7 +32,7 @@ public class FoodFragment extends Fragment {
     public static final String RADIUS = "1000";
     List<Result> food;
     RecyclerView rvFood;
-    String types = "resturants";
+    String types = "cafe";
 
     public FoodFragment() {
 

@@ -49,6 +49,7 @@ public class NearByPlacesActivity extends AppCompatActivity {
     }
 
     private void onBackButton() {
+
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

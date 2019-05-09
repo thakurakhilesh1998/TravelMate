@@ -69,10 +69,8 @@ public class map_activity extends AppCompatActivity {
     private void getDataFromIntent() {
 
         Intent intent = getIntent();
-
         lat = intent.getStringExtra("lat");
         lng = intent.getStringExtra("lang");
-
     }
 
 

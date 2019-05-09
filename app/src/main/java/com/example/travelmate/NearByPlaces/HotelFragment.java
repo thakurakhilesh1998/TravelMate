@@ -38,7 +38,7 @@ public class HotelFragment extends Fragment {
     public static final String RADIUS = "1000";
     List<Result> hotel;
     RecyclerView rvHotel;
-    String types = "resturants";
+    String types = "lodging";
 
 
     public HotelFragment() {
