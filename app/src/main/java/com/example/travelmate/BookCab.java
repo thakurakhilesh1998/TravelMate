@@ -22,6 +22,7 @@ import com.example.travelmate.Direction.Route;
 import com.example.travelmate.Direction.Step;
 import com.example.travelmate.PlaceID.PlaceID;
 import com.example.travelmate.utility.Decodepoly;
+import com.example.travelmate.utility.GPSTracker;
 import com.example.travelmate.utility.constants;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -63,6 +64,7 @@ public class BookCab extends AppCompatActivity {
     String source = "";
     String destination = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,7 @@ public class BookCab extends AppCompatActivity {
         toolbarcab = findViewById(R.id.toolbarcab);
         setSupportActionBar(toolbarcab);
         select.setVisibility(View.VISIBLE);
+        Log.e("lat1", String.valueOf(lat2));
         onBackButton();
         Places.initialize(getApplicationContext(), constants.KEY);
         autocomplete1();
@@ -160,7 +163,7 @@ public class BookCab extends AppCompatActivity {
             public void onResponse(Call<PlaceID> call, Response<PlaceID> response) {
                 lat2 = response.body().getResult().getGeometry().getLocation().getLat();
                 lang2 = response.body().getResult().getGeometry().getLocation().getLng();
-                if (!(destination.equals("") || source.equals(""))) {
+                if (!(lat1 == null || lat2 == null || lang1 == null | lat2 == null)) {
                     showOnMap();
                 } else {
                     Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.msgcab), Snackbar.LENGTH_LONG).show();
@@ -200,6 +203,9 @@ public class BookCab extends AppCompatActivity {
         ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
+                if (mMap != null) {
+                    mMap.clear();
+                }
                 mMap = googleMap;
                 LatLng source = new LatLng(lat1, lang1);
                 LatLng destination = new LatLng(lat2, lang2);
@@ -247,15 +253,25 @@ public class BookCab extends AppCompatActivity {
     }
 
     public void autocomplete1() {
+        GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment1);
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
         autocompleteFragment.setHint("Enter Your Source");
+        autocompleteFragment.setText(gpsTracker.getAddressLine(getApplicationContext()));
+        if (gpsTracker.getIsGPSTrackingEnabled()) {
+            lat1 = gpsTracker.getLatitude();
+            lang1 = gpsTracker.getLongitude();
+        } else {
+            gpsTracker.showSettingsAlert();
+        }
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
+
                 getLatitudeandlongitude(place);
             }
+
             @Override
             public void onError(@NonNull Status status) {
                 Log.e("error", status.getStatusMessage());
