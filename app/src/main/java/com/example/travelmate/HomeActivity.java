@@ -88,7 +88,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         try {
 
             if (GpsEnabled.isEnabled(getApplicationContext())) {
-
                 fetchCurrentLocation();
             } else {
                 GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
