@@ -80,7 +80,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
         currentLatlong = prefLocation.getLatitude() + "," + prefLocation.getLangitude();
         getDistanceTime(currentLatlong, i, holder);
     }
-
     private void getDistanceTime(String currentLatlong, final int i, final Holder holder) {
         final ArrayList<Float> ratings = new ArrayList<>();
         final long[] childnumber = new long[1];
@@ -97,7 +96,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
                         FirebaseDatabase.getInstance().getReference().child(geo1.get(i)).child("Rating").child(ds.getKey()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                                 if (dataSnapshot.hasChildren()) {
                                     SaveRating saveRating = dataSnapshot.getValue(SaveRating.class);
                                     ratings.add(saveRating.getRating());
@@ -107,7 +105,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Holder> {
                                     holder.rbRating.setRating(roundOneDecimals(sum(ratings) / childnumber[0]));
                                 }
                             }
-
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                                 Log.e("error", databaseError.getMessage());

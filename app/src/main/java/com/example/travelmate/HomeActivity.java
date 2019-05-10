@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -34,8 +33,6 @@ import com.example.travelmate.utility.PrefLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -64,6 +61,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     FusedLocationProviderClient fusedLocationProviderClient;
     PrefLocation prefLocation;
     ProgressDialog progressDialog;
+    GPSTracker gpsTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +71,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         progressDialog.setMessage("Please Wait..");
         progressDialog.setCanceledOnTouchOutside(false);
         findIds();
+        gpsTracker = new GPSTracker(getApplicationContext());
         subscribetocloudmessaging();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -90,7 +89,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (GpsEnabled.isEnabled(getApplicationContext())) {
                 fetchCurrentLocation();
             } else {
-                GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
+
                 gpsTracker.showSettingsAlert();
                 Toast.makeText(getApplicationContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
             }
@@ -126,32 +125,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     REQUEST_CODE);
 
         } else {
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
 
-                    if (location != null) {
-                        Log.e("location", String.valueOf(location.getLatitude()));
-                        prefLocation = new PrefLocation(getApplicationContext());
-                        prefLocation.setLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+            if (gpsTracker.getIsGPSTrackingEnabled()) {
+                prefLocation = new PrefLocation(getApplicationContext());
+                prefLocation.setLocation(String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude()));
 
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Your location not accessible", Toast.LENGTH_LONG).show();
-
-                    }
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e("msg e", e.getMessage());
-                }
-            });
+            } else {
+                gpsTracker.showSettingsAlert();
+            }
         }
-
-
     }
-
     private void subscribetocloudmessaging() {
         FirebaseMessaging.getInstance().subscribeToTopic("weather")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -275,10 +258,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
         switch (menuItem.getItemId()) {
             case R.id.home:
                 HomePageFragment homePageFragment = new HomePageFragment();
