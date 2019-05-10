@@ -79,7 +79,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
 
 //        destLatlang= addChar(destLatlang, '.', 2);
 //        destLatlang=addChar(destLatlang, '.', 12);
-        Log.e("destLatlang",destLatlang);
+        Log.e("destLatlang", destLatlang);
         ivdirection.setOnClickListener(this);
         ivcurrent.setOnClickListener(this);
         relativeLayout.setVisibility(View.VISIBLE);
@@ -127,7 +127,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
 
         String originlatlang = latitude + "," + langitude;
         final LatLng latLng1 = new LatLng(latitude, langitude);
-        final LatLng destLatlang1 = new LatLng(Double.valueOf(destLatlang.substring(0, 9)),Double.valueOf(destLatlang.substring(10, 19)));
+        final LatLng destLatlang1 = new LatLng(Double.valueOf(destLatlang.substring(0, 9)), Double.valueOf(destLatlang.substring(10, 19)));
         Call<Direction> getDirection = DirectionApiHitter.DirectionApiHitter().getDirection(originlatlang, destLatlang, mode, constants.KEY);
         getDirection.enqueue(new Callback<Direction>() {
             @Override
@@ -271,6 +271,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
+
     private void onClickOnNav() {
         relativeLayout.setVisibility(View.GONE);
         rvDirection.setVisibility(View.VISIBLE);
@@ -361,6 +362,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
 
 
     }
+
     public String addChar(String str, char ch, int position) {
         StringBuilder sb = new StringBuilder(str);
         sb.insert(position, ch);
