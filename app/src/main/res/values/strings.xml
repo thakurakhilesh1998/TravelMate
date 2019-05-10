@@ -38,5 +38,6 @@
     <string name="parking">Parking</string>
     <string name="bus_station">Bus Station</string>
     <string name="shopping">Shopping</string>
+    <string name="googlesignin">Google Login In...</string>
 
 </resources>

@@ -67,8 +67,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        progressDialog = new ProgressDialog(getApplicationContext());
-        progressDialog.setMessage("Please Wait..");
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please Wait..Loading..");
+        progressDialog.show();
         progressDialog.setCanceledOnTouchOutside(false);
         findIds();
         gpsTracker = new GPSTracker(getApplicationContext());
@@ -89,11 +90,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (GpsEnabled.isEnabled(getApplicationContext())) {
                 fetchCurrentLocation();
             } else {
-
+                progressDialog.dismiss();
                 gpsTracker.showSettingsAlert();
                 Toast.makeText(getApplicationContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
+            progressDialog.dismiss();
             Log.e("msg", e.getMessage());
         }
 
@@ -135,6 +137,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     }
+
     private void subscribetocloudmessaging() {
         FirebaseMessaging.getInstance().subscribeToTopic("weather")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -166,6 +169,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         showData(Email, Name, profile);
                     }
                 } catch (Exception e) {
+                    progressDialog.dismiss();
                     Log.e("msg", e.getMessage());
                 }
             }
@@ -347,8 +351,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
             AlertDialog alert = alertDialogBuilder.create();
-
-            alert.setTitle("AlertDialogExample");
             alert.show();
         }
     }

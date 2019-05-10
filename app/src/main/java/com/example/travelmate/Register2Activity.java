@@ -65,7 +65,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
     Uri Filepath;
     LinearLayout linearLayout;
     SaveData saveData, saveData1;
-    ProgressDialog progressDialog, progressDialog1;
+    ProgressDialog progressDialog, progressDialog1, progressDialog2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +159,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                 Age = etAge.getText().toString().trim();
                 Gender = findGender();
                 saveDataOnFirebase();
-                progressDialog1.dismiss();
+
             }
         } else {
             progressDialog1.dismiss();
@@ -197,8 +197,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                 saveDataInFirebase(Email, uid, imageurl);
             }
         });
-        util.toast(getApplicationContext(), "Image uploaded");
-        progressDialog1.dismiss();
+
 
 
     }
@@ -220,6 +219,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                     clearValuesFromView();
                     finish();
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    progressDialog1.dismiss();
                     util.toast(getApplicationContext(), "user profile updated successfully");
                 }
             }
@@ -297,6 +297,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 progressDialog.dismiss();
+                util.toast(getApplicationContext(), "Image uploaded");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

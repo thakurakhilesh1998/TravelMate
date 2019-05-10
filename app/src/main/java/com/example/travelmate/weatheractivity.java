@@ -1,5 +1,6 @@
 package com.example.travelmate;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -33,6 +34,7 @@ public class weatheractivity extends AppCompatActivity {
     String details = "true";
     String locationkey;
     Toolbar toolbar;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -40,10 +42,14 @@ public class weatheractivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weatheractivity);
         findids();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Wait..Loading..Weather Data");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Snackbar.make(findViewById(android.R.id.content),"message",Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(android.R.id.content), "message", Snackbar.LENGTH_SHORT).show();
         setBackButton();
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocoordinates1");
@@ -68,8 +74,6 @@ public class weatheractivity extends AppCompatActivity {
 
         String min = response.body().getDailyForecasts().get(0).getTemperature().getMinimum().getValue().toString() + "°c";
         String max = response.body().getDailyForecasts().get(0).getTemperature().getMaximum().getValue().toString() + "°c";
-
-
         tvName.setText(cityName);
         tvTemp.setText(response.body().getDailyForecasts().get(0).getRealFeelTemperature().getMaximum().getValue().toString() + "°C");
         tvStatus.setText(response.body().getDailyForecasts().get(0).getDay().getIconPhrase());
@@ -79,6 +83,7 @@ public class weatheractivity extends AppCompatActivity {
         recyclerView.setLayoutManager(manager);
         WeatherForecastAdapter adapter = new WeatherForecastAdapter(this, response);
         recyclerView.setAdapter(adapter);
+        progressDialog.dismiss();
     }
 
     private void findids() {

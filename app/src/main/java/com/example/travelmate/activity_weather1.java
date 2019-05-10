@@ -1,5 +1,6 @@
 package com.example.travelmate;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -34,25 +35,26 @@ public class activity_weather1 extends AppCompatActivity {
     String details = "true";
     String locationkey;
     PrefLocation prefLocation;
-
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather1);
         findids();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Wait..Loading Weather Data..");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
         onBackButton();
         try {
-            getLocationKey(prefLocation.getLatitude(),prefLocation.getLangitude());
-        }
-        catch (Exception e)
-        {
-            Snackbar.make(findViewById(android.R.id.content), "weather", Snackbar.LENGTH_SHORT).show();
+            getLocationKey(prefLocation.getLatitude(), prefLocation.getLangitude());
+        } catch (Exception e) {
+            Snackbar.make(findViewById(android.R.id.content), "weather api not working", Snackbar.LENGTH_SHORT).show();
         }
     }
+
     private void onBackButton() {
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -65,11 +67,8 @@ public class activity_weather1 extends AppCompatActivity {
     }
 
     private void forecastWeather(Response<Weather> response, String cityName) {
-
         String min = response.body().getDailyForecasts().get(0).getTemperature().getMinimum().getValue().toString() + "°c";
         String max = response.body().getDailyForecasts().get(0).getTemperature().getMaximum().getValue().toString() + "°c";
-
-
         tvName.setText(cityName);
         tvTemp.setText(response.body().getDailyForecasts().get(0).getRealFeelTemperature().getMaximum().getValue().toString() + "°C");
         tvStatus.setText(response.body().getDailyForecasts().get(0).getDay().getIconPhrase());
@@ -79,6 +78,7 @@ public class activity_weather1 extends AppCompatActivity {
         recyclerView.setLayoutManager(manager);
         WeatherForecastAdapter adapter = new WeatherForecastAdapter(this, response);
         recyclerView.setAdapter(adapter);
+        progressDialog.dismiss();
     }
 
     private void findids() {
@@ -119,8 +119,11 @@ public class activity_weather1 extends AppCompatActivity {
 
         locationkey = response.body().getKey();
         Log.e("locationkey", locationkey);
-
-        getWeatherForecast(locationkey, cityName);
+        try {
+            getWeatherForecast(locationkey, cityName);
+        } catch (Exception e) {
+            Snackbar.make(findViewById(android.R.id.content), "weather api not working", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private void getWeatherForecast(String locationkey, final String cityName) {

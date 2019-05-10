@@ -1,5 +1,6 @@
 package com.example.travelmate;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -19,11 +20,16 @@ public class NearByPlaces1 extends AppCompatActivity {
     String geolocation;
     PrefLocation prefLocation;
     Toolbar titletoolbar;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_near_by_places);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("please wait...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
         prefLocation = new PrefLocation(getApplicationContext());
         findIds();
         setSupportActionBar(titletoolbar);
@@ -31,6 +37,7 @@ public class NearByPlaces1 extends AppCompatActivity {
         Log.e("geolocation123", geolocation);
         NearByAdapter myadapter = new NearByAdapter(getSupportFragmentManager(), this, tabLayout.getTabCount(), name, geolocation);
         viewPager.setAdapter(myadapter);
+        progressDialog.dismiss();
         viewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         viewPager.setOffscreenPageLimit(10);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

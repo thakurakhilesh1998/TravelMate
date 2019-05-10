@@ -1,6 +1,7 @@
 package com.example.travelmate.HomeFragment;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,7 +26,6 @@ import com.example.travelmate.nearbyplaces_activity;
 public class HomePageFragment extends Fragment implements View.OnClickListener {
 
     LinearLayout nearby, weather, nearbyattrac, createtrip, bookcab, setting;
-
     public HomePageFragment() {
 
     }

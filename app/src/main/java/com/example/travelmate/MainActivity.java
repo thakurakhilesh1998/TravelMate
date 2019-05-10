@@ -161,11 +161,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void onGoogleSignClicked() {
-        progressDialog2.setMessage("wait...");
-        progressDialog2.setCanceledOnTouchOutside(false);
+
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, REQUEST_CODE);
-        progressDialog2.dismiss();
+
     }
 
     private void onRegister() {
@@ -241,6 +240,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
+            progressDialog2.setMessage(getResources().getString(R.string.googlesignin));
+            progressDialog2.setCanceledOnTouchOutside(false);
+            progressDialog2.show();
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -281,13 +283,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.e("msg", String.valueOf(dataSnapshot.hasChild(useruid)));
                 if (dataSnapshot.hasChildren()) {
                     if (dataSnapshot.hasChild(useruid)) {
+                        progressDialog2.dismiss();
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         finish();
                     } else {
+                        progressDialog2.dismiss();
                         startActivity(new Intent(getApplicationContext(), Register2Activity.class));
                         finish();
                     }
                 } else {
+                    progressDialog2.dismiss();
                     startActivity(new Intent(getApplicationContext(), Register2Activity.class));
                     finish();
                 }
