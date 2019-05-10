@@ -32,8 +32,7 @@ public class map_activity extends AppCompatActivity {
         setContentView(R.layout.activity_map_activity);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getDataFromIntent();
-
-      //  getCurrentLocation();
+        //  getCurrentLocation();
         showOnMap();
     }
 
