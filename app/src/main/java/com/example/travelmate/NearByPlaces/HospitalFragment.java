@@ -38,6 +38,7 @@ public class HospitalFragment extends Fragment {
     List<Result> hospital;
     RecyclerView rvHospital;
     String types = "hospital";
+    String lat,longitude;
 
 
     public HospitalFragment() {
@@ -64,10 +65,14 @@ public class HospitalFragment extends Fragment {
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvHospital.setLayoutManager(manager);
-
         String geolocation = getArguments().getString("geolocation");
-        String lat = substringGeolocation.getLatitude(geolocation);
-        String longitude = substringGeolocation.getLongitude(geolocation);
+        if (!(geolocation.length() < 19)) {
+            lat = substringGeolocation.getLatitude(geolocation);
+            longitude = substringGeolocation.getLongitude(geolocation);
+            getDataFromApi(lat, longitude);
+        } else {
+            Toast.makeText(getContext(), getResources().getString(R.string.location_not_accessible), Toast.LENGTH_LONG).show();
+        }
 
 
         getDataFromApi(lat, longitude);

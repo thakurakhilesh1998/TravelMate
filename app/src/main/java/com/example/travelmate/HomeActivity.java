@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -28,10 +29,8 @@ import com.bumptech.glide.Glide;
 import com.example.travelmate.HomeFragment.HomePageFragment;
 import com.example.travelmate.HomeFragment.Setting;
 import com.example.travelmate.utility.GPSTracker;
-import com.example.travelmate.utility.GpsEnabled;
 import com.example.travelmate.utility.PrefLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -85,19 +84,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (drawerLayout.isDrawerOpen(Gravity.START)) {
             drawerLayout.closeDrawer(Gravity.START);
         }
-        try {
-
-            if (GpsEnabled.isEnabled(getApplicationContext()) && gpsTracker.getIsGPSTrackingEnabled()) {
-                fetchCurrentLocation();
-            } else {
-                progressDialog.dismiss();
-                gpsTracker.showSettingsAlert();
-                Toast.makeText(getApplicationContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
+        if (gpsTracker.getIsGPSTrackingEnabled()) {
+            fetchCurrentLocation();
+        } else {
             progressDialog.dismiss();
-            Log.e("msg", e.getMessage());
+            gpsTracker.showSettingsAlert();
+            Toast.makeText(getApplicationContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
         }
+
         navigationView.setNavigationItemSelectedListener(this);
 
         navigationIcon.setOnClickListener(new View.OnClickListener() {
@@ -144,9 +138,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private void fetchCurrentLocation() {
 
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     REQUEST_CODE);
@@ -156,6 +147,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (gpsTracker.getIsGPSTrackingEnabled()) {
                 prefLocation = new PrefLocation(getApplicationContext());
                 prefLocation.setLocation(String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude()));
+                Log.e("latitude", String.valueOf(gpsTracker.getLatitude()));
                 checkUserDetails();
                 fetchData();
             } else {
@@ -194,13 +186,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     }
                 } catch (Exception e) {
                     progressDialog.dismiss();
-                    Log.e("msg", e.getMessage());
+                    Log.e("msg12", e.getMessage());
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                progressDialog.dismiss();
+                Log.e("database error", databaseError.getMessage());
             }
         });
     }
@@ -210,19 +203,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE && grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                        REQUEST_CODE);
-            }
-
             GPSTracker gpsTracker = new GPSTracker(getApplicationContext(), HomeActivity.this);
             if (gpsTracker.getIsGPSTrackingEnabled()) {
+                checkUserDetails();
+                fetchData();
                 prefLocation = new PrefLocation(getApplicationContext());
                 prefLocation.setLocation(String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude()));
             } else {
+                progressDialog.dismiss();
                 gpsTracker.showSettingsAlert();
             }
+
         } else {
+            progressDialog.dismiss();
             Snackbar.make(findViewById(android.R.id.content), "Please allow location to use function of app", Snackbar.LENGTH_LONG).show();
         }
     }
@@ -327,7 +320,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void onClickOnProfile() {
-
         startActivity(new Intent(this, userprofile_activity.class));
         finish();
     }
@@ -337,13 +329,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (drawerLayout.isDrawerOpen(Gravity.START)) {
             drawerLayout.closeDrawer(Gravity.START);
         } else {
-
-
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setMessage("Do You Want To Exit From Application?");
             alertDialogBuilder.setTitle("Exit Screen");
             alertDialogBuilder.setCancelable(false);
-
             alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -364,24 +353,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             alert.show();
         }
     }
+
     @Override
-    public void onResume(){
-        super.onResume();
-        try {
-
-            if (GpsEnabled.isEnabled(getApplicationContext()) && gpsTracker.getIsGPSTrackingEnabled()) {
-                fetchCurrentLocation();
-            } else {
-                progressDialog.dismiss();
-                gpsTracker.showSettingsAlert();
-                Toast.makeText(getApplicationContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            progressDialog.dismiss();
-            Log.e("msg", e.getMessage());
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("request code", String.valueOf(requestCode));
+        if (requestCode == 12) {
+            finish();
+            startActivity(getIntent());
         }
-
     }
-
-
 }

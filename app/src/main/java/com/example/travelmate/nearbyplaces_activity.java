@@ -167,7 +167,11 @@ public class nearbyplaces_activity extends AppCompatActivity {
     private void findCurrentLocation(final ArrayList<String> temp) {
 
         filtered = getDataFirebase.isInside(Double.parseDouble(prefLocation.getLatitude()), Double.parseDouble(prefLocation.getLangitude()), temp);
-        getFromFirebase(filtered);
+        if (filtered.size() == 0) {
+            getFromFirebase(temp);
+        } else {
+            getFromFirebase(filtered);
+        }
     }
 
     private void getFromFirebase(final ArrayList<String> filtered) {

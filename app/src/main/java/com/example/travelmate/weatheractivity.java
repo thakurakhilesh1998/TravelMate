@@ -55,7 +55,12 @@ public class weatheractivity extends AppCompatActivity {
         geolocation = intent.getStringExtra("geocoordinates1");
         String lat = substringGeolocation.getLatitude(geolocation);
         String longitude = substringGeolocation.getLongitude(geolocation);
-        getLocationKey(lat, longitude);
+        try {
+            getLocationKey(lat, longitude);
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            Snackbar.make(findViewById(android.R.id.content), e.getMessage(), Snackbar.LENGTH_LONG);
+        }
     }
 
     private void setBackButton() {
@@ -112,13 +117,17 @@ public class weatheractivity extends AppCompatActivity {
                         String cityName = response.body().getEnglishName();
                         getKey(response, cityName);
                     } catch (Exception e) {
+                        progressDialog.dismiss();
                         Snackbar.make(findViewById(android.R.id.content), e.getMessage(), BaseTransientBottomBar.LENGTH_SHORT);
                     }
+                } else {
+                    progressDialog.dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<LocationKey> call, Throwable t) {
+                progressDialog.dismiss();
                 Snackbar.make(findViewById(android.R.id.content), t.getMessage(), BaseTransientBottomBar.LENGTH_SHORT);
             }
         });
@@ -128,7 +137,12 @@ public class weatheractivity extends AppCompatActivity {
 
     private void getKey(Response<LocationKey> response, String cityName) {
         locationkey = response.body().getKey();
-        getWeatherForecast(locationkey, cityName);
+        try {
+            getWeatherForecast(locationkey, cityName);
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            Snackbar.make(findViewById(android.R.id.content), e.getMessage(), BaseTransientBottomBar.LENGTH_LONG);
+        }
     }
 
     private void getWeatherForecast(String locationkey, final String cityName) {
@@ -138,12 +152,14 @@ public class weatheractivity extends AppCompatActivity {
             public void onResponse(Call<Weather> call, Response<Weather> response) {
                 if (response.isSuccessful()) {
                     getWeather(response, cityName);
+                } else {
+                    progressDialog.dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<Weather> call, Throwable t) {
-
+                progressDialog.dismiss();
             }
         });
     }

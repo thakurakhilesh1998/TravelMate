@@ -51,6 +51,7 @@ public class activity_weather1 extends AppCompatActivity {
         try {
             getLocationKey(prefLocation.getLatitude(), prefLocation.getLangitude());
         } catch (Exception e) {
+            progressDialog.dismiss();
             Snackbar.make(findViewById(android.R.id.content), "weather api not working", Snackbar.LENGTH_SHORT).show();
         }
     }
@@ -96,22 +97,35 @@ public class activity_weather1 extends AppCompatActivity {
 
     private void getLocationKey(String lat, String longitude) {
         String latlong = lat + "%2C" + longitude;
-        Call<LocationKey> locationkey = LocationKeyApi.LocationKeyApi().getLocationKey(constants.WeatherKEY, latlong, details);
-        locationkey.enqueue(new Callback<LocationKey>() {
-            @Override
-            public void onResponse(Call<LocationKey> call, Response<LocationKey> response) {
+        if (!(latlong.length() == 0)) {
+            Call<LocationKey> locationkey = LocationKeyApi.LocationKeyApi().getLocationKey(constants.WeatherKEY, latlong, details);
+            locationkey.enqueue(new Callback<LocationKey>() {
+                @Override
+                public void onResponse(Call<LocationKey> call, Response<LocationKey> response) {
+                    if (response.isSuccessful()) {
+                        try {
+                            String cityName = response.body().getEnglishName();
+                            getKey(response, cityName);
+                        } catch (Exception e) {
+                            progressDialog.dismiss();
+                            Snackbar.make(findViewById(android.R.id.content),getResources().getString(R.string.location_not_accessible), Snackbar.LENGTH_LONG).show();
+                        }
+                    } else {
+                        progressDialog.dismiss();
+                        Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.location_not_accessible), Snackbar.LENGTH_LONG).show();
+                    }
+                }
 
-                String cityName = response.body().getEnglishName();
-                getKey(response, cityName);
-            }
-
-            @Override
-            public void onFailure(Call<LocationKey> call, Throwable t) {
-
-            }
-        });
-
-
+                @Override
+                public void onFailure(Call<LocationKey> call, Throwable t) {
+                    progressDialog.dismiss();
+                    Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.location_not_accessible), Snackbar.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            progressDialog.dismiss();
+            Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.location_not_accessible), Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private void getKey(Response<LocationKey> response, String cityName) {
@@ -122,6 +136,7 @@ public class activity_weather1 extends AppCompatActivity {
         try {
             getWeatherForecast(locationkey, cityName);
         } catch (Exception e) {
+            progressDialog.dismiss();
             Snackbar.make(findViewById(android.R.id.content), "weather api not working", Snackbar.LENGTH_SHORT).show();
         }
     }
@@ -133,12 +148,15 @@ public class activity_weather1 extends AppCompatActivity {
             public void onResponse(Call<Weather> call, Response<Weather> response) {
                 if (response.isSuccessful()) {
                     getWeather(response, cityName);
+                } else {
+                    progressDialog.dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<Weather> call, Throwable t) {
-
+                progressDialog.dismiss();
+                Snackbar.make(findViewById(android.R.id.content), t.getMessage(), Snackbar.LENGTH_SHORT).show();
             }
         });
     }

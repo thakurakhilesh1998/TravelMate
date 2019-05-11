@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,7 @@ public class BusStaionFragment extends Fragment {
     List<Result> atm1;
     RecyclerView rvAtm;
     String types = "bus_station";
+    String lat, longitude;
 
     public BusStaionFragment() {
         // Required empty public constructor
@@ -55,13 +55,15 @@ public class BusStaionFragment extends Fragment {
 
         rvAtm = view.findViewById(R.id.rvAtm);
         String geolocation = getArguments().getString("geolocation");
-        String lat = substringGeolocation.getLatitude(geolocation);
-        String longitude = substringGeolocation.getLongitude(geolocation);
-        Log.e("bdhsgfgvf", geolocation);
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        rvAtm.setLayoutManager(manager);
-        getDataFromApi(lat, longitude);
-
+        if (!(geolocation.length() < 19)) {
+            lat = substringGeolocation.getLatitude(geolocation);
+            longitude = substringGeolocation.getLongitude(geolocation);
+            RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            rvAtm.setLayoutManager(manager);
+            getDataFromApi(lat, longitude);
+        } else {
+            Toast.makeText(getContext(), getResources().getString(R.string.location_not_accessible), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void getDataFromApi(String lat, String longitude) {

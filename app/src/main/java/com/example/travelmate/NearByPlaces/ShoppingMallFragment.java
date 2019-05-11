@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +37,7 @@ public class ShoppingMallFragment extends Fragment {
     RecyclerView rvAtm;
     String types = "shopping_mall";
 
+    String lat, longitude;
 
     public ShoppingMallFragment() {
         // Required empty public constructor
@@ -56,12 +56,15 @@ public class ShoppingMallFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rvAtm = view.findViewById(R.id.rvAtm);
         String geolocation = getArguments().getString("geolocation");
-        String lat = substringGeolocation.getLatitude(geolocation);
-        String longitude = substringGeolocation.getLongitude(geolocation);
-        Log.e("bdhsgfgvf", geolocation);
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        rvAtm.setLayoutManager(manager);
-        getDataFromApi(lat, longitude);
+        if (!(geolocation.length() < 19)) {
+            lat = substringGeolocation.getLatitude(geolocation);
+            longitude = substringGeolocation.getLongitude(geolocation);
+            RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            rvAtm.setLayoutManager(manager);
+            getDataFromApi(lat, longitude);
+        } else {
+            Toast.makeText(getContext(), getResources().getString(R.string.location_not_accessible), Toast.LENGTH_LONG).show();
+        }
 
     }
 

@@ -34,6 +34,7 @@ public class Atmfragment extends Fragment {
     RecyclerView rvAtm;
     String types = "atm";
     PullRefreshLayout pullRefreshLayout;
+    String lat, longitude;
 
     public Atmfragment() {
 
@@ -54,11 +55,16 @@ public class Atmfragment extends Fragment {
         rvAtm = view.findViewById(R.id.rvAtm);
         pullRefreshLayout = view.findViewById(R.id.pullrefresh);
         String geolocation = getArguments().getString("geolocation");
-        String lat = substringGeolocation.getLatitude(geolocation);
-        String longitude = substringGeolocation.getLongitude(geolocation);
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        rvAtm.setLayoutManager(manager);
-        getDataFromApi(lat, longitude);
+        Log.e("geolocation", geolocation);
+        if (!(geolocation.length() < 19)) {
+            lat = substringGeolocation.getLatitude(geolocation);
+            longitude = substringGeolocation.getLongitude(geolocation);
+            RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            rvAtm.setLayoutManager(manager);
+            getDataFromApi(lat, longitude);
+        } else {
+            Toast.makeText(getContext(), getResources().getString(R.string.location_not_accessible), Toast.LENGTH_LONG).show();
+        }
 
     }
 

@@ -279,8 +279,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseDatabase.getInstance().getReference().child("User Profile").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                Log.e("msg", String.valueOf(dataSnapshot.hasChild(useruid)));
                 if (dataSnapshot.hasChildren()) {
                     if (dataSnapshot.hasChild(useruid)) {
                         progressDialog2.dismiss();

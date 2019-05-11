@@ -119,7 +119,6 @@ public class GPSTracker extends Service implements LocationListener {
                         MIN_DISTANCE_CHANGE_FOR_UPDATES,
                         this
                 );
-
                 if (locationManager != null) {
                     location = locationManager.getLastKnownLocation(provider_info);
                     updateGPSCoordinates();
@@ -203,19 +202,18 @@ public class GPSTracker extends Service implements LocationListener {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                mContext.startActivity(intent);
                 dialog.dismiss();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                homeActivity.startActivityForResult(intent,12);
             }
         });
 
         //On pressing cancel button
         alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(mContext,getString(R.string.notwork), Toast.LENGTH_LONG).show();
-                dialog.cancel();
+                Toast.makeText(mContext,"Application Can not work properly without location access", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
         });
 
@@ -341,4 +339,6 @@ public class GPSTracker extends Service implements LocationListener {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+
 }

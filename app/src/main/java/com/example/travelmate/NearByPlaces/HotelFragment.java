@@ -39,7 +39,7 @@ public class HotelFragment extends Fragment {
     List<Result> hotel;
     RecyclerView rvHotel;
     String types = "lodging";
-
+    String lat,longitude;
 
     public HotelFragment() {
 
@@ -61,11 +61,13 @@ public class HotelFragment extends Fragment {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvHotel.setLayoutManager(manager);
         String geolocation = getArguments().getString("geolocation");
-        String lat = substringGeolocation.getLatitude(geolocation);
-        String longitude = substringGeolocation.getLongitude(geolocation);
-
-
-        getDataFromApi(lat, longitude);
+        if (!(geolocation.length() < 19)) {
+            lat = substringGeolocation.getLatitude(geolocation);
+            longitude = substringGeolocation.getLongitude(geolocation);
+            getDataFromApi(lat, longitude);
+        } else {
+            Toast.makeText(getContext(), getResources().getString(R.string.location_not_accessible), Toast.LENGTH_LONG).show();
+        }
 
     }
 

@@ -33,6 +33,7 @@ public class FoodFragment extends Fragment {
     List<Result> food;
     RecyclerView rvFood;
     String types = "cafe";
+    String lat, longitude;
 
     public FoodFragment() {
 
@@ -53,17 +54,19 @@ public class FoodFragment extends Fragment {
         rvFood.setLayoutManager(manager);
 
         String geolocation = getArguments().getString("geolocation");
-        String lat = substringGeolocation.getLatitude(geolocation);
-        String longitude = substringGeolocation.getLongitude(geolocation);
-
-
-        getDataFromApi(lat, longitude);
+        if (!(geolocation.length() < 19)) {
+            lat = substringGeolocation.getLatitude(geolocation);
+            longitude = substringGeolocation.getLongitude(geolocation);
+            getDataFromApi(lat, longitude);
+        } else {
+            Toast.makeText(getContext(), getResources().getString(R.string.location_not_accessible), Toast.LENGTH_LONG).show();
+        }
     }
 
 
     private void getDataFromApi(String lat, String longitude) {
 
-        final String latlong = lat +longitude;
+        final String latlong = lat + longitude;
         Call<NearByAtm> getPlaces = NearbyApiHitter.NearbyApiHitter().getPlaces(constants.KEY, latlong, RADIUS, types);
         getPlaces.enqueue(new Callback<NearByAtm>() {
             @Override

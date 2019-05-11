@@ -41,6 +41,6 @@
     <string name="googlesignin">Google Login In...</string>
     <string name="registering">Registering...Wait..</string>
     <string name="registeragian">User Profile is not complete,Please Register Agian</string>
-    <string name="notwork">Application Can not work properly without location access</string>
+    <string name="location_not_accessible">location not accessible</string>
 
 </resources>
