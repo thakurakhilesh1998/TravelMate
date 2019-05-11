@@ -116,16 +116,20 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         name.add("Food");
         name.add("Atm");
         name.add("Hotels");
-        name.add("Petrol Station");
+        name.add("Parking");
         name.add("Hospital");
+        name.add("Shopping");
+        name.add("Bus Stand");
     }
 
     private void setImageList() {
         images.add(R.drawable.food);
         images.add(R.drawable.atm);
         images.add(R.drawable.hotel);
-        images.add(R.drawable.petrol);
+        images.add(R.drawable.parking);
         images.add(R.drawable.hospital);
+        images.add(R.drawable.shopping);
+        images.add(R.drawable.bustand);
     }
 
     private void setNearByrecyclerView() {

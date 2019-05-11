@@ -23,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.example.travelmate.APIS.DirectionApiHitter;
 import com.example.travelmate.Adapter.NavAdapter;
 import com.example.travelmate.Direction.Direction;
@@ -37,6 +36,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -154,7 +154,6 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
         });
 
     }
-
     private void initMap(final List<com.example.travelmate.Direction.Route> route, final LatLng latLng1, final LatLng destLatlang1, String mode) {
 
         if (mMap == null) {
@@ -162,15 +161,14 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onMapReady(GoogleMap googleMap) {
                     mMap = googleMap;
-                    mMap.addMarker(new MarkerOptions().position(latLng1).title("Current"));
-                    mMap.addMarker(new MarkerOptions().position(destLatlang1).title("destination"));
+                    mMap.addMarker(new MarkerOptions().position(latLng1).title("Current")).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                    mMap.addMarker(new MarkerOptions().position(destLatlang1).title("destination"))
+                            .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     tvDistance.setText(route.get(0).getLegs().get(0).getDistance().getText());
                     tvDestination.setText(route.get(0).getLegs().get(0).getEndAddress());
                     tvTime.setText("(" + route.get(0).getLegs().get(0).getDuration().getText() + ")");
                     list = getDirectionPolylines(route);
                     drawRouteOnMap(mMap, list);
-
-
                     for (Route rout : route) {
                         List<Leg> legs = rout.getLegs();
                         for (Leg leg1 : legs) {
@@ -307,15 +305,18 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
             }
         });
     }
+
     private void addMarker(Double latitude, Double langitude) {
         LatLng latLng = new LatLng(latitude, langitude);
-        mMap.addMarker(new MarkerOptions().title("Current Location").position(latLng));
+        mMap.addMarker(new MarkerOptions().title("Current Location").position(latLng))
+                .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
                 .zoom(15)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
+
     private void onChangeMode() {
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.mode);
@@ -327,6 +328,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
+
     @Override
     public void onBackPressed() {
 
@@ -362,6 +364,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
             return;
         }
     }
+
     public String addChar(String str, char ch, int position) {
         StringBuilder sb = new StringBuilder(str);
         sb.insert(position, ch);

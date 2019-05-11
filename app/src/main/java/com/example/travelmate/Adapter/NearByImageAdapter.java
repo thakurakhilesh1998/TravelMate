@@ -52,7 +52,7 @@ public class NearByImageAdapter extends RecyclerView.Adapter<NearByImageAdapter.
 
     @Override
     public int getItemCount() {
-        return 5;
+        return images.size();
     }
 
 
@@ -60,19 +60,25 @@ public class NearByImageAdapter extends RecyclerView.Adapter<NearByImageAdapter.
 
         switch (i) {
             case 0:
-                context.startActivity(new Intent(context, atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "food"));
+                context.startActivity(new Intent(context, atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "cafe"));
                 break;
             case 1:
                 context.startActivity(new Intent(context, atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "atm"));
                 break;
             case 2:
-                context.startActivity(new Intent(context, atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "hotels"));
+                context.startActivity(new Intent(context, atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "lodging"));
                 break;
             case 3:
-                context.startActivity(new Intent(context, atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "petrol-pump"));
+                context.startActivity(new Intent(context, atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "parking"));
                 break;
             case 4:
                 context.startActivity(new Intent(context, atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "hospital"));
+                break;
+            case 5:
+                context.startActivity(new Intent(context, atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "shopping_mall"));
+                break;
+            case 6:
+                context.startActivity(new Intent(context, atm_activity.class).putExtra("geocoordinates2", geolocation).putExtra("type", "bus_station"));
 
         }
 
