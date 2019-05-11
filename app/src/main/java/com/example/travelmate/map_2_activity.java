@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -115,12 +116,21 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
         mClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                latitude = location.getLatitude();
-                langitude = location.getLongitude();
-                getDataFromApi(latitude, langitude, mode);
+                if (location != null) {
+                    latitude = location.getLatitude();
+                    langitude = location.getLongitude();
+
+                    try {
+                        getDataFromApi(latitude, langitude, mode);
+
+                    } catch (Exception e) {
+                        Snackbar.make(findViewById(android.R.id.content), "Api is not working", Snackbar.LENGTH_LONG).show();
+                    }
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Location is not accessible", Snackbar.LENGTH_LONG).show();
+                }
             }
         });
-
     }
 
     private void getDataFromApi(Double latitude, Double langitude, final String mode) {
@@ -296,10 +306,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
                 addMarker(latitude, langitude);
             }
         });
-
-
     }
-
     private void addMarker(Double latitude, Double langitude) {
         LatLng latLng = new LatLng(latitude, langitude);
         mMap.addMarker(new MarkerOptions().title("Current Location").position(latLng));
@@ -309,8 +316,6 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
-
-
     private void onChangeMode() {
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.mode);
@@ -321,10 +326,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
-
-
     }
-
     @Override
     public void onBackPressed() {
 
@@ -359,10 +361,7 @@ public class map_2_activity extends AppCompatActivity implements View.OnClickLis
             super.onBackPressed();
             return;
         }
-
-
     }
-
     public String addChar(String str, char ch, int position) {
         StringBuilder sb = new StringBuilder(str);
         sb.insert(position, ch);
