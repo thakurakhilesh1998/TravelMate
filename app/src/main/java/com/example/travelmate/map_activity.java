@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -111,9 +112,19 @@ public class map_activity extends AppCompatActivity implements View.OnClickListe
         mClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                latitude = location.getLatitude();
-                langitude = location.getLongitude();
-                getDataFromApi(latitude, langitude, mode);
+                if (location != null) {
+                    latitude = location.getLatitude();
+                    langitude = location.getLongitude();
+                    try {
+                        getDataFromApi(latitude, langitude, mode);
+
+                    } catch (Exception e) {
+
+                        Snackbar.make(findViewById(android.R.id.content), "Api not working", Snackbar.LENGTH_LONG).show();
+                    }
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Location is not accessible at that moment", Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 
