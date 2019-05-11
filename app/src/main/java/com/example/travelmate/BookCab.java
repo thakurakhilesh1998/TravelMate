@@ -253,7 +253,7 @@ public class BookCab extends AppCompatActivity {
     }
 
     public void autocomplete1() {
-        GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
+        GPSTracker gpsTracker = new GPSTracker(getApplicationContext(), BookCab.this);
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment1);
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));

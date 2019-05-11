@@ -72,7 +72,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         progressDialog.show();
         progressDialog.setCanceledOnTouchOutside(false);
         findIds();
-        gpsTracker = new GPSTracker(getApplicationContext());
+        gpsTracker = new GPSTracker(getApplicationContext(), HomeActivity.this);
         subscribetocloudmessaging();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -87,7 +87,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
         try {
 
-            if (GpsEnabled.isEnabled(getApplicationContext())) {
+            if (GpsEnabled.isEnabled(getApplicationContext()) && gpsTracker.getIsGPSTrackingEnabled()) {
                 fetchCurrentLocation();
             } else {
                 progressDialog.dismiss();
@@ -98,8 +98,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             progressDialog.dismiss();
             Log.e("msg", e.getMessage());
         }
-
-
         navigationView.setNavigationItemSelectedListener(this);
 
         navigationIcon.setOnClickListener(new View.OnClickListener() {
@@ -108,14 +106,41 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 isDrawerOpened();
             }
         });
-
-        fetchData();
-
         ivprofile.setOnClickListener(this);
         setSupportActionBar(toolbar);
 
 
     }
+
+    private void checkUserDetails() {
+
+        FirebaseDatabase.getInstance().getReference().child("User Profile").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getUid())) {
+
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.registeragian), Toast.LENGTH_LONG).show();
+                        FirebaseAuth.getInstance().getCurrentUser().delete();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        finish();
+                    }
+                } catch (Exception e) {
+                    Log.e("error", e.getMessage());
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 
     private void fetchCurrentLocation() {
 
@@ -131,8 +156,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (gpsTracker.getIsGPSTrackingEnabled()) {
                 prefLocation = new PrefLocation(getApplicationContext());
                 prefLocation.setLocation(String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude()));
-
+                checkUserDetails();
+                fetchData();
             } else {
+                progressDialog.dismiss();
                 gpsTracker.showSettingsAlert();
             }
         }
@@ -153,8 +180,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void fetchData() {
-
-
         final String uid = mUser.getUid();
         reference = database.getReference();
         reference.child("User Profile").child(uid).addValueEventListener(new ValueEventListener() {
@@ -165,7 +190,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         String Email = dataSnapshot.child("Email").getValue().toString();
                         String Name = dataSnapshot.child("Name").getValue().toString();
                         String profile = dataSnapshot.child("Profile").getValue().toString();
-                        Log.e("akhilesh", "akhilesh thakur");
                         showData(Email, Name, profile);
                     }
                 } catch (Exception e) {
@@ -191,27 +215,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         REQUEST_CODE);
             }
 
-            GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
+            GPSTracker gpsTracker = new GPSTracker(getApplicationContext(), HomeActivity.this);
             if (gpsTracker.getIsGPSTrackingEnabled()) {
                 prefLocation = new PrefLocation(getApplicationContext());
                 prefLocation.setLocation(String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude()));
             } else {
                 gpsTracker.showSettingsAlert();
             }
-//            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-//                @Override
-//                public void onSuccess(Location location) {
-//
-//                    if (location != null) {
-//                        Log.e("location", String.valueOf(location.getLatitude()));
-//                        prefLocation = new PrefLocation(getApplicationContext());
-//                        prefLocation.setLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
-//
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), "Your location not accessible Please enable Gps", Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//            });
         } else {
             Snackbar.make(findViewById(android.R.id.content), "Please allow location to use function of app", Snackbar.LENGTH_LONG).show();
         }
@@ -353,6 +363,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             AlertDialog alert = alertDialogBuilder.create();
             alert.show();
         }
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        try {
+
+            if (GpsEnabled.isEnabled(getApplicationContext()) && gpsTracker.getIsGPSTrackingEnabled()) {
+                fetchCurrentLocation();
+            } else {
+                progressDialog.dismiss();
+                gpsTracker.showSettingsAlert();
+                Toast.makeText(getApplicationContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            Log.e("msg", e.getMessage());
+        }
+
     }
 
 

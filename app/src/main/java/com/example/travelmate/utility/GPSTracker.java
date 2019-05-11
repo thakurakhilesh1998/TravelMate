@@ -1,10 +1,7 @@
 package com.example.travelmate.utility;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -21,15 +18,19 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.travelmate.R;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Create this Class from tutorial :
  * http://www.androidhive.info/2012/07/android-gps-location-manager-tutorial
- *
+ * <p>
  * For Geocoder read this : http://stackoverflow.com/questions/472313/android-reverse-geocoding-getfromlocation
- *
  */
 
 public class GPSTracker extends Service implements LocationListener {
@@ -52,13 +53,16 @@ public class GPSTracker extends Service implements LocationListener {
     Location location;
     double latitude;
     double longitude;
+    static public AlertDialog.Builder alertDialog;
     // How many Geocoder should return our GPSTracker
     int geocoderMaxResults = 1;
     // Store LocationManager.GPS_PROVIDER or LocationManager.NETWORK_PROVIDER information
     private String provider_info;
+    Activity homeActivity;
 
-    public GPSTracker(Context context) {
+    public GPSTracker(Context context, Activity homeActivity) {
         this.mContext = context;
+        this.homeActivity = homeActivity;
         getLocation();
     }
 
@@ -121,9 +125,7 @@ public class GPSTracker extends Service implements LocationListener {
                     updateGPSCoordinates();
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             //e.printStackTrace();
             Log.e(TAG, "Impossible to connect to LocationManager", e);
         }
@@ -141,6 +143,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * GPSTracker latitude getter and setter
+     *
      * @return latitude
      */
     public double getLatitude() {
@@ -153,6 +156,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * GPSTracker longitude getter and setter
+     *
      * @return
      */
     public double getLongitude() {
@@ -186,7 +190,7 @@ public class GPSTracker extends Service implements LocationListener {
      * Function to show settings alert dialog
      */
     public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        alertDialog = new AlertDialog.Builder(homeActivity);
 
         //Setting Dialog Title
         alertDialog.setTitle(R.string.GPSAlertDialogTitle);
@@ -198,10 +202,10 @@ public class GPSTracker extends Service implements LocationListener {
         alertDialog.setPositiveButton(R.string.action_settings, new DialogInterface.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
+                dialog.dismiss();
             }
         });
 
@@ -209,8 +213,8 @@ public class GPSTracker extends Service implements LocationListener {
         alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(mContext,getString(R.string.notwork), Toast.LENGTH_LONG).show();
                 dialog.cancel();
             }
         });
@@ -219,7 +223,9 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     /**
+     * message
      * Get list of address by latitude and longitude
+     *
      * @return null or List<Address>
      */
     public List<Address> getGeocoderAddress(Context context) {
@@ -246,6 +252,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * Try to get AddressLine
+     *
      * @return null or addressLine
      */
     public String getAddressLine(Context context) {
@@ -263,6 +270,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * Try to get Locality
+     *
      * @return null or locality
      */
     public String getLocality(Context context) {
@@ -273,14 +281,14 @@ public class GPSTracker extends Service implements LocationListener {
             String locality = address.getLocality();
 
             return locality;
-        }
-        else {
+        } else {
             return null;
         }
     }
 
     /**
      * Try to get Postal Code
+     *
      * @return null or postalCode
      */
     public String getPostalCode(Context context) {
@@ -298,6 +306,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * Try to get CountryName
+     *
      * @return null or postalCode
      */
     public String getCountryName(Context context) {

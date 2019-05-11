@@ -28,8 +28,8 @@
     <string name="tripsuccessfully">Trip Created Successfully And Remainder Set</string>
     <string name="msgcab">please select source and destination and enter in order</string>
     <string name="near_by_attraction">Near By Attraction</string>
-    <string name="GPSAlertDialogTitle">Title</string>
-    <string name="GPSAlertDialogMessage">message</string>
+    <string name="GPSAlertDialogTitle">Enable Gps of device</string>
+    <string name="GPSAlertDialogMessage">You have to enable device Gps to use this application</string>
     <string name="cancel">Cancel</string>
     <string name="atm">ATM</string>
     <string name="hospitals">Hospitals</string>
@@ -40,5 +40,7 @@
     <string name="shopping">Shopping</string>
     <string name="googlesignin">Google Login In...</string>
     <string name="registering">Registering...Wait..</string>
+    <string name="registeragian">User Profile is not complete,Please Register Agian</string>
+    <string name="notwork">Application Can not work properly without location access</string>
 
 </resources>

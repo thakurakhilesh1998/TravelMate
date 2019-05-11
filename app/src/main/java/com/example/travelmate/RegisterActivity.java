@@ -149,6 +149,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
                     Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
                 }
             });
@@ -254,7 +255,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                progressDialog.dismiss();
+                progressDialog1.dismiss();
                 util.toast(getApplicationContext(), databaseError.getMessage());
             }
         });
@@ -262,6 +264,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
+
         finish();
     }
 

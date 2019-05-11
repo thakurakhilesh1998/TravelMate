@@ -51,14 +51,11 @@ public class Atmfragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         rvAtm = view.findViewById(R.id.rvAtm);
         pullRefreshLayout = view.findViewById(R.id.pullrefresh);
         String geolocation = getArguments().getString("geolocation");
         String lat = substringGeolocation.getLatitude(geolocation);
         String longitude = substringGeolocation.getLongitude(geolocation);
-        Log.e("bdhsgfgvf", geolocation);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvAtm.setLayoutManager(manager);
         getDataFromApi(lat, longitude);
