@@ -39,5 +39,6 @@
     <string name="bus_station">Bus Station</string>
     <string name="shopping">Shopping</string>
     <string name="googlesignin">Google Login In...</string>
+    <string name="registering">Registering...Wait..</string>
 
 </resources>

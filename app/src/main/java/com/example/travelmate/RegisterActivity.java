@@ -61,8 +61,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         btnRegister.setOnClickListener(this);
         btngooglesignin.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
-        progressDialog = new ProgressDialog(getApplicationContext());
-        progressDialog1 = new ProgressDialog(getApplicationContext());
+        progressDialog = new ProgressDialog(this);
+        progressDialog1 = new ProgressDialog(this);
         googleSignIn();
     }
 
@@ -112,27 +112,32 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void onRegister(View v) {
-        progressDialog.setMessage("Registering...Wait..");
+        progressDialog.setMessage(getResources().getString(R.string.registering));
         progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
         if (etEmail.getText().toString().isEmpty()) {
             etEmail.setError(getString(R.string.emailempty));
             etEmail.setFocusable(true);
+            progressDialog.dismiss();
             return;
-        }
-        if (etPassword.getText().toString().isEmpty()) {
+        } else if (etPassword.getText().toString().isEmpty()) {
             etPassword.setError(getString(R.string.passwordempty));
             etPassword.setFocusable(true);
+            progressDialog.dismiss();
+        } else {
+            createWithFirebase(v);
         }
-        createWithFirebase(v);
     }
 
     private void createWithFirebase(final View v) {
         if (!isEmailCorrect() || etEmail.getText().toString().length() < 10) {
             etEmail.setError(getString(R.string.emailerrormsg));
             etEmail.setFocusable(true);
+            progressDialog.dismiss();
         } else if (!isPassCorrect() || etPassword.getText().toString().length() < 6) {
             etPassword.setError(getString(R.string.passerrormsg));
             etPassword.setFocusable(true);
+            progressDialog.dismiss();
         } else {
             mAuth.createUserWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -152,7 +157,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void OnCompleteregisterUser() {
         progressDialog.dismiss();
-
         startActivity(new Intent(getApplicationContext(), Register2Activity.class)
                 .putExtra("email", etEmail.getText().toString())
                 .putExtra("password", etPassword.getText().toString()));
@@ -180,6 +184,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        progressDialog1.dismiss();
         util.toast(getApplicationContext(), "Connection Failed");
     }
 
@@ -188,7 +193,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onActivityResult(requestCode, resultCode, data);
         Log.e("requestcode", String.valueOf(resultCode));
         if (requestCode == REQUEST_CODE) {
-            Log.e("requestcode", String.valueOf(REQUEST_CODE));
+            progressDialog1.setMessage("Wait.. Google Sign Up");
+            progressDialog1.show();
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -219,6 +225,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                progressDialog1.dismiss();
                 util.toast(getApplicationContext(), e.getMessage());
             }
         });

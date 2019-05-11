@@ -65,7 +65,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
     Uri Filepath;
     LinearLayout linearLayout;
     SaveData saveData, saveData1;
-    ProgressDialog progressDialog, progressDialog1, progressDialog2;
+    ProgressDialog progressDialog, progressDialog1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,12 +147,15 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
             if (!isNameCorrect()) {
                 etName.setError(getString(R.string.namepattern));
                 etName.setFocusable(true);
+                progressDialog1.dismiss();
             } else if (!isPhoneCorrect() && etPhone.getText().toString().length() <= 10) {
                 etPhone.setError("Phone number pattern is not correct");
                 etPhone.setFocusable(true);
+                progressDialog1.dismiss();
             } else if (etAge.getText().toString().substring(0, 1).equals("0")) {
                 etAge.setError("age is not correct");
                 etAge.setFocusable(true);
+                progressDialog1.dismiss();
             } else {
                 Name = etName.getText().toString().trim();
                 Phone = etPhone.getText().toString().trim();
@@ -221,6 +224,9 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     progressDialog1.dismiss();
                     util.toast(getApplicationContext(), "user profile updated successfully");
+                }
+                else {
+                    progressDialog1.dismiss();
                 }
             }
         });
