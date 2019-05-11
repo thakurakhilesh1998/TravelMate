@@ -73,8 +73,6 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_tourist_place_activity);
         findIds();
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
         reviews = new ArrayList<>();
         images = new ArrayList<>();
         name = new ArrayList<>();
@@ -84,7 +82,6 @@ public class TouristPlace_activity extends AppCompatActivity implements View.OnC
         photos = new ArrayList<>();
         Intent intent = getIntent();
         geolocation = intent.getStringExtra("geocordinates");
-        Log.e("geolocation", geolocation);
         if (geolocation.length() < 19) {
             geolocation = addChar(geolocation, '.', 2);
             geolocation = addChar(geolocation, '.', 12);

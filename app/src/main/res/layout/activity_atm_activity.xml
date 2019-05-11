@@ -12,11 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"
-        app:logo="@drawable/backicon"
-        app:title="NearbyAtm"
-        app:titleMarginStart="116dp"
-        app:titleTextColor="@color/white">
-
+        app:title="q"
+        app:titleTextColor="@color/background">
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Weather"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textSize"
+            android:textStyle="bold"/>
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView

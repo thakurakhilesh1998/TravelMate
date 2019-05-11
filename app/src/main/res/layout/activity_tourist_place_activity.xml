@@ -51,7 +51,7 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rvPhotos"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"></android.support.v7.widget.RecyclerView>
+                        android:layout_height="250dp"></android.support.v7.widget.RecyclerView>
 
                     <cz.intik.overflowindicator.OverflowPagerIndicator
                         android:id="@+id/view_pager_indicator"
@@ -150,7 +150,7 @@
                     <Button
                         android:id="@+id/btnaddrating"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="@color/tripclor"
                         android:paddingHorizontal="8dp"
                         android:text="@string/rate_this_place"

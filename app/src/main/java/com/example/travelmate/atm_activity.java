@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,12 +26,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class atm_activity extends AppCompatActivity
-{
+public class atm_activity extends AppCompatActivity {
     public static final String RADIUS = "1000";
     List<Result> atm1;
     RecyclerView rvAtm;
     String types;
+    TextView tvTitle;
     ProgressDialog progressDialog;
     Toolbar toolbar;
     String geolocation;
@@ -44,17 +43,46 @@ public class atm_activity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         rvAtm = findViewById(R.id.rvAtm);
+        tvTitle = findViewById(R.id.tvTitle);
         Intent intent = getIntent();
+        progressDialog.setMessage("Wait fetching places...");
+        progressDialog.setCanceledOnTouchOutside(false);
         types = intent.getStringExtra("type");
+        setTitles(types);
         progressDialog = new ProgressDialog(getApplicationContext());
-        getSupportActionBar().setTitle(types);
+        onBackButton();
         geolocation = intent.getStringExtra("geocoordinates2");
-        Log.e("geolocation", geolocation);
         String lat = substringGeolocation.getLatitude(geolocation);
         String longitude = substringGeolocation.getLongitude(geolocation);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         rvAtm.setLayoutManager(manager);
         getDataFromApi(lat, longitude);
+
+    }
+
+    private void setTitles(String types) {
+        switch (types) {
+            case "cafe":
+                tvTitle.setText("Restaurant");
+                break;
+            case "atm":
+                tvTitle.setText("Atm");
+                break;
+            case "lodging":
+                tvTitle.setText("Hotels");
+                break;
+            case "parking":
+                tvTitle.setText("Parking");
+                break;
+            case "hospital":
+                tvTitle.setText("Hospital");
+                break;
+            case "shopping_mall":
+                tvTitle.setText("Shops");
+                break;
+            case "bus_station":
+                tvTitle.setText("Bus Stop");
+        }
 
     }
 
@@ -90,12 +118,11 @@ public class atm_activity extends AppCompatActivity
 
     private void onClickMap() {
 
-        startActivity(new Intent(getApplicationContext(), map_nearby_activity.class).putExtra("geo", geolocation).putExtra("type",types));
+        startActivity(new Intent(getApplicationContext(), map_nearby_activity.class).putExtra("geo", geolocation).putExtra("type", types));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.mapview, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -103,13 +130,23 @@ public class atm_activity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-    switch (item.getItemId())
-    {
-        case R.id.viewonMap:
-            onClickMap();
-    }
+        switch (item.getItemId()) {
+            case R.id.viewonMap:
+                onClickMap();
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void onBackButton() {
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
+            }
+        });
     }
 
 }

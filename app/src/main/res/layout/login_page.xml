@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.3"
-        android:background="@drawable/back4" />
+    <!--<ImageView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:alpha="0.3"-->
+    <!--android:background="@drawable/back4" />-->
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -55,13 +55,15 @@
                     android:textSize="15sp" />
             </com.github.florent37.materialtextfield.MaterialTextField>
 
+
             <com.github.florent37.materialtextfield.MaterialTextField
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12sp"
                 app:mtf_backgroundColor="@color/background"
                 app:mtf_image="@drawable/lock"
-                app:mtf_labelColor="@color/black">
+                app:mtf_labelColor="@color/black"
+                app:mtf_openKeyboardOnFocus="true">
 
                 <EditText
                     android:id="@+id/etPassword"
@@ -70,12 +72,14 @@
                     android:digits="@string/password"
                     android:hint="Password"
                     android:inputType="textPassword"
-                    android:maxLength="12"
+                    android:maxLength="16"
                     android:maxLines="1"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
                     android:textSize="15sp" />
+
             </com.github.florent37.materialtextfield.MaterialTextField>
+
 
             <TextView
                 android:id="@+id/tvforgotPass"

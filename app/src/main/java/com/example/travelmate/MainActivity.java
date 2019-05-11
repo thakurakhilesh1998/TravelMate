@@ -3,11 +3,14 @@ package com.example.travelmate;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.text.method.TransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -72,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mUser != null) {
             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         }
-
         btnLogin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
         googlesigninbutton.setOnClickListener(this);
