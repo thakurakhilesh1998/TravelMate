@@ -64,7 +64,7 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
         SimpleDateFormat outFormat = new SimpleDateFormat("EEEE");
         String goal = outFormat.format(date);
         holder.tvDayName.setText(goal);
-        int icon = weathericon.WeatherIcon(response.body().getDailyForecasts().get(0).getDay().getIcon());
+        int icon = weathericon.WeatherIcon(response.body().getDailyForecasts().get(i).getDay().getIcon());
         holder.ivWeatherIcon.setImageResource(icon);
     }
 

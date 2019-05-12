@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.example.travelmate.APIS.DirectionApiHitter;
 import com.example.travelmate.APIS.PlaceIDApi;
@@ -63,6 +64,7 @@ public class BookCab extends AppCompatActivity {
     ArrayList<LatLng> list;
     String source = "";
     String destination = "";
+    LinearLayout progressBar;
 
 
     @Override
@@ -73,6 +75,7 @@ public class BookCab extends AppCompatActivity {
         select = findViewById(R.id.select);
         list = new ArrayList<>();
         toolbarcab = findViewById(R.id.toolbarcab);
+        progressBar = findViewById(R.id.progressBar);
         setSupportActionBar(toolbarcab);
         select.setVisibility(View.VISIBLE);
         Log.e("lat1", String.valueOf(lat2));
@@ -109,17 +112,17 @@ public class BookCab extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
+
                 Log.e("uber cab error", error.getUrl());
             }
         });
     }
 
     private void getData1(final Products products) {
-
         Uber.getInstance().getUberAPIService().getPriceEstimates(lat1, lang1, lat2, lang2, new retrofit.Callback<Prices>() {
             @Override
             public void success(Prices prices, retrofit.client.Response response) {
-                select.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 rvCabDeatils = findViewById(R.id.rvCabDetails1);
                 rvCabDeatils.setVisibility(View.VISIBLE);
                 LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -130,7 +133,7 @@ public class BookCab extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-
+Log.e("cab error",error.getUrl());
             }
         });
 
@@ -219,7 +222,6 @@ public class BookCab extends AppCompatActivity {
     }
 
     private void drawPolyLIneOnMap(Response<Direction> response) {
-
         Route = response.body().getRoutes();
         list = getDirectionPolylines(Route);
         PolylineOptions options = new PolylineOptions().width(8).color(Color.BLUE).geodesic(true);
@@ -231,10 +233,10 @@ public class BookCab extends AppCompatActivity {
                 .build();
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        progressBar.setVisibility(View.VISIBLE);
+        select.setVisibility(View.GONE);
         getCabData();
-
     }
-
     void getLatitudeandlongitude(Place place) {
         source = place.getId();
         Call<PlaceID> getLocation = PlaceIDApi.PlaceIDApi().getLatlang(place.getId(), constants.KEY);

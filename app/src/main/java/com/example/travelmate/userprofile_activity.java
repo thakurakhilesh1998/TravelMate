@@ -58,7 +58,6 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         mUser = mAuth.getCurrentUser();
         setSupportActionBar(toolbar);
         setBackButton();
-        getTripNumber();
         list = new ArrayList<>();
         list2 = new ArrayList<>();
         btnEditDetails.setVisibility(View.VISIBLE);
@@ -73,26 +72,14 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                 finish();
             }
         });
 
     }
 
-    private void getTripNumber() {
 
-        reference.child("User Profile").child(mUser.getUid()).child("MyTrip").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //  tvMyTrips.setText(String.valueOf(dataSnapshot.getChildrenCount()));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
 
     private void getDataFromFirebase() {
         reference.child("User Profile").child(mUser.getUid()).addValueEventListener(new ValueEventListener() {
@@ -118,6 +105,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
             }
         });
     }
+
     private void setCheckbox(ArrayList<String> list) {
         for (int i = 0; i < list.size(); i++) {
             switch (list.get(i)) {
@@ -178,7 +166,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
     }
 
     private void onLogogClick() {
-        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+        //  startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }
 
     private void onSaveDetails(View v) {
@@ -297,6 +285,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         btnEditDetails.setVisibility(View.GONE);
         btnsaveDetails.setVisibility(View.VISIBLE);
     }
+
     public boolean isNameCorrect() {
         Pattern pattern = Pattern.compile(new String("^[a-zA-Z\\s]*$"));
         Matcher matcher = pattern.matcher(etName.getText().toString());

@@ -98,7 +98,29 @@
                     android:textSize="20dp"
                     android:textStyle="bold" />
             </LinearLayout>
+<LinearLayout
+    android:id="@+id/progressBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+            <ProgressBar
 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:tag="Loading Cab"
+                 />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Loading Cab Data"
+        android:textColor="@color/background"
+        android:textSize="20dp"/>
+</LinearLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvCabDetails1"
                 android:layout_width="match_parent"
