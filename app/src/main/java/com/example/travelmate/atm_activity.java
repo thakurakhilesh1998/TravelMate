@@ -40,6 +40,7 @@ public class atm_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atm_activity);
+        progressDialog = new ProgressDialog(getApplicationContext());
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         rvAtm = findViewById(R.id.rvAtm);

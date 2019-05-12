@@ -202,7 +202,6 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         });
 
 
-
     }
 
     private void saveDataInFirebase(String email, String uid, String imageurl) {
@@ -211,6 +210,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
         myRef = database.getReference("User Profile");
         myRef.child(uid).setValue(saveData);
         myRef.child(uid).child("interests").setValue(saveData1);
+        myRef.child(uid).child("MyTrip").setValue("");
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(Name)
                 .setPhotoUri(Uri.parse(imageurl))
@@ -224,8 +224,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     progressDialog1.dismiss();
                     util.toast(getApplicationContext(), "user profile updated successfully");
-                }
-                else {
+                } else {
                     progressDialog1.dismiss();
                 }
             }
@@ -373,7 +372,7 @@ public class Register2Activity extends AppCompatActivity implements View.OnClick
             }
         });
         AlertDialog alert = alertDialogBuilder.create();
-        alert.setTitle("AlertDialogExample");
+        alert.setTitle("Alert");
         alert.show();
     }
 

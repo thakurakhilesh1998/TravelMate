@@ -65,11 +65,12 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
 
     @Override
     public void onBindViewHolder(@NonNull final Holder holder, final int i) {
+        list3 = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference();
-        databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Trips").child(mUser.getUid()).child("MyTrip").child(list.get(i)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
@@ -93,17 +94,17 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
             holder.tvTripName.setText(name);
             holder.tvDate.setText(date1);
             holder.tvDestination.setText(destination);
+
             holder.btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onButtonEditClick(i);
+                    onButtonEditClick(i, list3);
                 }
             });
-            databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(list.get(i)).child("list").addValueEventListener(new ValueEventListener() {
+            databaseReference.child("Trips").child(mUser.getUid()).child("MyTrip").child(list.get(i)).child("list").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.hasChildren()) {
-                        list3 = new ArrayList<>();
                         list3 = (ArrayList<String>) dataSnapshot.getValue();
                         ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(context, list3);
                         holder.expandableListView.setAdapter(adapter);
@@ -129,7 +130,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
             @Override
             public void onGroupCollapse(int groupPosition) {
 
-                holder.expandableListView.getLayoutParams().height = 70;
+                holder.expandableListView.getLayoutParams().height = 80;
             }
         });
     }
@@ -140,12 +141,12 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
             public void onGroupExpand(int groupPosition) {
                 int height = 0;
                 for (int i = 0; i < list1.size(); i++) {
-                    height += 60;
+                    height += 100;
                 }
 
                 Log.e("height", String.valueOf(height));
                 holder.expandableListView.getLayoutParams().height = height;
-                height=0;
+                height = 0;
 
             }
         });
@@ -156,13 +157,11 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
         return list.size();
     }
 
-    private void onEditTrip(int adapterPosition) {
-
+    private void onEditTrip(int adapterPosition, ArrayList<String> list13) {
         if (tripname.getText().toString().isEmpty() || tripname.getText().toString().length() < 3) {
             tripname.setError("tripname can not be empty");
             tripname.setFocusable(true);
         } else if (destination1.getText().toString().isEmpty() || destination1.getText().toString().length() < 3) {
-
             destination1.setError("destination can not be empty");
             destination1.setFocusable(true);
         } else {
@@ -170,11 +169,16 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
             map.put("tripname", tripname.getText().toString().trim());
             map.put("destination", destination1.getText().toString().trim());
             Log.e("list2", String.valueOf(list2.size()));
-            list2.addAll(list3);
-            map.put("list", list2);
+            Log.e("list3", String.valueOf(list13.size()));
+            if (list13.size() > 0) {
+                list2.addAll(list13);
+                map.put("list", list2);
+            } else {
+                map.put("list", list2);
+            }
             tripname.getText().toString().trim();
             destination1.getText().toString().trim();
-            FirebaseDatabase.getInstance().getReference().child("User Profile").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MyTrip").child(list.get(adapterPosition)).updateChildren(map, new DatabaseReference.CompletionListener() {
+            FirebaseDatabase.getInstance().getReference().child("Trips").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MyTrip").child(list.get(adapterPosition)).updateChildren(map, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                     Intent intent = viewmytripactivity.getIntent();
@@ -188,7 +192,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
 
     }
 
-    private void onButtonEditClick(final int adapterPosition) {
+    private void onButtonEditClick(final int adapterPosition, final ArrayList<String> list13) {
 
         dialog = new Dialog(viewmytripactivity);
         dialog.setContentView(R.layout.edittrip);
@@ -196,7 +200,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         findDialogIds();
-        FirebaseDatabase.getInstance().getReference().child("User Profile").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MyTrip").child(list.get(adapterPosition)).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Trips").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MyTrip").child(list.get(adapterPosition)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
@@ -217,7 +221,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
         edittrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onEditTrip(adapterPosition);
+                onEditTrip(adapterPosition, list13);
             }
         });
         ivCancel.setOnClickListener(new View.OnClickListener() {
@@ -261,7 +265,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.Holder> {
     }
 
     public int pxToDp(int px) {
-        DisplayMetrics displayMetrics =context.getResources().getDisplayMetrics();
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         return Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 

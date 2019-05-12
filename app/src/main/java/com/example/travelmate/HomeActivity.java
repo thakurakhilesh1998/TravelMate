@@ -91,9 +91,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             gpsTracker.showSettingsAlert();
             Toast.makeText(getApplicationContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
         }
-
         navigationView.setNavigationItemSelectedListener(this);
-
         navigationIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,10 +100,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
         ivprofile.setOnClickListener(this);
         setSupportActionBar(toolbar);
-
-
     }
-
     private void checkUserDetails() {
 
         FirebaseDatabase.getInstance().getReference().child("User Profile").addValueEventListener(new ValueEventListener() {
@@ -126,7 +121,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -148,7 +142,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 prefLocation = new PrefLocation(getApplicationContext());
                 prefLocation.setLocation(String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude()));
                 Log.e("latitude", String.valueOf(gpsTracker.getLatitude()));
-                checkUserDetails();
+                // checkUserDetails();
                 fetchData();
             } else {
                 progressDialog.dismiss();
@@ -173,20 +167,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private void fetchData() {
         final String uid = mUser.getUid();
-        reference = database.getReference();
-        reference.child("User Profile").child(uid).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("User Profile").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
                     if (dataSnapshot.hasChildren()) {
                         String Email = dataSnapshot.child("Email").getValue().toString();
+                        Log.e("Email", Email);
                         String Name = dataSnapshot.child("Name").getValue().toString();
                         String profile = dataSnapshot.child("Profile").getValue().toString();
                         showData(Email, Name, profile);
                     }
                 } catch (Exception e) {
                     progressDialog.dismiss();
-                    Log.e("msg12", e.getMessage());
+//                    Log.e("msg12", e.getMessage());
                 }
             }
 
@@ -223,7 +217,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void showData(String email, String name, String profile) {
         tvName.setText(name);
         tvEmail.setText(email);
-        Glide.with(this).load(profile).into(ivprofile);
+        Glide.with(getApplicationContext()).load(profile).into(ivprofile);
         HomePageFragment homePageFragment = new HomePageFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frame, homePageFragment);
@@ -278,6 +272,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.mytrip:
                 startActivity(new Intent(getApplicationContext(), viewmytripactivity.class));
+                finish();
                 break;
             case R.id.settings:
                 onSettingClicked();
@@ -294,7 +289,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Setting setting = new Setting();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frame, setting);
-        ft.addToBackStack("fm1");
         drawerLayout.closeDrawer(Gravity.START);
         ft.commitAllowingStateLoss();
     }
@@ -320,7 +314,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void onClickOnProfile() {
-        startActivity(new Intent(this, userprofile_activity.class));
+        startActivity(new Intent(this, userprofile_activity.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
         finish();
     }
 
@@ -357,7 +351,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("request code", String.valueOf(requestCode));
         if (requestCode == 12) {
             finish();
             startActivity(getIntent());

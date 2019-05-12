@@ -15,7 +15,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     Context context;
     ArrayList<String> list;
-    int i = 1;
+
 
 
     public ExpandableListViewAdapter(Context context, ArrayList<String> list) {
@@ -73,7 +73,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-
         LayoutInflater layoutInflater = (LayoutInflater) this.context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = layoutInflater.inflate(R.layout.expaned, null);
@@ -81,8 +80,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
         final TextView listTitleTextView = (TextView) convertView
                 .findViewById(R.id.tvListView);
-        listTitleTextView.setText(" "+i +". "+ list.get(childPosition));
-        i++;
+        listTitleTextView.setText(list.get(childPosition));
         return convertView;
     }
 

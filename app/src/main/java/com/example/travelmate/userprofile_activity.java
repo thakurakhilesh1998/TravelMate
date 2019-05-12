@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -74,7 +73,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+               startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                 finish();
             }
         });
@@ -118,9 +117,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
 
             }
         });
-
     }
-
     private void setCheckbox(ArrayList<String> list) {
         for (int i = 0; i < list.size(); i++) {
             switch (list.get(i)) {
@@ -261,8 +258,6 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
     }
 
     private boolean updateUserProfile() {
-
-
         if (etName.getText().toString().trim().isEmpty()) {
             etName.setError("Name field can not be empty");
             etName.setFocusable(true);
@@ -302,8 +297,6 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         btnEditDetails.setVisibility(View.GONE);
         btnsaveDetails.setVisibility(View.VISIBLE);
     }
-
-
     public boolean isNameCorrect() {
         Pattern pattern = Pattern.compile(new String("^[a-zA-Z\\s]*$"));
         Matcher matcher = pattern.matcher(etName.getText().toString());

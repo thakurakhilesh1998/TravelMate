@@ -75,9 +75,10 @@ public class viewmytripactivity extends AppCompatActivity implements View.OnClic
     private void getDataFromFirebase() {
 
         databaseReference = database.getReference();
-        databaseReference.child("User Profile").child(mUser.getUid()).child("MyTrip").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Trips").child(mUser.getUid()).child("MyTrip").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 getData(dataSnapshot);
             }
 

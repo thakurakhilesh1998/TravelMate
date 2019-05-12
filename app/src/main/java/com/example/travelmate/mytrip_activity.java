@@ -28,6 +28,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class mytrip_activity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener {
 
@@ -165,7 +166,7 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
 
     private void notification(View v) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = df.format(now.getTime());
+        final String formattedDate = df.format(now.getTime());
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate1 = df1.format(c.getTime());
@@ -187,11 +188,18 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
             Intent intent = new Intent(getApplicationContext(), viewmytripactivity.class);
             String tripname = etTripname.getText().toString().trim();
             String destination = etDestination.getText().toString().trim();
-            savetripdata data = new savetripdata(tripname, formattedDate, list, destination);
+            final savetripdata data = new savetripdata(tripname, formattedDate, list, destination);
             reference = database.getReference();
-            reference.child("User Profile").child(mUser.getUid()).child("MyTrip").child(formattedDate).setValue(data);
+            HashMap<String, Object> date1 = new HashMap<>();
+            date1.put(formattedDate, "");
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("date", formattedDate);
+            map.put("destination", destination);
+            map.put("tripname", tripname);
+            map.put("list", list);
+            reference.child("Trips").child(mUser.getUid()).child("MyTrip").child(formattedDate).updateChildren(map);
             NotifyMe notifyMe = new NotifyMe.Builder(this)
-                    .title("Trip remainder,Your Trip"+etTripname.getText().toString()+"is started")
+                    .title("Trip remainder,Your Trip " + etTripname.getText().toString() + " is started")
                     .content("Look at your item list so you can not miss items during your trip")
                     .color(255, 0, 0, 255)
                     .led_color(255, 255, 255, 255)
@@ -231,5 +239,11 @@ public class mytrip_activity extends AppCompatActivity implements DatePickerDial
         etTripname.setText("");
         etDestination.setText("");
         tvPickDate.setText("");
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+        finish();
     }
 }
