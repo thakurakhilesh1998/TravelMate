@@ -101,6 +101,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ivprofile.setOnClickListener(this);
         setSupportActionBar(toolbar);
     }
+
     private void checkUserDetails() {
 
         FirebaseDatabase.getInstance().getReference().child("User Profile").addValueEventListener(new ValueEventListener() {
@@ -121,6 +122,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 

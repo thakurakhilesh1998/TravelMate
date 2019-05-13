@@ -13,7 +13,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import com.bumptech.glide.Glide;
 import com.example.travelmate.utility.UpdatedUserProfileData;
 import com.example.travelmate.utility.UserProfileData;
@@ -65,9 +64,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
         btnsaveDetails.setOnClickListener(this);
         getDataFromFirebase();
     }
-
     private void setBackButton() {
-
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,11 +73,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
                 finish();
             }
         });
-
     }
-
-
-
     private void getDataFromFirebase() {
         reference.child("User Profile").child(mUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -125,7 +118,6 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
                     cb5.setChecked(true);
                     break;
                 default:
-
 
             }
         }
@@ -205,6 +197,7 @@ public class userprofile_activity extends AppCompatActivity implements View.OnCl
                 reference.child("User Profile").child(mUser.getUid()).child("Age").setValue(etAge.getText().toString().trim());
                 reference.child("User Profile").child(mUser.getUid()).child("Name").setValue(etName.getText().toString().trim());
                 reference.child("User Profile").child(mUser.getUid()).child("interests").setValue(data);
+                startActivity(getIntent());
                 getUpdateData();
                 btnEditDetails.setVisibility(View.VISIBLE);
                 etName.setEnabled(false);

@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.example.travelmate.APIS.DirectionApiHitter;
 import com.example.travelmate.APIS.PlaceIDApi;
@@ -133,7 +132,7 @@ public class BookCab extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-Log.e("cab error",error.getUrl());
+                Log.e("cab error", error.getUrl());
             }
         });
 
@@ -237,6 +236,7 @@ Log.e("cab error",error.getUrl());
         select.setVisibility(View.GONE);
         getCabData();
     }
+
     void getLatitudeandlongitude(Place place) {
         source = place.getId();
         Call<PlaceID> getLocation = PlaceIDApi.PlaceIDApi().getLatlang(place.getId(), constants.KEY);
