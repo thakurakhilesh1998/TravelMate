@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.example.travelmate.BookCab;
 import com.example.travelmate.Book_Cab2;
 import com.example.travelmate.R;
-import com.neno0o.ubersdk.Activites.Authentication;
 import com.neno0o.ubersdk.Endpoints.Models.Prices.Prices;
 import com.neno0o.ubersdk.Endpoints.Models.Products.Products;
 
@@ -28,12 +27,17 @@ public class CabDetailsAdapter extends RecyclerView.Adapter<CabDetailsAdapter.Ho
     Products response;
     BookCab bookCab;
     Prices prices;
+    Double lat1, lang1, lat2, lang2;
 
-    public CabDetailsAdapter(BookCab bookCab, Context context, Products response, Prices prices) {
+    public CabDetailsAdapter(BookCab bookCab, Context context, Products response, Prices prices, Double lat1, Double lang1, Double lat2, Double lang2) {
         this.context = context;
         this.response = response;
         this.bookCab = bookCab;
         this.prices = prices;
+        this.lat1 = lat1;
+        this.lang1 = lang1;
+        this.lat2 = lat2;
+        this.lang2 = lang2;
     }
 
     @NonNull
@@ -48,7 +52,7 @@ public class CabDetailsAdapter extends RecyclerView.Adapter<CabDetailsAdapter.Ho
         holder.servicename.setText(response.getProducts().get(i).getDisplayName());
         Glide.with(context).load(response.getProducts().get(i).getImage()).into(holder.vehicle);
         holder.btnConfirm.setText(response.getProducts().get(i).getDisplayName());
-        holder.tvCapacity.setText(String.valueOf("Capacity: "+response.getProducts().get(i).getCapacity()));
+        holder.tvCapacity.setText(String.valueOf("Capacity: " + response.getProducts().get(i).getCapacity()));
         holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +70,12 @@ public class CabDetailsAdapter extends RecyclerView.Adapter<CabDetailsAdapter.Ho
                 btnConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        context.startActivity(new Intent(context,Book_Cab2.class));
+                        context.startActivity(new Intent(context, Book_Cab2.class)
+                                .putExtra("product_id", response.getProducts().get(i).getProductId()
+                                ).putExtra("startlat", lat1)
+                                .putExtra("startlang", lang1)
+                                .putExtra("destlat", lat2)
+                                .putExtra("destlang", lang2));
                     }
                 });
             }

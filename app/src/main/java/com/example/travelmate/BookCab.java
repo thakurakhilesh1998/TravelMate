@@ -126,7 +126,7 @@ public class BookCab extends AppCompatActivity {
                 rvCabDeatils.setVisibility(View.VISIBLE);
                 LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
                 rvCabDeatils.setLayoutManager(manager);
-                CabDetailsAdapter cabDetailsAdapter = new CabDetailsAdapter(BookCab.this, getApplicationContext(), products, prices);
+                CabDetailsAdapter cabDetailsAdapter = new CabDetailsAdapter(BookCab.this, getApplicationContext(),products,prices,lat1,lang1,lat2,lang2);
                 rvCabDeatils.setAdapter(cabDetailsAdapter);
             }
 
