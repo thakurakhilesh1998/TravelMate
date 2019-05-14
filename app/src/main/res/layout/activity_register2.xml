@@ -85,6 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Age"
+                    android:digits="@string/number"
                     android:textColor="@color/white"
                     android:textColorHint="@color/black"
                     android:textSize="@dimen/checkboxsize" />

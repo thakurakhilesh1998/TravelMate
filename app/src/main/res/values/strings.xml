@@ -33,6 +33,7 @@
     <string name="cancel">Cancel</string>
     <string name="atm">ATM</string>
     <string name="hospitals">Hospitals</string>
+    <string name="number">0123456789</string>
     <string name="food">Food</string>
     <string name="hotels">Hotels</string>
     <string name="parking">Parking</string>
