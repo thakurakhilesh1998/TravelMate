@@ -45,7 +45,7 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
             public void run() {
                 checkUser();
             }
-        }, 2000);
+        }, 1500);
     }
 
     private void checkUser() {
@@ -68,7 +68,6 @@ public class SplashScreen extends AppCompatActivity implements Animation.Animati
 
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     Snackbar.make(findViewById(android.R.id.content), databaseError.getMessage(), Snackbar.LENGTH_LONG).show();

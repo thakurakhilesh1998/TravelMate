@@ -3,7 +3,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_gasstation_activity">gasstation_activity</string>
     <string name="digits">abcdefghijklmnopqrstuvwxyz.0123456789@</string>
-    <string name="password">abcdefghijklmnopqrstuvwxyz0123456789@_!#$%*^ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="password">abcdefghijklmnopqrstuvwxyz0123456789@_!#$.%*^ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="passerrormsg">password must have at least one special character,one capital letter,one small letter</string>
     <string name="emailerrormsg">Email pattern is not correct</string>
     <string name="emailempty">Email Field Can not be empty</string>
